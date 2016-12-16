@@ -1,23 +1,30 @@
 # NiagaraKayak
 
-Niagara Kayak Rental App Ideas
-Take a look at the cheqroom app for kayaks / canoes and see if we could mimick something like that or possibly just use that app.. Would it be a useful tool though? Would it be too much work? 
+# Pattern that should be used to implement this app, NO SPAGHETTI CODE, PLEASE, IT WILL JUST HURT US LATER
 
-Display a calendar showing upcoming events (social paddles, learn to paddle clinics and courses, youth yaking camps?)
-Weather toolbar (st.catharines, niagara on the lake, niagara falls) maybe a wind forecast if possible aswell.. (put a note saying anything over 20km/h winds is what we classify as unfavourable paddling conditions((small craft pendant is up))
+The pattern we should try to employ to keep us sane while building this is MVP (Model, View, Presenter)
 
-Become a member option ? (we are still generaring ideas about a seasons pass member ship and or weekly / monthly memberships (( may include t-shirt/sticker/ recycleable waterbottle?? Not sure yet ))
+If you aren't familiar with this pattern, check out some code samples here
 
-Share pictures videos and memories through social media (facebook page, instagram page, snapchat?lol)
-Or have an upload pictures/videos option for users (share your outting or expieriance with nkr!)
+https://github.com/googlesamples/android-architecture#stable-samples
 
-Offer direction links through the app to various launch destinations
-Create some kind of inventory availability so people can see how many boats are available on certain days, at certain times and in what location the team may be positioned at that day or weekend specifically..
+# API details
 
-Have some kind of timer on there for people, so when renting boats they know to get back to the launch location for a certain time.  ( probably two hours after hitting the water, unless they have paid for an extended time block ) this would apply to most launches but not all.. Some launches are point A-B so the time blocks can be a little more flexible.
+Simple explanation:
 
-A trip advisor link on the app, or able to rate the service through the app.
+The reservations are simply stored as a "post" in WordPress. It's entirely textual.
+This kinda sucks, but it will work fine.
 
-A shop tab ?
+It has some basic authentication for stopping randoms from creating posts, in the form of a nonce key.
 
-Allowing members or anyone to order a t-shirt, hoodie, hats.. ?
+The nonce key is the strings.xml file in the res/ directory. 
+
+You shouldn't need it though..
+
+In app/src/main there is a file called the ApiUrlHelper.
+
+That class is for generating GET/POST urls to create/read/update/delete reservations.
+
+The idea is very simple, we generate these urls based on what we are trying to accomplish, fire off requests, get back JSON, and work with it.
+
+## TODO Update with various request responses from API.
