@@ -1,5 +1,8 @@
 package com.niagarakayak.niagarakayakapp.home;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,12 +36,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             ActivityUtils.addFragmentToActivty(getSupportFragmentManager(), homeFragment, R.id.contentView);
         }
 
-        //Create the presenter
-        new HomePresenter(new TwitterAPIService(
-                getString(R.string.TWITTER_CONSUMER_KEY),
-                getString(R.string.TWITTER_ACCESS_TOKEN)),
-                homeFragment);
+        boolean isConnectedOrConnecting = false;
+        if (isConnectedOrConnecting()) {
+            isConnectedOrConnecting = true;
+        }
 
+        TwitterAPIService twitterAPIService = new TwitterAPIService(
+                getString(R.string.TWITTER_CONSUMER_KEY),
+                getString(R.string.TWITTER_CONSUMER_SECRET),
+                getString(R.string.TWITTER_ACCESS_TOKEN),
+                getString(R.string.TWITTER_ACCESS_TOKEN_SECRET)
+        );
+
+        //Create the presenter
+        new HomePresenter(twitterAPIService, homeFragment, isConnectedOrConnecting);
         setUpResideMenu();
         setUpActionBar();
     }
@@ -84,5 +95,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
+    }
+
+    private boolean isConnectedOrConnecting() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+
+        if (activeNetwork!= null) {
+            return activeNetwork.isConnectedOrConnecting();
+        }
+
+        return false;
     }
 }

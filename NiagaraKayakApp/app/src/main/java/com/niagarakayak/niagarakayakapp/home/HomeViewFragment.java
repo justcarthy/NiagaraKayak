@@ -3,6 +3,7 @@ package com.niagarakayak.niagarakayakapp.home;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -10,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.niagarakayak.niagarakayakapp.R;
 
 import java.util.Objects;
@@ -56,13 +56,18 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
+    public void setTweetHandle(String handle) {
+        tweetHandle.setText(handle);
+    }
+
+    @Override
     public void setTweetImage(Drawable image) {
         tweetProfileImage.setImageDrawable(image);
     }
 
     @Override
-    public void setTweetDescription(String description) {
-        tweetDesc.setText(description);
+    public void setTweetDescription(String description){
+            tweetDesc.setText(description);
     }
 
     @Override
@@ -71,8 +76,8 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void showErrorToast(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    public void showSnackbarWithMessage(String message, int length) {
+        Snackbar.make(this.getView(), message, length).show();
     }
 
     public static HomeViewFragment newInstance() {
