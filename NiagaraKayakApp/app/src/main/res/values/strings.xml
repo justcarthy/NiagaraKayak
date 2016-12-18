@@ -1,4 +1,8 @@
 <resources>
-    <string name="app_name">NiagaraKayakApp</string>
-    <string name="API_NONCE">6fec9cf1f2</string>
+    <string name="app_name">Niagara KAYAK</string>
+    <string name="NK_API_KEY">6fec9cf1f2</string>
+    <string name="TWITTER_CONSUMER_KEY">reuVAkV9SXz1auh53NwNFhR3f</string>
+    <string name="TWITTER_CONSUMER_SECRET">anHE1KU1tk2BdIRkaxtnByJIpBZcSU5J3oHmQD0QWW6WXsN9j9</string>
+    <string name="TWITTER_ACCESS_TOKEN">141973750-XbejmOcyUGLZwX6Q614NgobtfcG3K4JpSPizKlyS</string>
+    <string name="TWITTER_ACCESS_TOKEN_SECRET">1m3cZdBPpE2fQMVJC9w9QeFfb1cGxVoEfzscJbfjeFsEP</string>
 </resources>

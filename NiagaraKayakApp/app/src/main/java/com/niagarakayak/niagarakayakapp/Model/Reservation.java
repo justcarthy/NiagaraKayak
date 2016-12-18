@@ -1,4 +1,4 @@
-package com.niagarakayak.niagarakayakapp.Model;
+package com.niagarakayak.niagarakayakapp.model;
 
 /**
  * Object which represents a reservation.
