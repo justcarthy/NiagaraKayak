@@ -1,7 +1,7 @@
 package com.niagarakayak.niagarakayakapp.model;
 
 /**
- * Object which represents a reservation.
+ * This class represents a reservation.
  */
 
 public class Reservation {
