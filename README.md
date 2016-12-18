@@ -31,7 +31,7 @@ The idea is very simple, we generate these urls based on what we are trying to a
 
 ## Example of API calls and returns
 
-### GET all reservations `http://www.niagarakayak.com/api/get_posts
+### GET all reservations `http://www.niagarakayak.com/api/get_posts`
 
 ```json
 {
