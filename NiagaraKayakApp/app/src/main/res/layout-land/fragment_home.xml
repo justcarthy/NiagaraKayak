@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent">
+<ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_marginRight="32dp"
+                    android:layout_marginBottom="32dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_height="wrap_content">
+            <android.support.v7.widget.CardView
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    card_view:cardUseCompatPadding="true"
+                    card_view:cardElevation="4dp"
+                    card_view:cardCornerRadius="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp">
+                <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+                    <ImageView
+                            android:id="@+id/tweet_pic"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:background="@color/colorPrimary"
+                            android:layout_alignParentTop="true"
+                            android:layout_margin="@dimen/activity_horizontal_margin"/>
+                    <TextView
+                            android:id="@+id/tweet_label_intro"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="Tweet by"
+                            android:layout_toEndOf="@id/tweet_pic"
+                            tools:textSize="18sp"
+                            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/activity_horizontal_margin"/>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text=" @FakeNKayak"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="20sp"
+                            android:layout_marginTop="@dimen/activity_horizontal_margin"
+                            android:layout_marginRight="@dimen/activity_horizontal_margin"
+                            android:layout_toEndOf="@+id/tweet_label_intro" android:id="@+id/tweet_handle"/>
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:layout_below="@id/tweet_pic"
+                            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                            tools:text="Lorem Ipsuma Ajsdajsdkasdasd" android:id="@+id/tweet_desc"/>
+
+                    <ImageView
+                            android:layout_height="32dp"
+                            android:layout_width="40dp"
+                            android:background="@drawable/drawable_twitter"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                            android:layout_marginRight="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/activity_horizontal_margin"
+                            android:layout_marginBottom="@dimen/activity_horizontal_margin"/>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+    </RelativeLayout>
+</ScrollView>
+</LinearLayout>
