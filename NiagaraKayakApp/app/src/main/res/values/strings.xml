@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Niagara KAYAK</string>
     <string name="NK_API_KEY">6fec9cf1f2</string>
-    <string name="TWITTER_CONSUMER_KEY">4JygBNaBnfsC6HMiKcnYlIO2N</string>
-    <string name="TWITTER_CONSUMER_SECRET">7EX3qNS1SPAs3NSr5XOnnFI50ySq7V6kWjaV1wh2DDkQee8DJi</string>
-    <string name="TWITTER_ACCESS_TOKEN">141973750-XbejmOcyUGLZwX6Q614NgobtfcG3K4JpSPizKlyS</string>
-    <string name="TWITTER_ACCESS_TOKEN_SECRET">1m3cZdBPpE2fQMVJC9w9QeFfb1cGxVoEfzscJbfjeFsEP</string>
+    <string name="TWITTER_CONSUMER_KEY">zo0gas9WmFcR908hh4ektjaGo</string>
+    <string name="TWITTER_CONSUMER_SECRET">YAJdzoAZUJYgxJJXja7i7vKRjvgkU5CBun3X7IYHYMNWwhkZZj</string>
+    <string name="TWITTER_ACCESS_TOKEN">810606940556500992-3P4l58LdmFdXNibcNKeB11f2OB7sVom</string>
+    <string name="TWITTER_ACCESS_TOKEN_SECRET">AAAffEsdp1ggmjpU409JEV9nHWftramfrF0Fgc53RXvL3</string>
+    <string name="OPEN_WEATHER_API_KEY">922ee36e789d1afa54220341a705f230</string>
 </resources>
