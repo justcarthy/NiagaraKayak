@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.service.twitter.TwitterAPIService;
+import com.niagarakayak.niagarakayakapp.service.weather.OpenWeatherAPIService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 import com.special.ResideMenu.ResideMenu;
 import com.special.ResideMenu.ResideMenuItem;
@@ -48,8 +49,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 getString(R.string.TWITTER_ACCESS_TOKEN_SECRET)
         );
 
-        //Create the presenter
-        new HomePresenter(twitterAPIService, homeFragment, isConnectedOrConnecting);
+        OpenWeatherAPIService openWeatherAPIService = new OpenWeatherAPIService(
+                getString(R.string.OPEN_WEATHER_API_KEY)
+        );
+
+        new HomePresenter(twitterAPIService,
+                openWeatherAPIService, homeFragment, isConnectedOrConnecting);
         setUpResideMenu();
         setUpActionBar();
     }

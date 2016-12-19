@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#1F8094</color>
     <color name="colorAccent">#EBEBEB</color>
     <color name="white">#FFF</color>
+    <color name="error_snackbar">#b33e3e</color>
+    <color name="weather_snackbar">#0a6c73</color>
+    <color name="success_snackbar">#a5df83</color>
 </resources>

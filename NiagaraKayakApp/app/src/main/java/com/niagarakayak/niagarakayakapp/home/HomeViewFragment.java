@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.niagarakayak.niagarakayakapp.R;
+import com.niagarakayak.niagarakayakapp.util.SnackbarUtils;
 
 import java.util.Objects;
 
@@ -20,11 +21,8 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
     private HomeContract.Presenter mPresenter;
 
     private TextView tweetLabel;
-
     private TextView tweetHandle;
-
     private TextView tweetDesc;
-
     private ImageView tweetProfileImage;
 
     @Nullable
@@ -76,8 +74,10 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void showSnackbarWithMessage(String message, int length) {
-        Snackbar.make(this.getView(), message, length).show();
+    public void showSnackbarWithMessage(String message, int length, SnackbarUtils.SnackbarColor snackbarColor) {
+        Snackbar sb = Snackbar.make(this.getView(), message, length);
+        sb.getView().setBackgroundColor(SnackbarUtils.getBackgroundColor(getContext(), snackbarColor));
+        sb.show();
     }
 
     public static HomeViewFragment newInstance() {
