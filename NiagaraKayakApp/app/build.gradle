@@ -36,4 +36,7 @@ dependencies {
 
     // Twitter
     compile 'org.twitter4j:twitter4j-core:4.0.5'
+
+    // Maps
+    compile 'com.google.android.gms:play-services-maps:10.0.1'
 }

@@ -30,15 +30,14 @@ public class TwitterAPIService implements TwitterService {
     }
 
     private class getLastTweetTask extends AsyncTask<TwitterCallback, Void, Status> {
-        private Exception exception;
+        private TwitterException exception;
         private TwitterCallback callback;
 
         @Override
         protected twitter4j.Status doInBackground(TwitterCallback... callbacks) {
             this.callback = callbacks[0];
             try {
-                twitter4j.Status lastStatus = twitter.getUserTimeline().get(0);
-                return lastStatus;
+                return twitter.getUserTimeline().get(0);
             } catch (TwitterException e) {
                 this.exception = e;
                 Log.d("TWITTER API ERROR", e.getMessage());

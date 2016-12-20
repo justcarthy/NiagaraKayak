@@ -12,7 +12,8 @@ public interface HomeContract {
         void setTweetHandle(String handle);
         void setTweetImage(Drawable image);
         void setTweetDescription(String description);
-        void setMapFragment();
+        void showMapsCard();
+        void showMapsLabel();
         void showSnackbarWithMessage(String message, int length, SnackbarUtils.SnackbarColor color);
     }
 
