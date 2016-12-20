@@ -5,6 +5,10 @@ import android.support.v4.content.ContextCompat;
 import com.niagarakayak.niagarakayakapp.R;
 
 public class SnackbarUtils {
+
+    // For those longer messages
+    public static final int LENGTH_LONGER = 10000;
+
     public static enum SnackbarColor {
         ERROR_COLOR,
         SUCCESS_COLOR,

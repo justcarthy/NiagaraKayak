@@ -29,6 +29,7 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
     private CardView mapsCard;
     private TextView mapsLabel;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
