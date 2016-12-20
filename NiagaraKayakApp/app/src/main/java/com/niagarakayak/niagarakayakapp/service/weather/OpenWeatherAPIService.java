@@ -51,10 +51,10 @@ public class OpenWeatherAPIService implements WeatherService {
             is.close();
             con.disconnect();
             return buffer.toString();
-        }
-        catch(Throwable t) {
+        } catch(Throwable t) {
             t.printStackTrace();
         }
+
         finally {
             try { is.close(); } catch(Throwable t) {}
             try { con.disconnect(); } catch(Throwable t) {}

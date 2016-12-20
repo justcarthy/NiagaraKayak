@@ -53,8 +53,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 getString(R.string.OPEN_WEATHER_API_KEY)
         );
 
-        new HomePresenter(twitterAPIService,
-                openWeatherAPIService, homeFragment, isConnectedOrConnecting);
+        new HomePresenter(twitterAPIService, openWeatherAPIService, homeFragment, isConnectedOrConnecting);
         setUpResideMenu();
         setUpActionBar();
     }
@@ -86,6 +85,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private void setUpResideMenu() {
         resideMenu.setBackground(R.drawable.menu_background);
         resideMenu.attachToActivity(this);
+        resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
         String titles[] = { "Home", "Reservations", "Preferences" };
         int icon[] = { R.drawable.icon_home, R.drawable.icon_calendar, R.drawable.icon_profile };
 

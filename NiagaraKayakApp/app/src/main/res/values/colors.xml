@@ -7,4 +7,5 @@
     <color name="error_snackbar">#b33e3e</color>
     <color name="weather_snackbar">#0a6c73</color>
     <color name="success_snackbar">#a5df83</color>
+    <color name="normal_snackbar">#454545</color>
 </resources>

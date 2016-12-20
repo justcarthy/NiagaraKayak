@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,9 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
     private TextView tweetDesc;
     private ImageView tweetProfileImage;
 
+    private CardView mapsCard;
+    private TextView mapsLabel;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -33,6 +37,8 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
         tweetDesc = (TextView) root.findViewById(R.id.tweet_desc);
         tweetHandle = (TextView) root.findViewById(R.id.tweet_handle);
         tweetProfileImage = (ImageView) root.findViewById(R.id.tweet_pic);
+        mapsCard = (CardView) root.findViewById(R.id.map_card);
+        mapsLabel = (TextView) root.findViewById(R.id.map_card_label);
         return root;
     }
 
@@ -64,13 +70,22 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void setTweetDescription(String description){
+    public void setTweetDescription(String description) {
             tweetDesc.setText(description);
     }
 
     @Override
-    public void setMapFragment() {
+    public void showMapsLabel() {
+        if (mapsLabel != null) {
+            mapsLabel.setVisibility(View.VISIBLE);
+        }
+    }
 
+    @Override
+    public void showMapsCard() {
+        if (mapsCard != null) {
+            mapsCard.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

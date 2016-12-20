@@ -1,16 +1,22 @@
 package com.niagarakayak.niagarakayakapp.home;
 
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
+import android.util.Log;
+import android.view.View;
+import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.model.Weather;
 import com.niagarakayak.niagarakayakapp.service.twitter.TwitterAPIService;
 import com.niagarakayak.niagarakayakapp.service.twitter.TwitterService;
 import com.niagarakayak.niagarakayakapp.service.weather.OpenWeatherAPIService;
 import com.niagarakayak.niagarakayakapp.service.weather.WeatherService;
+import com.niagarakayak.niagarakayakapp.util.HomeUtils;
+import com.niagarakayak.niagarakayakapp.util.WeatherUtils;
 import twitter4j.Status;
+import twitter4j.TwitterException;
 
 import static android.support.design.widget.Snackbar.*;
-import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.SnackbarColor.*;
+import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.SnackbarColor.ERROR_COLOR;
+import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.SnackbarColor.WEATHER_COLOR;
 
 public class HomePresenter implements HomeContract.Presenter {
 
@@ -19,9 +25,8 @@ public class HomePresenter implements HomeContract.Presenter {
     private final OpenWeatherAPIService mWeatherService;
     private final boolean isConnected;
 
-    public HomePresenter(@NonNull TwitterAPIService twitterAPIService,
-                         OpenWeatherAPIService openWeatherAPIService, @NonNull HomeContract.View mHomeView,
-                         boolean hasInternet) {
+    public HomePresenter(@NonNull TwitterAPIService twitterAPIService, @NonNull OpenWeatherAPIService openWeatherAPIService,
+                         @NonNull HomeContract.View mHomeView, boolean hasInternet) {
         this.mTwitterAPI = twitterAPIService;
         this.mWeatherService = openWeatherAPIService;
         this.mHomeView = mHomeView;
@@ -39,25 +44,23 @@ public class HomePresenter implements HomeContract.Presenter {
         if (isConnected) {
             loadTweetCard();
         } else {
-            mHomeView.showSnackbarWithMessage("No internet connection found!", LENGTH_LONG, WEATHER_COLOR);
+            mHomeView.showSnackbarWithMessage("No internet connection found!", LENGTH_LONG, ERROR_COLOR);
             loadErrorTweetCard();
         }
     }
 
-    private void loadWeatherBar() {
-        // TODO: Get Niagara Kayaks location from Google Maps.
-        mWeatherService.fetchWeather(new WeatherService.WeatherServiceRequest("St.Catharines",
+    private void loadWeatherBar(String city) {
+        mWeatherService.fetchWeather(new WeatherService.WeatherServiceRequest(city,
                 new WeatherService.WeatherCallback() {
             @Override
             public void onFailure() {
-                mHomeView.showSnackbarWithMessage("Couldn't fetch the weather", LENGTH_SHORT, ERROR_COLOR);
+                mHomeView.showSnackbarWithMessage("Couldn't fetch the weather!'", LENGTH_LONG, ERROR_COLOR);
             }
 
             @Override
             public void onSuccess(Weather weather) {
-                // TODO: Display the weather better here
                 float temp = weather.temperature.getTemp();
-                mHomeView.showSnackbarWithMessage(weather.currentCondition.getCondition(), LENGTH_SHORT, WEATHER_COLOR);
+                mHomeView.showSnackbarWithMessage(weather.currentCondition.getCondition(), LENGTH_LONG, WEATHER_COLOR);
             }
         }));
     }
@@ -66,18 +69,19 @@ public class HomePresenter implements HomeContract.Presenter {
     public void loadTweetCard() {
         mTwitterAPI.loadLastTweet(new TwitterService.TwitterCallback() {
             @Override
-            public void onFailure(Exception e) {
-                mHomeView.showSnackbarWithMessage("Failed to load most recent tweet", LENGTH_SHORT, ERROR_COLOR);
+            public void onFailure(TwitterException e) {
+                mHomeView.showSnackbarWithMessage("Failed to fetch most recent tweet", LENGTH_SHORT, ERROR_COLOR);
                 loadErrorTweetCard();
             }
 
             @Override
             public void onSuccess(Status lastTweet) {
+                String tweetText = lastTweet.getText();
+
                 mHomeView.setTweetLabel("Recent tweet from ");
                 mHomeView.setTweetHandle("@" + lastTweet.getUser().getScreenName());
-                mHomeView.setTweetDescription(lastTweet.getText());
+                mHomeView.setTweetDescription(tweetText);
 
-                loadWeatherBar();
                 loadMapCard();
             }
         });
@@ -85,11 +89,13 @@ public class HomePresenter implements HomeContract.Presenter {
 
     public void loadErrorTweetCard() {
         mHomeView.setTweetLabel("Error");
-        mHomeView.setTweetDescription("Failed to recent Tweet");
+        mHomeView.setTweetDescription("St.Catharines");
     }
 
     @Override
     public void loadMapCard() {
+        mHomeView.showMapsLabel();
+        mHomeView.showMapsCard();
     }
 
     public void loadErrorMapCard() {
