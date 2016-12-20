@@ -1,20 +1,19 @@
 package com.niagarakayak.niagarakayakapp.home;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
-import android.view.View;
-import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.model.Weather;
 import com.niagarakayak.niagarakayakapp.service.twitter.TwitterAPIService;
 import com.niagarakayak.niagarakayakapp.service.twitter.TwitterService;
 import com.niagarakayak.niagarakayakapp.service.weather.OpenWeatherAPIService;
 import com.niagarakayak.niagarakayakapp.service.weather.WeatherService;
-import com.niagarakayak.niagarakayakapp.util.HomeUtils;
 import com.niagarakayak.niagarakayakapp.util.WeatherUtils;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
 import static android.support.design.widget.Snackbar.*;
+
+import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.LENGTH_LONGER;
+
 import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.SnackbarColor.ERROR_COLOR;
 import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.SnackbarColor.WEATHER_COLOR;
 
@@ -24,14 +23,14 @@ public class HomePresenter implements HomeContract.Presenter {
     private final TwitterService mTwitterAPI;
     private final OpenWeatherAPIService mWeatherService;
     private final boolean isConnected;
-    private static final int LENGTH_LONGER = 10000;
 
-    public HomePresenter(@NonNull TwitterAPIService twitterAPIService, @NonNull OpenWeatherAPIService openWeatherAPIService,
-                         @NonNull HomeContract.View mHomeView, boolean hasInternet) {
+    public HomePresenter(@NonNull TwitterAPIService twitterAPIService,
+                         @NonNull OpenWeatherAPIService openWeatherAPIService,
+                         @NonNull HomeContract.View mHomeView, boolean isConnected) {
         this.mTwitterAPI = twitterAPIService;
         this.mWeatherService = openWeatherAPIService;
         this.mHomeView = mHomeView;
-        this.isConnected = hasInternet;
+        this.isConnected = isConnected;
         mHomeView.setPresenter(this);
     }
 
@@ -60,31 +59,7 @@ public class HomePresenter implements HomeContract.Presenter {
 
             @Override
             public void onSuccess(Weather weather) {
-                int UniSad  =   0x1F61E;
-                int UniRain =   0x2614;
-                int UniCloud=   0x2601;
-                int UniWind =   0x1F343;
-                int UniHappy=   0x1F604;
-                int UniSun  =   0x1F305;
-                if(WeatherUtils.severeConditions(weather)) {
-                    mHomeView.showSnackbarWithMessage("Not the best day outside for kayaking "
-                            + HomeUtils.getEmojiByUnicode(UniSad) + " "
-                            + HomeUtils.getEmojiByUnicode(UniRain) + " "
-                            + "\nMaybe tomorrow?", LENGTH_LONGER, WEATHER_COLOR);
-
-                }
-                else if(WeatherUtils.mildConditions(weather)){
-                    mHomeView.showSnackbarWithMessage("It's a little windy, \nbut that's no reason to stay inside"
-                            + HomeUtils.getEmojiByUnicode(UniCloud) + " "
-                            + HomeUtils.getEmojiByUnicode(UniWind) + " ",
-                            LENGTH_LONGER, WEATHER_COLOR);
-                }
-                else{
-                    mHomeView.showSnackbarWithMessage("Perfect weather outside today! \nCome kayaking!"
-                                    + HomeUtils.getEmojiByUnicode(UniHappy) + " "
-                                    + HomeUtils.getEmojiByUnicode(UniSun) + " ",
-                            LENGTH_LONGER, WEATHER_COLOR);
-                }
+                mHomeView.showSnackbarWithMessage(WeatherUtils.getWeatherString(weather), LENGTH_LONGER, WEATHER_COLOR);
             }
         }));
     }
@@ -118,15 +93,13 @@ public class HomePresenter implements HomeContract.Presenter {
 
     @Override
     public void loadMapCard() {
+        loadWeatherBar("St.Catharines");
         mHomeView.showMapsLabel();
         mHomeView.showMapsCard();
-
-        loadWeatherBar("St.Catharines");
     }
 
     public void loadErrorMapCard() {
         // TODO: Implement.
     }
-
 
 }
