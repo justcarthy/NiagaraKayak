@@ -41,14 +41,16 @@ public class HomeActivity extends AppCompatActivity {
         View headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header);
         mDrawerTitles = getResources().getStringArray(R.array.menu_titles);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        homeFragment = (HomeViewFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.contentView);
-        if (homeFragment == null) {
+
+        if (savedInstanceState == null) {
             homeFragment = HomeViewFragment.newInstance();
             ActivityUtils.addFragmentToActivty(getSupportFragmentManager(), homeFragment, R.id.contentView);
+        } else {
+            homeFragment = (HomeViewFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.contentView);
         }
 
-        boolean connectionStatus = isConnectedOrConnecting();
+        boolean networkStatus = isConnectedOrConnecting();
 
         TwitterAPIService twitterAPIService = new TwitterAPIService(
                 getString(R.string.TWITTER_CONSUMER_KEY),
@@ -62,7 +64,7 @@ public class HomeActivity extends AppCompatActivity {
         );
 
         // Set presenter
-        new HomePresenter(twitterAPIService, openWeatherAPIService, homeFragment, connectionStatus);
+        new HomePresenter(twitterAPIService, openWeatherAPIService, homeFragment, networkStatus);
         setupDrawer();
     }
 
