@@ -12,6 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.util.SnackbarUtils;
 
@@ -24,22 +30,26 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
     private TextView tweetLabel;
     private TextView tweetHandle;
     private TextView tweetDesc;
+    private TextView tweetDate;
     private ImageView tweetProfileImage;
 
     private CardView mapsCard;
+    private SupportMapFragment mapFragment;
     private TextView mapsLabel;
-
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setRetainInstance(true);
         View root  = inflater.inflate(R.layout.fragment_home, container, false);
         tweetLabel = (TextView) root.findViewById(R.id.tweet_label_intro);
         tweetDesc = (TextView) root.findViewById(R.id.tweet_desc);
         tweetHandle = (TextView) root.findViewById(R.id.tweet_handle);
+        tweetDate = (TextView) root.findViewById(R.id.tweet_date);
         tweetProfileImage = (ImageView) root.findViewById(R.id.tweet_pic);
         mapsCard = (CardView) root.findViewById(R.id.map_card);
         mapsLabel = (TextView) root.findViewById(R.id.map_card_label);
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment);
         return root;
     }
 
@@ -71,6 +81,11 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
+    public void setTweetDate(String stringDate) {
+        tweetDate.setText(stringDate);
+    }
+
+    @Override
     public void setTweetDescription(String description) {
             tweetDesc.setText(description);
     }
@@ -83,9 +98,23 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void showMapsCard() {
+    public void setMapsLabel(String label) {
+        mapsLabel.setText(label);
+    }
+
+    @Override
+    public void showMapsCardWithCoords(final LatLng coords) {
         if (mapsCard != null) {
             mapsCard.setVisibility(View.VISIBLE);
+            // Load the map asynchronously, fire the callback when ready.
+            mapFragment.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coords, 10));
+                    googleMap.addMarker(new MarkerOptions().position(coords));
+                    googleMap.getUiSettings().setScrollGesturesEnabled(false);
+                }
+            });
         }
     }
 

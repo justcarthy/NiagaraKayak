@@ -6,4 +6,6 @@
     <string name="TWITTER_ACCESS_TOKEN">810606940556500992-3P4l58LdmFdXNibcNKeB11f2OB7sVom</string>
     <string name="TWITTER_ACCESS_TOKEN_SECRET">AAAffEsdp1ggmjpU409JEV9nHWftramfrF0Fgc53RXvL3</string>
     <string name="OPEN_WEATHER_API_KEY">922ee36e789d1afa54220341a705f230</string>
+    <string name="access_drawer_open">Open navigation drawer</string>
+    <string name="accesss_drawer_close">Close navigation drawer</string>
 </resources>
