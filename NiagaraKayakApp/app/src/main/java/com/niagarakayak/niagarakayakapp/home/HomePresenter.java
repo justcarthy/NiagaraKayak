@@ -1,14 +1,23 @@
 package com.niagarakayak.niagarakayakapp.home;
 
 import android.support.annotation.NonNull;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.niagarakayak.niagarakayakapp.model.Weather;
 import com.niagarakayak.niagarakayakapp.service.twitter.TwitterAPIService;
 import com.niagarakayak.niagarakayakapp.service.twitter.TwitterService;
 import com.niagarakayak.niagarakayakapp.service.weather.OpenWeatherAPIService;
 import com.niagarakayak.niagarakayakapp.service.weather.WeatherService;
+import com.niagarakayak.niagarakayakapp.util.HomeUtils;
 import com.niagarakayak.niagarakayakapp.util.WeatherUtils;
 import twitter4j.Status;
 import twitter4j.TwitterException;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import static android.support.design.widget.Snackbar.*;
 
@@ -76,30 +85,39 @@ public class HomePresenter implements HomeContract.Presenter {
             @Override
             public void onSuccess(Status lastTweet) {
                 String tweetText = lastTweet.getText();
-
-                mHomeView.setTweetLabel("Recent tweet from ");
+                Date tweetDate = lastTweet.getCreatedAt();
+                mHomeView.setTweetLabel("Last tweet from ");
                 mHomeView.setTweetHandle("@" + lastTweet.getUser().getScreenName());
                 mHomeView.setTweetDescription(tweetText);
-
-                loadMapCard();
+                mHomeView.setTweetDate(tweetDate.toString());
+                LatLng coords = HomeUtils.getLocationFromTweet(tweetText);
+                loadWeatherBar("St.Catharines");
+                loadMapCard(tweetDate, coords);
             }
         });
     }
 
     public void loadErrorTweetCard() {
         mHomeView.setTweetLabel("Error");
-        mHomeView.setTweetDescription("Please Reconnect to see most recent status.");
+        mHomeView.setTweetDescription("Please reconnect to see most recent status.");
     }
 
     @Override
-    public void loadMapCard() {
-        loadWeatherBar("St.Catharines");
+    public void loadMapCard(Date tweetDate, LatLng coords) {
+        Calendar tweetCal = Calendar.getInstance();
+        Calendar todaysCal = Calendar.getInstance();
+        tweetCal.setTime(tweetDate);
+        todaysCal.setTime(new Date());
+
+        String mapsLabelText = "Here's where we were last";
+
+        if (tweetCal.get(Calendar.DAY_OF_YEAR) == todaysCal.get(Calendar.DAY_OF_YEAR)) {
+            // The tweet was today
+            mapsLabelText = "Here's where we are for today";
+        }
+
+        mHomeView.setMapsLabel(mapsLabelText);
         mHomeView.showMapsLabel();
-        mHomeView.showMapsCard();
+        mHomeView.showMapsCardWithCoords(coords);
     }
-
-    public void loadErrorMapCard() {
-        // TODO: Implement.
-    }
-
 }

@@ -1,46 +1,54 @@
 package com.niagarakayak.niagarakayakapp.home;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v7.app.ActionBar;
+import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.service.twitter.TwitterAPIService;
 import com.niagarakayak.niagarakayakapp.service.weather.OpenWeatherAPIService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
-import com.special.ResideMenu.ResideMenu;
-import com.special.ResideMenu.ResideMenuItem;
 
 
-public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActionBar actionBar;
-    private ResideMenu resideMenu;
+public class HomeActivity extends AppCompatActivity {
+    private DrawerLayout mDrawer;
+    private Toolbar mToolbar;
+    private NavigationView mNavigationView;
+    private String[] mDrawerTitles;
+    private CharSequence mTitle;
+
+    private ActionBarDrawerToggle mDrawerToggle;
+    private HomeViewFragment homeFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        actionBar = getSupportActionBar();
-        resideMenu = new ResideMenu(this);
-
-        HomeViewFragment homeFragment = (HomeViewFragment) getSupportFragmentManager()
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        setToolbarTitle("Home");
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header);
+        mDrawerTitles = getResources().getStringArray(R.array.menu_titles);
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        homeFragment = (HomeViewFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.contentView);
-
         if (homeFragment == null) {
             homeFragment = HomeViewFragment.newInstance();
             ActivityUtils.addFragmentToActivty(getSupportFragmentManager(), homeFragment, R.id.contentView);
         }
 
-        boolean isConnectedOrConnecting = false;
-        if (isConnectedOrConnecting()) {
-            isConnectedOrConnecting = true;
-        }
+        boolean connectionStatus = isConnectedOrConnecting();
 
         TwitterAPIService twitterAPIService = new TwitterAPIService(
                 getString(R.string.TWITTER_CONSUMER_KEY),
@@ -53,53 +61,56 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 getString(R.string.OPEN_WEATHER_API_KEY)
         );
 
-        new HomePresenter(twitterAPIService, openWeatherAPIService, homeFragment, isConnectedOrConnecting);
-        setUpResideMenu();
-        setUpActionBar();
+        // Set presenter
+        new HomePresenter(twitterAPIService, openWeatherAPIService, homeFragment, connectionStatus);
+        setupDrawer();
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            default:
-                Toast.makeText(HomeActivity.this, "Menu item tapped", Toast.LENGTH_SHORT).show();
-        }
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    private void setupDrawer() {
+        mDrawerToggle = setupDrawerToggle();
+        mDrawer.addDrawerListener(mDrawerToggle);
+        mNavigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem item) {
+                        selectDrawerItem(item);
+                        return true;
+                    }
+                }
+        );
+    }
+
+    private void selectDrawerItem(MenuItem item) {
+        // TODO: Implement when we make more activities.
+        setToolbarTitle(item.getTitle());
+        mDrawer.closeDrawers();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == android.R.id.home) {
-            if (!resideMenu.isOpened()) {
-                resideMenu.openMenu(ResideMenu.DIRECTION_LEFT);
-            } else {
-                resideMenu.closeMenu();
-            }
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void setUpResideMenu() {
-        resideMenu.setBackground(R.drawable.menu_background);
-        resideMenu.attachToActivity(this);
-        resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
-        String titles[] = { "Home", "Reservations", "Preferences" };
-        int icon[] = { R.drawable.icon_home, R.drawable.icon_calendar, R.drawable.icon_profile };
-
-        for (int i = 0; i < titles.length; i++){
-            ResideMenuItem item = new ResideMenuItem(this, icon[i], titles[i]);
-            item.setOnClickListener(this);
-            resideMenu.addMenuItem(item, ResideMenu.DIRECTION_LEFT);
-        }
-    }
-
-    private void setUpActionBar() {
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+    private ActionBarDrawerToggle setupDrawerToggle() {
+        return new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.access_drawer_open,  R.string.accesss_drawer_close);
     }
 
     private boolean isConnectedOrConnecting() {
@@ -112,5 +123,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return false;
+    }
+
+    public void setToolbarTitle(CharSequence title) {
+        mTitle = title;
+        getSupportActionBar().setTitle(mTitle);
     }
 }

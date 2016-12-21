@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="menu_titles">
+        <item>Home</item>
+        <item>Resevations</item>
+        <item>Preferences</item>
+    </string-array>
+</resources>
