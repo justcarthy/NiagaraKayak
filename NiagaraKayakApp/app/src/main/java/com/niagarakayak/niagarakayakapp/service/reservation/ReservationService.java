@@ -6,6 +6,11 @@ import java.util.ArrayList;
 
 public interface ReservationService {
 
-    ArrayList<Reservation> getAllReservations();
+    void getAllReservations(ReservationCallback callback);
+
+    interface ReservationCallback {
+        void onFailure();
+        void onSuccess(ArrayList<Reservation> reservations);
+    }
 
 }
