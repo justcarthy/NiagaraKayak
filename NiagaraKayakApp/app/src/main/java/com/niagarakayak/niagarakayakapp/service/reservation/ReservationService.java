@@ -14,7 +14,7 @@ public interface ReservationService {
      * @param Email email address of client to fetch reservations for
      */
     void getAllReservations(ReservationCallback callback,String Email);
-    void postReservation(PostCallback callback,Reservation reservation);
+    String postReservationURL(Reservation reservation);
 
     interface ReservationCallback {
         void onFailure();

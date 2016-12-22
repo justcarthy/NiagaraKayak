@@ -14,7 +14,6 @@ import java.util.ArrayList;
 public class ReservationAPIService implements ReservationService {
 
     private String Email;  //email for getAllReservations
-    private Reservation reservation; //Reservation to be posted
     @Override
     public void getAllReservations(ReservationCallback callback,String Email) {
         this.Email = Email;
@@ -22,8 +21,17 @@ public class ReservationAPIService implements ReservationService {
     }
 
     @Override
-    public void postReservation(PostCallback callback,Reservation reservation){
-        
+    public String postReservationURL(Reservation reservation){
+        String postURL = UrlContainer.getPostURL();
+        //apikey , email , date , time , hours , single , tandem;
+        String email = reservation.getEmail();
+        String date = reservation.getDate();
+        String time = reservation.getReservationTime();
+        int hours = reservation.getReservationHours();
+        int single = reservation.getSingleKayaks();
+        int tandem = reservation.getTandemKayaks();
+        postURL = String.format(postURL,ReservationService.APIKey,email,date,time,hours,single,tandem);
+        return postURL;
     }
 
     /**
@@ -54,7 +62,6 @@ public class ReservationAPIService implements ReservationService {
 
         return null;
     }
-
     /**
      * method gets the json object and closes all resources
      * @param httpConnection connection to extract the JSON object from
@@ -89,19 +96,10 @@ public class ReservationAPIService implements ReservationService {
         protected void onPostExecute(ArrayList<Reservation> reservations) {
             if(reservations==null)
                 callback.onFailure();
-            else callback.onSuccess(reservations);
+            else
+                callback.onSuccess(reservations);
         }
     }
 
-    private class PostReservationTask extends AsyncTask<PostCallback,Void,Boolean> {
-        @Override
-        protected Boolean doInBackground(PostCallback... params) {
-            return null;
-        }
 
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
-        }
-    }
 }
