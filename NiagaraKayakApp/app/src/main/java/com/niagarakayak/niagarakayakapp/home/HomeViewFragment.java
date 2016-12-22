@@ -12,10 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.niagarakayak.niagarakayakapp.R;
@@ -36,12 +33,17 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
     private CardView mapsCard;
     private SupportMapFragment mapFragment;
     private TextView mapsLabel;
+    private Bundle mBundle;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setRetainInstance(true);
         View root  = inflater.inflate(R.layout.fragment_home, container, false);
+
+        if (savedInstanceState != null) {
+            mBundle = savedInstanceState;
+        }
+
         tweetLabel = (TextView) root.findViewById(R.id.tweet_label_intro);
         tweetDesc = (TextView) root.findViewById(R.id.tweet_desc);
         tweetHandle = (TextView) root.findViewById(R.id.tweet_handle);
@@ -50,14 +52,43 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
         mapsCard = (CardView) root.findViewById(R.id.map_card);
         mapsLabel = (TextView) root.findViewById(R.id.map_card_label);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment);
+        // Don't destroy the map fragment.
+        mapFragment.setRetainInstance(true);
         return root;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putCharSequence("tweetLabel", tweetLabel.getText());
+        outState.putCharSequence("tweetHandle", tweetHandle.getText());
+        outState.putCharSequence("tweetDesc", tweetDesc.getText());
+        outState.putCharSequence("tweetDate", tweetDate.getText());
+        if (mapsCard.getVisibility() == View.VISIBLE) {
+            outState.putBoolean("mapsIsVisible", true);
+            outState.putCharSequence("mapsLabel", mapsLabel.getText());
+        } else {
+            outState.putBoolean("mapsIsVisible", false);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         setTweetImage(ContextCompat.getDrawable(getActivity(), R.drawable.nk_twitter_logo));
-        mPresenter.start();
+
+        if (mBundle == null) {
+            mPresenter.start();
+        } else {
+            tweetLabel.setText(mBundle.getCharSequence("tweetLabel"));
+            tweetDesc.setText(mBundle.getCharSequence("tweetDesc"));
+            tweetHandle.setText(mBundle.getCharSequence("tweetHandle"));
+            tweetDate.setText(mBundle.getCharSequence("tweetDate"));
+            mapsLabel.setText(mBundle.getCharSequence("mapsLabel"));
+            if (mBundle.getBoolean("mapsIsVisible")) {
+                mapsCard.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override
@@ -111,7 +142,8 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
                     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coords, 10));
-                    googleMap.addMarker(new MarkerOptions().position(coords));
+                    MarkerOptions markerOptions = new MarkerOptions().position(coords);
+                    googleMap.addMarker(markerOptions);
                     googleMap.getUiSettings().setScrollGesturesEnabled(false);
                 }
             });
