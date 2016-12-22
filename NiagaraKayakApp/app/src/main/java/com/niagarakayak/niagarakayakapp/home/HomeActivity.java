@@ -1,9 +1,11 @@
 package com.niagarakayak.niagarakayakapp.home;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -14,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import com.niagarakayak.niagarakayakapp.R;
+import com.niagarakayak.niagarakayakapp.preferences.PreferencesPresenter;
+import com.niagarakayak.niagarakayakapp.preferences.PreferencesViewFragment;
 import com.niagarakayak.niagarakayakapp.service.twitter.TwitterAPIService;
 import com.niagarakayak.niagarakayakapp.service.weather.OpenWeatherAPIService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
@@ -33,6 +37,13 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (!checkSettings(prefs)) {
+            // TODO: run intro here
+        }
+
         setContentView(R.layout.activity_main);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -44,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             homeFragment = HomeViewFragment.newInstance();
-            ActivityUtils.addFragmentToActivty(getSupportFragmentManager(), homeFragment, R.id.contentView);
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), homeFragment, R.id.contentView);
         } else {
             homeFragment = (HomeViewFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.contentView);
@@ -66,6 +77,16 @@ public class HomeActivity extends AppCompatActivity {
         // Set presenter
         new HomePresenter(twitterAPIService, openWeatherAPIService, homeFragment, networkStatus);
         setupDrawer();
+    }
+
+    private boolean checkSettings(SharedPreferences prefs) {
+        if (prefs.getString("name", null) == null
+                || prefs.getString("email", null) == null
+                || prefs.getString("phone", null) == null) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -95,7 +116,24 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void selectDrawerItem(MenuItem item) {
-        // TODO: Implement when we make more activities.
+
+        switch (item.getItemId()) {
+            case R.id.nav_home_fragment: {
+                break;
+            }
+
+            case R.id.nav_preferences_fragment: {
+                PreferencesViewFragment fragment = new PreferencesViewFragment();
+                ActivityUtils.replaceFragmentInActivity(getSupportFragmentManager(), fragment, R.id.contentView);
+                new PreferencesPresenter(PreferenceManager.getDefaultSharedPreferences(this), fragment);
+                break;
+            }
+
+            case R.id.nav_reservations_fragment: {
+                break;
+            }
+        }
+
         setToolbarTitle(item.getTitle());
         mDrawer.closeDrawers();
     }

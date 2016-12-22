@@ -86,6 +86,7 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
             tweetDate.setText(mBundle.getCharSequence("tweetDate"));
             mapsLabel.setText(mBundle.getCharSequence("mapsLabel"));
             if (mBundle.getBoolean("mapsIsVisible")) {
+                mapsLabel.setVisibility(View.VISIBLE);
                 mapsCard.setVisibility(View.VISIBLE);
             }
         }
@@ -142,8 +143,7 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
                     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coords, 10));
-                    MarkerOptions markerOptions = new MarkerOptions().position(coords);
-                    googleMap.addMarker(markerOptions);
+                    googleMap.addMarker(new MarkerOptions().position(coords));
                     googleMap.getUiSettings().setScrollGesturesEnabled(false);
                 }
             });
