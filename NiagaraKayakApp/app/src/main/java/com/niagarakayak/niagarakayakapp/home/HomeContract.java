@@ -20,7 +20,6 @@ public interface HomeContract {
         void showMapsCardWithCoords(final LatLng coords);
         void showMapsLabel();
         void setMapsLabel(String label);
-        void showSnackbarWithMessage(String message, int length, SnackbarUtils.SnackbarColor color);
     }
 
     interface Presenter extends BasePresenter {

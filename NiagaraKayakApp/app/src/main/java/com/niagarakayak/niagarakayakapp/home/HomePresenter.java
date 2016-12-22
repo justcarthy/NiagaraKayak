@@ -1,6 +1,7 @@
 package com.niagarakayak.niagarakayakapp.home;
 
 import android.support.annotation.NonNull;
+import android.view.View;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -11,6 +12,7 @@ import com.niagarakayak.niagarakayakapp.service.twitter.TwitterAPIService;
 import com.niagarakayak.niagarakayakapp.service.twitter.TwitterService;
 import com.niagarakayak.niagarakayakapp.service.weather.OpenWeatherAPIService;
 import com.niagarakayak.niagarakayakapp.service.weather.WeatherService;
+import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 import com.niagarakayak.niagarakayakapp.util.HomeUtils;
 import com.niagarakayak.niagarakayakapp.util.WeatherUtils;
 import twitter4j.Status;
@@ -53,24 +55,9 @@ public class HomePresenter implements HomeContract.Presenter {
         if (isConnected) {
             loadTweetCard();
         } else {
-            mHomeView.showSnackbarWithMessage("No internet connection found!", LENGTH_LONG, ERROR_COLOR);
+            ActivityUtils.showSnackbarWithMessage((View) mHomeView, "No internet connection found!", LENGTH_LONG, ERROR_COLOR);
             loadErrorTweetCard();
         }
-    }
-
-    private void loadWeatherBar(String city) {
-        mWeatherService.fetchWeather(new WeatherService.WeatherServiceRequest(city,
-                new WeatherService.WeatherCallback() {
-            @Override
-            public void onFailure() {
-                mHomeView.showSnackbarWithMessage("Couldn't fetch the weather!'", LENGTH_LONG, ERROR_COLOR);
-            }
-
-            @Override
-            public void onSuccess(Weather weather) {
-                mHomeView.showSnackbarWithMessage(WeatherUtils.getWeatherString(weather), LENGTH_LONGER, WEATHER_COLOR);
-            }
-        }));
     }
 
     @Override
@@ -78,7 +65,7 @@ public class HomePresenter implements HomeContract.Presenter {
         mTwitterAPI.loadLastTweet(new TwitterService.TwitterCallback() {
             @Override
             public void onFailure(TwitterException e) {
-                mHomeView.showSnackbarWithMessage("Failed to fetch most recent tweet", LENGTH_SHORT, ERROR_COLOR);
+                ActivityUtils.showSnackbarWithMessage((View) mHomeView, "Failed to fetch most recent tweet", LENGTH_SHORT, ERROR_COLOR);
                 loadErrorTweetCard();
             }
 
@@ -91,7 +78,6 @@ public class HomePresenter implements HomeContract.Presenter {
                 mHomeView.setTweetDescription(tweetText);
                 mHomeView.setTweetDate(tweetDate.toString());
                 LatLng coords = HomeUtils.getLocationFromTweet(tweetText);
-                loadWeatherBar("St.Catharines");
                 loadMapCard(tweetDate, coords);
             }
         });

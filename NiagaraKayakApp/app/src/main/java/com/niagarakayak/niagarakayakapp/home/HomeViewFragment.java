@@ -150,13 +150,6 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
         }
     }
 
-    @Override
-    public void showSnackbarWithMessage(String message, int length, SnackbarUtils.SnackbarColor snackbarColor) {
-        Snackbar sb = Snackbar.make(this.getView(), message, length);
-        sb.getView().setBackgroundColor(SnackbarUtils.getBackgroundColor(getContext(), snackbarColor));
-        sb.show();
-    }
-
     public static HomeViewFragment newInstance() {
         Bundle args = new Bundle();
         HomeViewFragment homeViewFragment = new HomeViewFragment();

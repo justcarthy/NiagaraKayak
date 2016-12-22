@@ -2,12 +2,7 @@ package com.niagarakayak.niagarakayakapp.preferences;
 
 import android.content.SharedPreferences;
 import android.view.View;
-import android.widget.Toast;
-
-import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.home.HomeActivity;
-import com.niagarakayak.niagarakayakapp.home.HomePresenter;
-import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 
 public class PreferencesPresenter implements PreferencesContract.Presenter {
 
