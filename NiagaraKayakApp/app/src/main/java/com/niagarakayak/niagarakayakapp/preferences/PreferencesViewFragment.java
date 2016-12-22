@@ -12,10 +12,6 @@ import android.widget.Toast;
 
 import com.niagarakayak.niagarakayakapp.R;
 
-/**
- * Created by justin on 21/12/16.
- */
-
 public class PreferencesViewFragment extends Fragment implements PreferencesContract.View {
 
     private PreferencesContract.Presenter mPresenter;
@@ -24,8 +20,6 @@ public class PreferencesViewFragment extends Fragment implements PreferencesCont
     private EditText phoneText;
     private EditText emailText;
     private Button saveButton;
-
-
 
     @Nullable
     @Override
@@ -39,6 +33,8 @@ public class PreferencesViewFragment extends Fragment implements PreferencesCont
         return root;
     }
 
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -49,8 +45,6 @@ public class PreferencesViewFragment extends Fragment implements PreferencesCont
     public void setPresenter(PreferencesContract.Presenter presenter) {
         mPresenter = presenter;
     }
-
-
 
     public static PreferencesViewFragment newInstance() {
         Bundle args = new Bundle();
@@ -94,9 +88,7 @@ public class PreferencesViewFragment extends Fragment implements PreferencesCont
     @Override
     public void showToast(String message) {
         Toast.makeText(this.getContext(), message, Toast.LENGTH_LONG).show();
-
     }
-
 
 
 }
