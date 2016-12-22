@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import com.niagarakayak.niagarakayakapp.R;
 
 /**
@@ -33,6 +35,7 @@ public class PreferencesViewFragment extends Fragment implements PreferencesCont
         phoneText = (EditText) root.findViewById(R.id.phone);
         emailText = (EditText) root.findViewById(R.id.email);
         saveButton = (Button) root.findViewById(R.id.btn_save);
+        saveButton.setOnClickListener(mPresenter);
         return root;
     }
 
@@ -47,35 +50,7 @@ public class PreferencesViewFragment extends Fragment implements PreferencesCont
         mPresenter = presenter;
     }
 
-    @Override
-    public void setName() {
 
-    }
-
-    @Override
-    public void setEmail() {
-
-    }
-
-    @Override
-    public void setPhone() {
-
-    }
-
-    @Override
-    public void getNameText() {
-
-    }
-
-    @Override
-    public void getEmailText() {
-
-    }
-
-    @Override
-    public void getPhoneText() {
-
-    }
 
     public static PreferencesViewFragment newInstance() {
         Bundle args = new Bundle();
@@ -83,4 +58,45 @@ public class PreferencesViewFragment extends Fragment implements PreferencesCont
         preferencesViewFragment.setArguments(args);
         return preferencesViewFragment;
     }
+
+    @Override
+    public void setName(String name) {
+        nameText.setText(name);
+    }
+
+    @Override
+    public void setEmail(String email) {
+        emailText.setText(email);
+    }
+
+    @Override
+    public void setPhone(String phone) {
+        phoneText.setText(phone);
+    }
+
+    @Override
+    public String getNameText() {
+
+        return nameText.getText().toString();
+    }
+
+    @Override
+    public String getEmailText() {
+
+        return emailText.getText().toString();
+    }
+
+    @Override
+    public String getPhoneText() {
+        return phoneText.getText().toString();
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toast.makeText(this.getContext(), message, Toast.LENGTH_LONG).show();
+
+    }
+
+
+
 }

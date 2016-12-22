@@ -1,6 +1,8 @@
 package com.niagarakayak.niagarakayakapp.preferences;
 
 
+import android.view.View;
+
 import com.niagarakayak.niagarakayakapp.BasePresenter;
 import com.niagarakayak.niagarakayakapp.BaseView;
 
@@ -10,18 +12,26 @@ import com.niagarakayak.niagarakayakapp.BaseView;
 
 public interface PreferencesContract {
 
-    interface Presenter extends BasePresenter {
+    interface Presenter extends BasePresenter, android.view.View.OnClickListener {
         void loadSettings();
+        boolean checkInput();
         void saveSettings();
+
+        @Override
+        void onClick(android.view.View v);
+
+        @Override
+        void start();
     }
 
     interface View extends BaseView<Presenter> {
-        void setName();
-        void setEmail();
-        void setPhone();
-        void getNameText();
-        void getEmailText();
-        void getPhoneText();
+        void setName(String name);
+        void setEmail(String email);
+        void setPhone(String phone);
+        String getNameText();
+        String getEmailText();
+        String getPhoneText();
+        void showToast(String message);
     }
 
 

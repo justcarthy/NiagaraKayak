@@ -89,6 +89,10 @@ public class HomeActivity extends AppCompatActivity {
         return true;
     }
 
+    public HomeViewFragment getHomeFragment() {
+        return homeFragment;
+    }
+
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -125,7 +129,7 @@ public class HomeActivity extends AppCompatActivity {
             case R.id.nav_preferences_fragment: {
                 PreferencesViewFragment fragment = new PreferencesViewFragment();
                 ActivityUtils.replaceFragmentInActivity(getSupportFragmentManager(), fragment, R.id.contentView);
-                new PreferencesPresenter(PreferenceManager.getDefaultSharedPreferences(this), fragment);
+                new PreferencesPresenter(this, PreferenceManager.getDefaultSharedPreferences(this), fragment);
                 break;
             }
 
