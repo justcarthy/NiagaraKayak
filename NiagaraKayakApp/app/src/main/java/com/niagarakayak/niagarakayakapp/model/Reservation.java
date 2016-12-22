@@ -5,41 +5,24 @@ package com.niagarakayak.niagarakayakapp.model;
  */
 
 public class Reservation {
-    private String name;
-    // Store date as strings for simplicity
-    private String date;
+
     private String email;
-    private String phone;
-    private String reservationTime;
-    private int reservationHours;
+    private String reservationID;
+    private String date;
+    private String time;
+    private int hours;
     private int singleKayaks;
     private int tandemKayaks;
-    private String launchArea;
-    private int numAdults;
-    private int numChildren;
-
 
     public Reservation() {}
 
-    public Reservation(String name, String date, String email, String phone, String reservationTime, int reservationHours,
-                       int singleKayaks, int tandemKayaks, String launchArea, int numAdults, int numChildren) {
-        this.name = name;
+    public Reservation(String reservationID,String email,String date,String time,int hours,int singleKayaks,int tandemKayaks) {
+        this.reservationID = reservationID;
         this.date = date;
-        this.email= email;
-        this.phone = phone;
-        this.reservationTime = reservationTime;
-        this.reservationHours = reservationHours;
+        this.time = time;
+        this.hours = hours;
         this.singleKayaks = singleKayaks;
         this.tandemKayaks = tandemKayaks;
-        this.launchArea = launchArea;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDate() {
@@ -51,11 +34,11 @@ public class Reservation {
     }
 
     public int getReservationHours() {
-        return reservationHours;
+        return hours;
     }
 
     public void setReservationHours(int reservationHours) {
-        this.reservationHours = reservationHours;
+        this.hours = reservationHours;
     }
 
     public int getSingleKayaks() {
@@ -82,43 +65,11 @@ public class Reservation {
         this.email = email;
     }
 
-    public String getLaunchArea() {
-        return launchArea;
-    }
-
-    public void setLaunchArea(String launchArea) {
-        this.launchArea = launchArea;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public String getReservationTime() {
-        return reservationTime;
+        return time;
     }
 
     public void setReservationTime(String reservationTime) {
-        this.reservationTime = reservationTime;
-    }
-
-    public int getNumAdults() {
-        return numAdults;
-    }
-
-    public void setNumAdults(int numAdults) {
-        this.numAdults = numAdults;
-    }
-
-    public int getNumChildren() {
-        return numChildren;
-    }
-
-    public void setNumChildren(int numChildren) {
-        this.numChildren = numChildren;
+        this.time = reservationTime;
     }
 }
