@@ -1,6 +1,13 @@
 package com.niagarakayak.niagarakayakapp.preferences;
 
 import android.content.SharedPreferences;
+import android.view.View;
+import android.widget.Toast;
+
+import com.niagarakayak.niagarakayakapp.R;
+import com.niagarakayak.niagarakayakapp.home.HomeActivity;
+import com.niagarakayak.niagarakayakapp.home.HomePresenter;
+import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 
 public class PreferencesPresenter implements PreferencesContract.Presenter {
 
@@ -21,10 +28,39 @@ public class PreferencesPresenter implements PreferencesContract.Presenter {
     @Override
     public void loadSettings() {
         // TODO: Implement
+
+        String nameSetting = prefs.getString("name", null);
+        String emailSetting = prefs.getString("email", null);
+        String phoneSetting = prefs.getString("phone", null);
+        mPrefsView.setName(nameSetting);
+        mPrefsView.setEmail(emailSetting);
+        mPrefsView.setPhone(phoneSetting);
+
+
+    }
+
+    @Override
+    public boolean checkInput() {
+        if(mPrefsView.getEmailText().isEmpty()||
+                mPrefsView.getNameText().isEmpty()||
+                mPrefsView.getEmailText().isEmpty()){
+            mPrefsView.showToast("Fields cannot be blank");
+            return false;
+        }
+        else return true;
     }
 
     @Override
     public void saveSettings() {
+        prefs.edit().putString("name", mPrefsView.getNameText());
+        prefs.edit().putString("email", mPrefsView.getEmailText());
+        prefs.edit().putString("phone", mPrefsView.getPhoneText());
+    }
 
+    @Override
+    public void onClick(View v) {
+        if(checkInput()) {
+            saveSettings();
+        }
     }
 }
