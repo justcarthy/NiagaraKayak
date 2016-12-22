@@ -72,4 +72,12 @@ public class Reservation {
     public void setReservationTime(String reservationTime) {
         this.time = reservationTime;
     }
+
+    public void setReservationID(String reservationID){
+        this.reservationID = reservationID;
+    }
+
+    public String getReservationID(){
+        return this.reservationID;
+    }
 }
