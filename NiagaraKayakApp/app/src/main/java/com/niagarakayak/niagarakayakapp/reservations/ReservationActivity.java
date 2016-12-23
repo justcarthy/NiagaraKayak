@@ -28,14 +28,12 @@ public class ReservationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // TODO: Change this with activity_reservation
-        setContentView(R.layout.activity_preferences);
+        setContentView(R.layout.activity_reservation);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        setToolbarTitle("Preferences");
+        setToolbarTitle("Reservations");
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        View headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header);
+        mNavigationView.inflateHeaderView(R.layout.nav_header);
         mDrawerTitles = getResources().getStringArray(R.array.menu_titles);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -93,7 +91,7 @@ public class ReservationActivity extends AppCompatActivity {
 
 
     private void setToolbarTitle(String title) {
-        mToolbar.setTitle(title);
+        getSupportActionBar().setTitle(title);
     }
 }
 

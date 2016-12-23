@@ -11,7 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >s
+        >
 
         <ImageView
             android:layout_width="40dp"
@@ -58,7 +58,7 @@
             android:id="@+id/reservation_group_details"
             tools:text="Group of 3; 1 adult, 2 children"
             android:layout_margin="@dimen/activity_horizontal_margin"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textAlignment="center"
             android:layout_below="@id/reservation_number_location"
             />
