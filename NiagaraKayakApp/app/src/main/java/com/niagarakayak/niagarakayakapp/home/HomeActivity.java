@@ -1,6 +1,7 @@
 package com.niagarakayak.niagarakayakapp.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
@@ -20,8 +21,12 @@ import android.view.MenuItem;
 import android.view.View;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.model.Weather;
+import com.niagarakayak.niagarakayakapp.preferences.PreferencesActivity;
 import com.niagarakayak.niagarakayakapp.preferences.PreferencesPresenter;
 import com.niagarakayak.niagarakayakapp.preferences.PreferencesViewFragment;
+import com.niagarakayak.niagarakayakapp.reservations.ReservationActivity;
+import com.niagarakayak.niagarakayakapp.reservations.ReservationsPresenter;
+import com.niagarakayak.niagarakayakapp.reservations.ReservationsViewFragment;
 import com.niagarakayak.niagarakayakapp.service.twitter.TwitterAPIService;
 import com.niagarakayak.niagarakayakapp.service.weather.OpenWeatherAPIService;
 import com.niagarakayak.niagarakayakapp.service.weather.WeatherService;
@@ -45,14 +50,10 @@ public class HomeActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
 
     private HomeViewFragment homeViewFragment;
-    private PreferencesViewFragment preferencesViewFragment;
-
     private SharedPreferences prefs;
 
     private TwitterAPIService twitterAPIService;
     private OpenWeatherAPIService openWeatherAPIService;
-
-    private Fragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +68,14 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+        setToolbarTitle("Home");
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header);
         mDrawerTitles = getResources().getStringArray(R.array.menu_titles);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+
+        // The HomePresenter needs the twitter api service.
         twitterAPIService = new TwitterAPIService(
                 getString(R.string.TWITTER_CONSUMER_KEY),
                 getString(R.string.TWITTER_CONSUMER_SECRET),
@@ -85,29 +89,16 @@ public class HomeActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             homeViewFragment = HomeViewFragment.newInstance();
-            currentFragment = homeViewFragment;
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), currentFragment, R.id.contentView);
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), homeViewFragment, R.id.contentView);
             // Show the weather bar once.
             loadWeatherBar("St.Catharines");
 
         } else {
-            currentFragment = getSupportFragmentManager().findFragmentById(R.id.contentView);
+            homeViewFragment = (HomeViewFragment) getSupportFragmentManager().findFragmentById(R.id.contentView);
         }
 
-        useCorrectPresenter();
+        new HomePresenter(twitterAPIService, openWeatherAPIService, homeViewFragment, isConnectedOrConnecting());
         setupDrawer();
-    }
-
-    private void useCorrectPresenter() {
-        if (currentFragment instanceof HomeViewFragment) {
-            homeViewFragment = (HomeViewFragment) currentFragment;
-            new HomePresenter(twitterAPIService, openWeatherAPIService, homeViewFragment, isConnectedOrConnecting());
-            setToolbarTitle("Home");
-        } else if (currentFragment instanceof PreferencesViewFragment) {
-            preferencesViewFragment = (PreferencesViewFragment) currentFragment;
-            new PreferencesPresenter(PreferenceManager.getDefaultSharedPreferences(this), preferencesViewFragment);
-            setToolbarTitle("Preferences");
-        }
     }
 
     private void loadWeatherBar(String city) {
@@ -115,12 +106,12 @@ public class HomeActivity extends AppCompatActivity {
                 new WeatherService.WeatherCallback() {
                     @Override
                     public void onFailure() {
-                        ActivityUtils.showSnackbarWithMessage(currentFragment.getView(), "Couldn't fetch the weather!'", LENGTH_LONG, ERROR_COLOR);
+                        ActivityUtils.showSnackbarWithMessage(homeViewFragment.getView(), "Couldn't fetch the weather!'", LENGTH_LONG, ERROR_COLOR);
                     }
 
                     @Override
                     public void onSuccess(Weather weather) {
-                        ActivityUtils.showSnackbarWithMessage(currentFragment.getView(), WeatherUtils.getWeatherString(weather), LENGTH_LONGER, WEATHER_COLOR);
+                        ActivityUtils.showSnackbarWithMessage(homeViewFragment.getView(), WeatherUtils.getWeatherString(weather), LENGTH_LONGER, WEATHER_COLOR);
                     }
                 }));
     }
@@ -165,31 +156,28 @@ public class HomeActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.nav_home: {
-                changeFragments(HomeViewFragment.newInstance());
+                // Do nothing, we are already here
                 break;
             }
 
             case R.id.nav_preferences: {
-                changeFragments(PreferencesViewFragment.newInstance());
+                // Preferences
+                Intent i = new Intent(this, PreferencesActivity.class);
+                startActivity(i);
                 break;
             }
 
             case R.id.nav_reservations: {
+                // Reservations
+                Intent i = new Intent(this, ReservationActivity.class);
+                startActivity(i);
                 break;
             }
         }
 
-        setToolbarTitle(item.getTitle());
+        mNavigationView.getMenu().getItem(0).setChecked(true);
         mDrawer.closeDrawers();
     }
-
-
-    private void changeFragments(Fragment fragment) {
-        currentFragment = fragment;
-        ActivityUtils.replaceFragmentInActivity(getSupportFragmentManager(), currentFragment, R.id.contentView);
-        useCorrectPresenter();
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -214,11 +202,6 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         return false;
-    }
-
-    @Override
-    public void onBackPressed() {
-        changeFragments(HomeViewFragment.newInstance());
     }
 
     public void setToolbarTitle(CharSequence title) {
