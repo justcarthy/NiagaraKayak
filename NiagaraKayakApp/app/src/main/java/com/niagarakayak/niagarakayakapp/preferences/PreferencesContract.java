@@ -19,9 +19,6 @@ public interface PreferencesContract {
 
         @Override
         void onClick(android.view.View v);
-
-        @Override
-        void start();
     }
 
     interface View extends BaseView<Presenter> {
