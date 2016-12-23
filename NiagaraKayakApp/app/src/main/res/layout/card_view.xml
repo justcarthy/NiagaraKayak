@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:contentPadding="10dp"
+    android:layout_margin="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >s
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/reservation_weather_pic"
+            android:layout_alignParentTop="true"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:textSize="30sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/reservation_weather_details"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            tools:text="Sunny 21 C on "
+            android:layout_toEndOf="@id/reservation_weather_pic"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/reservation_date"
+            tools:text="December 10th 2016"
+            android:layout_alignBaseline="@+id/reservation_weather_details"
+            android:layout_toEndOf="@+id/reservation_weather_details"
+            android:layout_centerVertical="true"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="#1 - Charles Daley Park"
+            android:textSize="20sp"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:id="@+id/reservation_number_location"
+            android:textAlignment="center"
+            android:layout_below="@+id/reservation_weather_pic"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/reservation_group_details"
+            tools:text="Group of 3; 1 adult, 2 children"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:layout_below="@id/reservation_number_location"
+            />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
