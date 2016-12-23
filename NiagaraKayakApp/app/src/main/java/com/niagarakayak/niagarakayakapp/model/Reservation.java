@@ -10,19 +10,26 @@ public class Reservation {
     private String reservationID;
     private String date;
     private String time;
+    private String location;
+    private int adults;
+    private int children;
     private int hours;
     private int singleKayaks;
     private int tandemKayaks;
 
     public Reservation() {}
 
-    public Reservation(String reservationID,String email,String date,String time,int hours,int singleKayaks,int tandemKayaks) {
+    public Reservation(String reservationID,String email,String date,String time,int hours,int singleKayaks,int tandemKayaks,
+                       String location, int adults, int children) {
         this.reservationID = reservationID;
         this.date = date;
         this.time = time;
         this.hours = hours;
         this.singleKayaks = singleKayaks;
         this.tandemKayaks = tandemKayaks;
+        this.adults = adults;
+        this.children = children;
+        this.location = location;
     }
 
     public String getDate() {
@@ -49,9 +56,7 @@ public class Reservation {
         this.singleKayaks = singleKayaks;
     }
 
-    public int getTandemKayaks() {
-        return tandemKayaks;
-    }
+    public int getTandemKayaks() {return tandemKayaks;    }
 
     public void setTandemKayaks(int tandemKayaks) {
         this.tandemKayaks = tandemKayaks;
@@ -78,6 +83,26 @@ public class Reservation {
     }
 
     public String getReservationID(){
-        return this.reservationID;
+        return reservationID;
     }
+
+    public void setLocation(String location){ this.location = location; }
+
+    public String getLocation() { return location ;}
+
+    public void setAdults(int adults){ this.adults = adults; }
+
+    public int getAdults(){ return adults; }
+
+    public int getChildren() { return children;}
+
+    public void setChildren(int children) { this.children = children;    }
+
+    public int getHours() { return hours;}
+
+    public void setHours(int hours) { this.hours = hours;    }
+
+    public String getTime() { return time;    }
+
+    public void setTime(String time) { this.time = time;    }
 }

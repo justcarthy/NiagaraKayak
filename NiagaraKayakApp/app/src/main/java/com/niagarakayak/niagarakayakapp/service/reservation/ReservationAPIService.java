@@ -30,7 +30,11 @@ public class ReservationAPIService implements ReservationService {
         int hours = reservation.getReservationHours();
         int single = reservation.getSingleKayaks();
         int tandem = reservation.getTandemKayaks();
-        postURL = String.format(postURL,ReservationService.APIKey,email,date,time,hours,single,tandem);
+        int adults = reservation.getAdults();
+        int children = reservation.getChildren();
+        String location = reservation.getLocation();
+        postURL = String.format(postURL,ReservationService.APIKey,email,date,time,hours,single,
+                tandem,location,adults,children);
         return postURL;
     }
 

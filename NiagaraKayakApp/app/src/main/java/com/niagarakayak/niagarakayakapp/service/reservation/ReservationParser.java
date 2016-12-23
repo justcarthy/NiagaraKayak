@@ -32,6 +32,9 @@ public class ReservationParser {
             reservation.setReservationHours(jsonObject.getInt("Hours"));
             reservation.setSingleKayaks(jsonObject.getInt("Single"));
             reservation.setTandemKayaks(jsonObject.getInt("Tandem"));
+            reservation.setAdults(jsonObject.getInt("adults"));
+            reservation.setChildren(jsonObject.getInt("children"));
+            reservation.setLocation(jsonObject.getString("location"));
             reservations.add(reservation);
         }
         return reservations;
