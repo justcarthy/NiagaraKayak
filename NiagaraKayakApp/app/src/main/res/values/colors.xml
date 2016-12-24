@@ -9,4 +9,7 @@
     <color name="success_snackbar">#a5df83</color>
     <color name="normal_snackbar">#454545</color>
     <color name="twitter_card_light_text">#b6b6b6</color>
+    <color name="intro_name_color">#1F8094</color>
+    <color name="intro_email_color">#47a1b3</color>
+    <color name="intro_phone_color">#66bed1</color>
 </resources>

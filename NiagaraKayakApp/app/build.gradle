@@ -38,4 +38,7 @@ dependencies {
 
     // Maps
     compile 'com.google.android.gms:play-services-maps:10.0.1'
+
+    //Intro
+    compile 'com.github.paolorotolo:appintro:4.1.0'
 }

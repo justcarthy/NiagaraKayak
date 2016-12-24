@@ -20,6 +20,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import com.niagarakayak.niagarakayakapp.R;
+import com.niagarakayak.niagarakayakapp.intro.IntroActivity;
+import com.niagarakayak.niagarakayakapp.logo.LogoActivity;
 import com.niagarakayak.niagarakayakapp.model.Weather;
 import com.niagarakayak.niagarakayakapp.preferences.PreferencesActivity;
 import com.niagarakayak.niagarakayakapp.preferences.PreferencesPresenter;
@@ -62,7 +64,9 @@ public class HomeActivity extends AppCompatActivity {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         if (!checkSettings(prefs)) {
-            // TODO: run intro here
+            Intent i = new Intent(this, LogoActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
         }
 
         setContentView(R.layout.activity_home);
@@ -99,6 +103,12 @@ public class HomeActivity extends AppCompatActivity {
 
         new HomePresenter(twitterAPIService, openWeatherAPIService, homeViewFragment, isConnectedOrConnecting());
         setupDrawer();
+    }
+
+    private void clearSharedPrefs(SharedPreferences prefs) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+        editor.commit();
     }
 
     private void loadWeatherBar(String city) {
