@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.model.Reservation;
+import com.niagarakayak.niagarakayakapp.service.reservation.ReservationAPIService;
 
 import java.util.ArrayList;
 

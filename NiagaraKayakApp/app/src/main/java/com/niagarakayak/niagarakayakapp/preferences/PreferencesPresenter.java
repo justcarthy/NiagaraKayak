@@ -1,6 +1,7 @@
 package com.niagarakayak.niagarakayakapp.preferences;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 import com.niagarakayak.niagarakayakapp.home.HomeActivity;
 
@@ -22,16 +23,17 @@ public class PreferencesPresenter implements PreferencesContract.Presenter {
 
     @Override
     public void loadSettings() {
-        // TODO: Implement
+        String nameSetting = prefs.getString("name", "");
+        String emailSetting = prefs.getString("email", "");
+        String phoneSetting = prefs.getString("phone", "");
 
-        String nameSetting = prefs.getString("name", null);
-        String emailSetting = prefs.getString("email", null);
-        String phoneSetting = prefs.getString("phone", null);
+        Log.d("PreferencesPresenter", "loadSettings: nameSetting: " + nameSetting);
+        Log.d("PreferencesPresenter", "loadSettings: emailSetting: " + emailSetting);
+        Log.d("PreferencesPresenter", "loadSettings: phoneSetting: " + phoneSetting);
+
         mPrefsView.setName(nameSetting);
         mPrefsView.setEmail(emailSetting);
         mPrefsView.setPhone(phoneSetting);
-
-
     }
 
     @Override
@@ -47,9 +49,11 @@ public class PreferencesPresenter implements PreferencesContract.Presenter {
 
     @Override
     public void saveSettings() {
-        prefs.edit().putString("name", mPrefsView.getNameText());
-        prefs.edit().putString("email", mPrefsView.getEmailText());
-        prefs.edit().putString("phone", mPrefsView.getPhoneText());
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("name", mPrefsView.getNameText());
+        editor.putString("email", mPrefsView.getEmailText());
+        editor.putString("phone", mPrefsView.getPhoneText());
+        editor.commit();
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.niagarakayak.niagarakayakapp.reservations;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -14,6 +15,7 @@ import android.view.View;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.home.HomeActivity;
 import com.niagarakayak.niagarakayakapp.preferences.PreferencesActivity;
+import com.niagarakayak.niagarakayakapp.service.reservation.ReservationAPIService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 
 public class ReservationActivity extends AppCompatActivity {
@@ -28,6 +30,7 @@ public class ReservationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.activity_reservation);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -45,7 +48,10 @@ public class ReservationActivity extends AppCompatActivity {
             reservationsViewFragment = (ReservationsViewFragment) getSupportFragmentManager().findFragmentById(R.id.contentView);
         }
 
-        new ReservationsPresenter(reservationsViewFragment);
+        ReservationAPIService reservationAPIService = new ReservationAPIService(getString(R.string.NK_API_KEY));
+
+        new ReservationsPresenter(prefs.getString("email", ""), reservationAPIService, reservationsViewFragment);
+
         setupDrawer();
     }
 
@@ -87,6 +93,9 @@ public class ReservationActivity extends AppCompatActivity {
                 break;
             }
         }
+
+        mNavigationView.getMenu().getItem(1).setChecked(true);
+        mDrawer.closeDrawers();
     }
 
 

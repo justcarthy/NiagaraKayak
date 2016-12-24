@@ -31,11 +31,6 @@ public class PreferencesActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        if (!checkSettings(prefs)) {
-            // TODO: run intro here
-        }
-
         setContentView(R.layout.activity_preferences);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -55,16 +50,6 @@ public class PreferencesActivity extends AppCompatActivity {
 
         new PreferencesPresenter(prefs, preferencesViewFragment);
         setupDrawer();
-    }
-
-    private boolean checkSettings(SharedPreferences prefs) {
-        if (prefs.getString("name", null) == null
-                || prefs.getString("email", null) == null
-                || prefs.getString("phone", null) == null) {
-            return false;
-        }
-
-        return true;
     }
 
     private void setupDrawer() {
@@ -105,6 +90,9 @@ public class PreferencesActivity extends AppCompatActivity {
                 break;
             }
         }
+
+        mNavigationView.getMenu().getItem(2).setChecked(true);
+        mDrawer.closeDrawers();
     }
 
 

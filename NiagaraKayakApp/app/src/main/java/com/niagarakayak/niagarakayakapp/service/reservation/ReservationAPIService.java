@@ -12,10 +12,15 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class ReservationAPIService implements ReservationService {
-
+    private final String APIKey;
     private String Email;  //email for getAllReservations
+
+    public ReservationAPIService(String APIKey) {
+        this.APIKey = APIKey;
+    }
+
     @Override
-    public void getAllReservations(ReservationCallback callback,String Email) {
+    public void getAllReservations(ReservationCallback callback, String Email) {
         this.Email = Email;
         new getAllReservationsTask().execute(callback);
     }
@@ -33,8 +38,8 @@ public class ReservationAPIService implements ReservationService {
         int adults = reservation.getAdults();
         int children = reservation.getChildren();
         String location = reservation.getLocation();
-        postURL = String.format(postURL,ReservationService.APIKey,email,date,time,hours,single,
-                tandem,location,adults,children);
+        postURL = String.format(postURL, APIKey, email, date, time, hours, single,
+                tandem, location, adults, children);
         return postURL;
     }
 
@@ -42,28 +47,22 @@ public class ReservationAPIService implements ReservationService {
      *
      * @return Reservation for the given Email,null if unauthorized
      */
-    private ArrayList<Reservation> fetchReservations(){
+    private ArrayList<Reservation> fetchReservations() throws Exception {
         String url = UrlContainer.getReservationUrl();
-        url = String.format(url,ReservationService.APIKey,this.Email);
-        try {
-
+        url = String.format(url, APIKey, this.Email);
             HttpURLConnection httpConnection = (HttpURLConnection)new URL(url).openConnection();
             httpConnection.setRequestMethod("GET");
             httpConnection.setUseCaches(false);
             httpConnection.connect();
 
             int response_code = httpConnection.getResponseCode();
-            switch(response_code){
+            switch(response_code) {
                 case HttpURLConnection.HTTP_OK:
                     String json = getJSONStrign(httpConnection); //resources are closed
                     return ReservationParser.getReservations(json);
                 case HttpURLConnection.HTTP_UNAUTHORIZED: //call failure
                     return null;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         return null;
     }
     /**
@@ -74,13 +73,14 @@ public class ReservationAPIService implements ReservationService {
      */
     private String getJSONStrign(HttpURLConnection httpConnection) throws IOException {
         StringBuffer buffer = new StringBuffer();
-        BufferedReader in = new BufferedReader(
-                                new InputStreamReader(httpConnection.getInputStream()));
+        BufferedReader in = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
 
         String line = null;
-        while (  (line = in.readLine()) != null ){
+
+        while ((line = in.readLine()) != null ) {
             buffer.append(line + "\r\n");
         }
+
         in.close();
         httpConnection.disconnect();
         return buffer.toString();
@@ -89,19 +89,27 @@ public class ReservationAPIService implements ReservationService {
 
     private class getAllReservationsTask extends AsyncTask<ReservationCallback, Void, ArrayList<Reservation>> {
         private ReservationCallback callback;
+        private Exception exception;
 
         @Override
         protected ArrayList<Reservation> doInBackground(ReservationCallback... params) {
             this.callback = params[0];
-            return fetchReservations();
+            try {
+                return fetchReservations();
+            } catch (Exception e) {
+                this.exception = e;
+            }
+
+            return new ArrayList<>();
         }
 
         @Override
         protected void onPostExecute(ArrayList<Reservation> reservations) {
-            if(reservations==null)
-                callback.onFailure();
-            else
+            if(exception != null || reservations == null) {
+                callback.onFailure(exception);
+            } else {
                 callback.onSuccess(reservations);
+            }
         }
     }
 

@@ -9,20 +9,20 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- *  Class is a parser to build reservation collection from json
+ *  Class is a parser to build reservation object from json
  */
 
 public class ReservationParser {
 
    // [{"ReservationID":"bala@bala.com1","Email":"bala@bala.com","Date":"2016-12-29","Time":"11:20:00","Hours":"2","Single":"3","Tandem":"0"}]
 
-    public static ArrayList<Reservation> getReservations(String json) throws JSONException{
+    public static ArrayList<Reservation> getReservations(String json) throws JSONException {
         ArrayList<Reservation> reservations = new ArrayList<>();
         JSONArray jsonArray = new JSONArray(json);
         JSONObject jsonObject = null;
         Reservation reservation = null;
 
-        for(int i=0;i<jsonArray.length();i++){
+        for(int i=0; i<jsonArray.length(); i++) {
             jsonObject = jsonArray.getJSONObject(i);
             reservation = new Reservation();
             reservation.setReservationID(jsonObject.getString("ReservationID"));
@@ -37,6 +37,7 @@ public class ReservationParser {
             reservation.setLocation(jsonObject.getString("location"));
             reservations.add(reservation);
         }
+
         return reservations;
     }
 }

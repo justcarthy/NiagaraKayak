@@ -3,6 +3,7 @@
           package="com.niagarakayak.niagarakayakapp">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <application
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
@@ -16,6 +17,8 @@
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyBbFFll_Z94x6kKA-9zCqe1T1TsjrPEUUA"/>
+        <activity android:name=".logo.LogoActivity"/>
+        <activity android:name=".intro.IntroActivity"/>
         <activity android:name=".home.HomeActivity">
         <intent-filter>
             <action android:name="android.intent.action.MAIN"/>

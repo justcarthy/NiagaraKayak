@@ -5,9 +5,9 @@ package com.niagarakayak.niagarakayakapp.service.reservation;
  */
 
 public class UrlContainer {
-    private static final String reservationUrl = "http://www.niagarakayak/kayakAPI/" +
+    private static final String reservationUrl = "http://www.niagarakayak.com/kayakAPI/" +
             "reservation.php/?api=%s&customer=%s";
-    private static final String postURL = "www.niagarakayak/kayakAPI/reservation.php/" +
+    private static final String postURL = "http://www.niagarakayak.com/kayakAPI/reservation.php/" +
             "?api=%s&type=POST&Email=%s&Date=%s&Time=%s&Hours=%d&Single=%d&Tandem=%d" +
             "&location=%s&adults=%d&children=%d";
     //apikey , email , date , time , hours , single , tandem;
