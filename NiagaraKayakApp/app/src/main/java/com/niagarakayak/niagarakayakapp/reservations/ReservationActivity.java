@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.home.HomeActivity;
 import com.niagarakayak.niagarakayakapp.preferences.PreferencesActivity;
@@ -26,6 +27,7 @@ public class ReservationActivity extends AppCompatActivity {
     private ReservationsViewFragment reservationsViewFragment;
     private DrawerLayout.DrawerListener mDrawerToggle;
     private SharedPreferences prefs;
+    private View headerLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,7 +38,7 @@ public class ReservationActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         setToolbarTitle("Reservations");
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        mNavigationView.inflateHeaderView(R.layout.nav_header);
+        headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header);
         mDrawerTitles = getResources().getStringArray(R.array.menu_titles);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -50,10 +52,21 @@ public class ReservationActivity extends AppCompatActivity {
 
         ReservationAPIService reservationAPIService = new ReservationAPIService(getString(R.string.NK_API_KEY));
 
+        setNavHeaderText(prefs.getString("name", ""), prefs.getString("email", ""));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         new ReservationsPresenter(prefs.getString("email", ""), reservationAPIService, reservationsViewFragment);
-
         setupDrawer();
     }
+
+    private void setNavHeaderText(String username, String email) {
+        TextView navUserText = (TextView) headerLayout.findViewById(R.id.nav_user_name);
+        TextView navEmailText = (TextView) headerLayout.findViewById(R.id.nav_user_email);
+
+        navUserText.setText(username);
+        navEmailText.setText(email);
+    }
+
 
     private void setupDrawer() {
         mDrawerToggle = setupDrawerToggle();

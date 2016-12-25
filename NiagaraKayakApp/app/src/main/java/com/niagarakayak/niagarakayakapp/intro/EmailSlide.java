@@ -1,14 +1,9 @@
 package com.niagarakayak.niagarakayakapp.intro;
 
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +11,7 @@ import android.widget.EditText;
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 import com.niagarakayak.niagarakayakapp.R;
 
-public class EmailSlide extends Fragment implements ISlideBackgroundColorHolder{
+public class EmailSlide extends IntroSlide implements ISlideBackgroundColorHolder{
 
     private View container;
     private EditText input;
@@ -31,6 +26,11 @@ public class EmailSlide extends Fragment implements ISlideBackgroundColorHolder{
     }
 
     @Override
+    boolean isInputValid() {
+       return super.isInputValid() && input.getText().toString().contains("@");
+    }
+
+    @Override
     public int getDefaultBackgroundColor() {
         return Color.parseColor("#47a1b3");
     }
@@ -40,18 +40,6 @@ public class EmailSlide extends Fragment implements ISlideBackgroundColorHolder{
         if (container != null) {
             container.setBackgroundColor(backgroundColor);
         }
-    }
-
-    boolean isInputEmpty() {
-        return input != null && TextUtils.isEmpty(input.getText());
-    }
-
-    String getInput() {
-        if (input != null) {
-            return input.getText().toString();
-        }
-
-        return "";
     }
 
 }

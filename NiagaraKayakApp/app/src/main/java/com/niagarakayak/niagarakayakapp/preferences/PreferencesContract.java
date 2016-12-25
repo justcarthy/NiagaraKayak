@@ -14,7 +14,7 @@ public interface PreferencesContract {
 
     interface Presenter extends BasePresenter, android.view.View.OnClickListener {
         void loadSettings();
-        boolean checkInput();
+        boolean validInput();
         void saveSettings();
 
         @Override

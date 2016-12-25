@@ -32,7 +32,6 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
 
     @Override
     public void loadReservations() {
-
         reservationAPIService.getAllReservations(new ReservationService.ReservationCallback() {
             @Override
             public void onFailure(Exception e) {
@@ -47,6 +46,5 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
                 }
             }
         }, email);
-
     }
 }

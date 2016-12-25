@@ -3,7 +3,6 @@ package com.niagarakayak.niagarakayakapp.preferences;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
-import com.niagarakayak.niagarakayakapp.home.HomeActivity;
 
 public class PreferencesPresenter implements PreferencesContract.Presenter {
 
@@ -27,24 +26,30 @@ public class PreferencesPresenter implements PreferencesContract.Presenter {
         String emailSetting = prefs.getString("email", "");
         String phoneSetting = prefs.getString("phone", "");
 
-        Log.d("PreferencesPresenter", "loadSettings: nameSetting: " + nameSetting);
-        Log.d("PreferencesPresenter", "loadSettings: emailSetting: " + emailSetting);
-        Log.d("PreferencesPresenter", "loadSettings: phoneSetting: " + phoneSetting);
-
         mPrefsView.setName(nameSetting);
         mPrefsView.setEmail(emailSetting);
         mPrefsView.setPhone(phoneSetting);
     }
 
     @Override
-    public boolean checkInput() {
-        if(mPrefsView.getEmailText().isEmpty()||
-                mPrefsView.getNameText().isEmpty()||
-                mPrefsView.getEmailText().isEmpty()){
+    public boolean validInput() {
+        String name = mPrefsView.getNameText();
+        String email = mPrefsView.getEmailText();
+        String phone = mPrefsView.getPhoneText();
+
+        if (name.isEmpty()|| email.isEmpty()|| phone.isEmpty()) {
             mPrefsView.showToast("Fields cannot be blank");
             return false;
         }
-        else return true;
+
+        if (!email.contains("@")) {
+            mPrefsView.showToast("Invalid email");
+            return false;
+        }
+
+
+
+        return true;
     }
 
     @Override
@@ -54,11 +59,12 @@ public class PreferencesPresenter implements PreferencesContract.Presenter {
         editor.putString("email", mPrefsView.getEmailText());
         editor.putString("phone", mPrefsView.getPhoneText());
         editor.commit();
+        mPrefsView.showToast("Saved!");
     }
 
     @Override
     public void onClick(View v) {
-        if(checkInput()) {
+        if(validInput()) {
             saveSettings();
         }
     }

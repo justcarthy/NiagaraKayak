@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.home.HomeActivity;
 import com.niagarakayak.niagarakayakapp.reservations.ReservationActivity;
@@ -26,6 +27,7 @@ public class PreferencesActivity extends AppCompatActivity {
     private PreferencesViewFragment preferencesViewFragment;
     private DrawerLayout.DrawerListener mDrawerToggle;
     private SharedPreferences prefs;
+    View headerLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,7 +38,7 @@ public class PreferencesActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         setToolbarTitle("Preferences");
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        View headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header);
+        headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header);
         mDrawerTitles = getResources().getStringArray(R.array.menu_titles);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -48,8 +50,19 @@ public class PreferencesActivity extends AppCompatActivity {
             preferencesViewFragment = (PreferencesViewFragment) getSupportFragmentManager().findFragmentById(R.id.contentView);
         }
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         new PreferencesPresenter(prefs, preferencesViewFragment);
+        setNavHeaderText(prefs.getString("name", ""), prefs.getString("email", ""));
         setupDrawer();
+    }
+
+    private void setNavHeaderText(String username, String email) {
+        TextView navUserText = (TextView) headerLayout.findViewById(R.id.nav_user_name);
+        TextView navEmailText = (TextView) headerLayout.findViewById(R.id.nav_user_email);
+
+        navUserText.setText(username);
+        navEmailText.setText(email);
     }
 
     private void setupDrawer() {
@@ -97,6 +110,6 @@ public class PreferencesActivity extends AppCompatActivity {
 
 
     private void setToolbarTitle(String title) {
-        mToolbar.setTitle(title);
+        getSupportActionBar().setTitle(title);
     }
 }

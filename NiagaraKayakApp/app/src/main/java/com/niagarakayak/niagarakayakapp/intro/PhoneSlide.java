@@ -14,8 +14,7 @@ import android.widget.EditText;
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 import com.niagarakayak.niagarakayakapp.R;
 
-public class PhoneSlide extends Fragment implements ISlideBackgroundColorHolder{
-
+public class PhoneSlide extends IntroSlide implements ISlideBackgroundColorHolder{
     private View container;
     private EditText input;
 
@@ -38,18 +37,6 @@ public class PhoneSlide extends Fragment implements ISlideBackgroundColorHolder{
         if (container != null) {
             container.setBackgroundColor(backgroundColor);
         }
-    }
-
-    boolean isInputEmpty() {
-        return input != null && TextUtils.isEmpty(input.getText());
-    }
-
-    String getInput() {
-        if (input != null) {
-            return input.getText().toString();
-        }
-
-        return "";
     }
 
 }

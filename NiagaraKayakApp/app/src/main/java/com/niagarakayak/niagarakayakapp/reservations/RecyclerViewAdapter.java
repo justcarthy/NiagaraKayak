@@ -62,7 +62,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             reservationDate.setText(reservation.getDate());
             reservationNumberLocations.setText(position + " - " + reservation.getLocation());
             int count = reservation.getAdults() + reservation.getChildren();
-            reservationGroupDetails.setText("Group of " + count + "; " + reservation.getAdults() + " adults, " + reservation.getChildren() + " children");
+
+            String adultMsg = reservation.getAdults() > 1 ? " adults " : " adult ";
+            String childrenMsg = reservation.getChildren() > 1 ? " children" : " child";
+
+            String reservationGroupMsg =
+                    "Group of " + count + "; "
+                            + reservation.getAdults() + adultMsg
+                            + reservation.getChildren() + childrenMsg;
+
+            reservationGroupDetails.setText(reservationGroupMsg);
         }
 
     }
