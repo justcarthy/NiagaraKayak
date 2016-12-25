@@ -32,14 +32,11 @@ public class HomePresenter implements HomeContract.Presenter {
 
     private final HomeContract.View mHomeView;
     private final TwitterService mTwitterAPI;
-    private final OpenWeatherAPIService mWeatherService;
     private final boolean isConnected;
 
     public HomePresenter(@NonNull TwitterAPIService twitterAPIService,
-                         @NonNull OpenWeatherAPIService openWeatherAPIService,
                          @NonNull HomeContract.View mHomeView, boolean isConnected) {
         this.mTwitterAPI = twitterAPIService;
-        this.mWeatherService = openWeatherAPIService;
         this.mHomeView = mHomeView;
         this.isConnected = isConnected;
         mHomeView.setPresenter(this);

@@ -9,31 +9,23 @@ import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import com.niagarakayak.niagarakayakapp.R;
-import com.niagarakayak.niagarakayakapp.intro.IntroActivity;
 import com.niagarakayak.niagarakayakapp.logo.LogoActivity;
 import com.niagarakayak.niagarakayakapp.model.Weather;
 import com.niagarakayak.niagarakayakapp.preferences.PreferencesActivity;
-import com.niagarakayak.niagarakayakapp.preferences.PreferencesPresenter;
-import com.niagarakayak.niagarakayakapp.preferences.PreferencesViewFragment;
 import com.niagarakayak.niagarakayakapp.reservations.ReservationActivity;
-import com.niagarakayak.niagarakayakapp.reservations.ReservationsPresenter;
-import com.niagarakayak.niagarakayakapp.reservations.ReservationsViewFragment;
 import com.niagarakayak.niagarakayakapp.service.twitter.TwitterAPIService;
 import com.niagarakayak.niagarakayakapp.service.weather.OpenWeatherAPIService;
 import com.niagarakayak.niagarakayakapp.service.weather.WeatherService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
-import com.niagarakayak.niagarakayakapp.util.SnackbarUtils;
 import com.niagarakayak.niagarakayakapp.util.WeatherUtils;
 
 import static android.support.design.widget.Snackbar.LENGTH_LONG;
@@ -47,7 +39,6 @@ public class HomeActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
     private String[] mDrawerTitles;
-    private CharSequence mTitle;
 
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -56,6 +47,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private TwitterAPIService twitterAPIService;
     private OpenWeatherAPIService openWeatherAPIService;
+
+    private View headerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +67,11 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         setToolbarTitle("Home");
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        View headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header);
+        headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header);
         mDrawerTitles = getResources().getStringArray(R.array.menu_titles);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 
-        // The HomePresenter needs the twitter api service.
         twitterAPIService = new TwitterAPIService(
                 getString(R.string.TWITTER_CONSUMER_KEY),
                 getString(R.string.TWITTER_CONSUMER_SECRET),
@@ -101,7 +93,8 @@ public class HomeActivity extends AppCompatActivity {
             homeViewFragment = (HomeViewFragment) getSupportFragmentManager().findFragmentById(R.id.contentView);
         }
 
-        new HomePresenter(twitterAPIService, openWeatherAPIService, homeViewFragment, isConnectedOrConnecting());
+        setNavHeaderText(prefs.getString("name", ""), prefs.getString("email", ""));
+        new HomePresenter(twitterAPIService, homeViewFragment, isConnectedOrConnecting());
         setupDrawer();
     }
 
@@ -109,6 +102,14 @@ public class HomeActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.clear();
         editor.commit();
+    }
+
+    private void setNavHeaderText(String username, String email) {
+        TextView navUserText = (TextView) headerLayout.findViewById(R.id.nav_user_name);
+        TextView navEmailText = (TextView) headerLayout.findViewById(R.id.nav_user_email);
+
+        navUserText.setText(username);
+        navEmailText.setText(email);
     }
 
     private void loadWeatherBar(String city) {
@@ -215,7 +216,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void setToolbarTitle(CharSequence title) {
-        mTitle = title;
-        getSupportActionBar().setTitle(mTitle);
+        getSupportActionBar().setTitle(title);
     }
 }

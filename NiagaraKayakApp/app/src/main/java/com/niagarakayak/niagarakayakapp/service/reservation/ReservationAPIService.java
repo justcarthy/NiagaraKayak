@@ -58,20 +58,21 @@ public class ReservationAPIService implements ReservationService {
             int response_code = httpConnection.getResponseCode();
             switch(response_code) {
                 case HttpURLConnection.HTTP_OK:
-                    String json = getJSONStrign(httpConnection); //resources are closed
+                    String json = getJSONString(httpConnection); //resources are closed
                     return ReservationParser.getReservations(json);
                 case HttpURLConnection.HTTP_UNAUTHORIZED: //call failure
                     return null;
             }
         return null;
     }
+
     /**
      * method gets the json object and closes all resources
      * @param httpConnection connection to extract the JSON object from
      * @return JSON object as string
      * @throws Exception throws IOException
      */
-    private String getJSONStrign(HttpURLConnection httpConnection) throws IOException {
+    private String getJSONString(HttpURLConnection httpConnection) throws IOException {
         StringBuffer buffer = new StringBuffer();
         BufferedReader in = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
 

@@ -7,8 +7,10 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.github.paolorotolo.appintro.AppIntro2;
+import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.home.HomeActivity;
 
 public class IntroActivity extends AppIntro2 {
@@ -42,9 +44,9 @@ public class IntroActivity extends AppIntro2 {
     public void onDonePressed(Fragment currentFragment) {
 //        super.onDonePressed(currentFragment);
 
-        boolean isNameEmpty = nameSlide.isInputEmpty();
-        boolean isEmailEmpty = emailSlide.isInputEmpty();
-        boolean isPhoneEmpty = phoneSlide.isInputEmpty();
+        boolean isNameEmpty = nameSlide.isInputValid();
+        boolean isEmailEmpty = emailSlide.isInputValid();
+        boolean isPhoneEmpty = phoneSlide.isInputValid();
 
         // First check input
         if (!invalidInput(isNameEmpty, isEmailEmpty, isPhoneEmpty)) {
@@ -74,7 +76,7 @@ public class IntroActivity extends AppIntro2 {
         }
 
         if (emailStatus) {
-            Toast.makeText(IntroActivity.this, "You left the email field blank! Please tell us your email!", Toast.LENGTH_LONG).show();
+            Toast.makeText(IntroActivity.this, "Invalid email! Please check the email field again", Toast.LENGTH_LONG).show();
             return true;
         }
         

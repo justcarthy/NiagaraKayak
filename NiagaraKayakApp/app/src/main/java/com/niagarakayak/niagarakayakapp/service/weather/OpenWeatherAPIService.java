@@ -61,7 +61,6 @@ public class OpenWeatherAPIService implements WeatherService {
         }
 
         return null;
-
     }
 
     private class getWeatherTask extends AsyncTask<WeatherServiceRequest, Void, Weather> {
