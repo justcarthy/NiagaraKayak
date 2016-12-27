@@ -88,7 +88,6 @@ public class HomeActivity extends AppCompatActivity {
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), homeViewFragment, R.id.contentView);
             // Show the weather bar once.
             loadWeatherBar("St.Catharines");
-
         } else {
             homeViewFragment = (HomeViewFragment) getSupportFragmentManager().findFragmentById(R.id.contentView);
         }

@@ -3,7 +3,6 @@ package com.niagarakayak.niagarakayakapp.home;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -16,7 +15,6 @@ import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.niagarakayak.niagarakayakapp.R;
-import com.niagarakayak.niagarakayakapp.util.SnackbarUtils;
 
 import java.util.Objects;
 

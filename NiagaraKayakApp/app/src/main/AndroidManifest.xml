@@ -27,5 +27,6 @@
         </activity>
         <activity android:name=".preferences.PreferencesActivity"/>
         <activity android:name=".reservations.ReservationActivity"/>
+        <activity android:name=".add_reservations.AddReservationsActivity"/>
     </application>
 </manifest>

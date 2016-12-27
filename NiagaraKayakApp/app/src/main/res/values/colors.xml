@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#249CB5</color>
     <color name="colorPrimaryDark">#1F8094</color>
-    <color name="colorAccent">#FAFAFA</color>
+    <color name="colorAccent">#66bed1</color>
     <color name="white">#FFF</color>
     <color name="error_snackbar">#b33e3e</color>
     <color name="weather_snackbar">#0a6c73</color>
@@ -12,4 +12,5 @@
     <color name="intro_name_color">#1F8094</color>
     <color name="intro_email_color">#47a1b3</color>
     <color name="intro_phone_color">#66bed1</color>
+    <color name="text_label_drawable_color">#b6b6b6</color>
 </resources>
