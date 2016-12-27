@@ -30,8 +30,8 @@
             android:layout_below="@id/image_container"
             android:textSize="20sp"
             android:layout_margin="@dimen/activity_vertical_margin"
-            android:textColor="@color/colorAccent"
-            tools:textColor="@color/colorAccent"
+            android:textColor="@color/white"
+            tools:textColor="@color/white"
             android:layout_height="wrap_content"/>
 
     <EditText
