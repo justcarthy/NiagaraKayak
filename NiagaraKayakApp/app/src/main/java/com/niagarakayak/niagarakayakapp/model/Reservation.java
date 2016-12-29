@@ -16,11 +16,12 @@ public class Reservation {
     private int hours;
     private int singleKayaks;
     private int tandemKayaks;
+    private boolean confirmed;
 
     public Reservation() {}
 
     public Reservation(String reservationID,String email,String date,String time,int hours,int singleKayaks,int tandemKayaks,
-                       String location, int adults, int children) {
+                       String location, int adults, int children, boolean confirmed) {
         this.reservationID = reservationID;
         this.date = date;
         this.time = time;
@@ -30,7 +31,12 @@ public class Reservation {
         this.adults = adults;
         this.children = children;
         this.location = location;
+        this.confirmed = confirmed;
     }
+
+    public boolean isConfirmed() { return confirmed; }
+
+    public void setConfirmed(boolean confirmed) { this.confirmed = confirmed; }
 
     public String getDate() {
         return date;
