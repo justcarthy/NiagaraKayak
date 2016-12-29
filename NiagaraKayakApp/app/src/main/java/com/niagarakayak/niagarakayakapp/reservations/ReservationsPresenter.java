@@ -32,7 +32,6 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
         reservationAPIService.getAllReservations(new ReservationService.ReservationCallback() {
             @Override
             public void onFailure(Exception e) {
-                e.printStackTrace();
                 ActivityUtils.showSnackbarWithMessage(((Fragment) mReservationsView).getView(), "Couldn't load reservations", Snackbar.LENGTH_LONG, SnackbarColor.ERROR_COLOR);
             }
 

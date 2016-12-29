@@ -21,9 +21,15 @@ public class PreferencesViewFragment extends Fragment implements PreferencesCont
     private TextInputEditText emailText;
     private Button saveButton;
 
+    private Bundle mBundle;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            mBundle = savedInstanceState;
+        }
+
         View root  = inflater.inflate(R.layout.fragment_preferences, container, false);
         nameText = (TextInputEditText) root.findViewById(R.id.name);
         phoneText = (TextInputEditText) root.findViewById(R.id.phone);
@@ -36,7 +42,21 @@ public class PreferencesViewFragment extends Fragment implements PreferencesCont
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.start();
+        if (mBundle != null) {
+            nameText.setText(mBundle.getString("name"));
+            phoneText.setText(mBundle.getString("phone"));
+            emailText.setText(mBundle.getString("email"));
+        } else {
+            mPresenter.start();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("name", nameText.getText().toString());
+        outState.putString("phone", phoneText.getText().toString());
+        outState.putString("email", emailText.getText().toString());
     }
 
     @Override

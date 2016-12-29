@@ -50,8 +50,6 @@ public class IntroActivity extends AppIntro2 {
 
         // First check input
         if (!invalidInput(isNameEmpty, isEmailEmpty, isPhoneEmpty)) {
-            Log.d("INTRO", "onDonePressed: We got here");
-
             // If it's good, save it in shared preferences
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = prefs.edit();
