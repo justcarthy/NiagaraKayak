@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class ReservationAPIService implements ReservationService {
     private final String APIKey;
     private String Email;  //email for getAllReservations
+    private String postURL;
 
     public ReservationAPIService(String APIKey) {
         this.APIKey = APIKey;
@@ -22,13 +23,14 @@ public class ReservationAPIService implements ReservationService {
     @Override
     public void getAllReservations(ReservationCallback callback, String Email) {
         this.Email = Email;
-        new getAllReservationsTask().execute(callback);
+        new getReservationsTask().execute(callback);
     }
 
     @Override
-    public String postReservationURL(Reservation reservation){
+    public void postReservation(PostCallback callback,Reservation reservation){
         String postURL = UrlContainer.getPostURL();
-        //apikey , email , date , time , hours , single , tandem;
+        //apikey,reservationID,email,date,time,hours,single,tandem,location,adults,children;
+        String reservationID = reservation.getReservationID();
         String email = reservation.getEmail();
         String date = reservation.getDate();
         String time = reservation.getReservationTime();
@@ -38,16 +40,17 @@ public class ReservationAPIService implements ReservationService {
         int adults = reservation.getAdults();
         int children = reservation.getChildren();
         String location = reservation.getLocation();
-        postURL = String.format(postURL, APIKey, email, date, time, hours, single,
+        postURL = String.format(postURL, APIKey, reservationID, email, date, time, hours, single,
                 tandem, location, adults, children);
-        return postURL;
+        this.postURL = postURL;
+        new PostReservationTask().execute(callback);
     }
 
     /**
      *
      * @return Reservation for the given Email,null if unauthorized
      */
-    private ArrayList<Reservation> fetchReservations() throws Exception {
+    private ArrayList<Reservation> executeFetchReservations() throws Exception {
         String url = UrlContainer.getReservationUrl();
         url = String.format(url, APIKey, this.Email);
             HttpURLConnection httpConnection = (HttpURLConnection)new URL(url).openConnection();
@@ -87,8 +90,24 @@ public class ReservationAPIService implements ReservationService {
         return buffer.toString();
     }
 
+    private void executePostReservation() throws Exception{
+        HttpURLConnection httpConnection = (HttpURLConnection)new URL(this.postURL).openConnection();
+        httpConnection.setRequestMethod("GET");
+        httpConnection.setUseCaches(false);
+        httpConnection.connect();
 
-    private class getAllReservationsTask extends AsyncTask<ReservationCallback, Void, ArrayList<Reservation>> {
+        int response_code = httpConnection.getResponseCode();
+        switch(response_code) {
+            case HttpURLConnection.HTTP_OK: // on succesful post return OK
+                  break;
+            case HttpURLConnection.HTTP_UNAUTHORIZED: //call failure
+                 throw new Exception("HTTP_UNAUTHORIZED");
+        }
+        httpConnection.disconnect(); //close resources
+    }
+
+
+    private class getReservationsTask extends AsyncTask<ReservationCallback, Void, ArrayList<Reservation>> {
         private ReservationCallback callback;
         private Exception exception;
 
@@ -96,7 +115,7 @@ public class ReservationAPIService implements ReservationService {
         protected ArrayList<Reservation> doInBackground(ReservationCallback... params) {
             this.callback = params[0];
             try {
-                return fetchReservations();
+                return executeFetchReservations();
             } catch (Exception e) {
                 this.exception = e;
             }
@@ -113,6 +132,32 @@ public class ReservationAPIService implements ReservationService {
             }
         }
     }
+
+    private class PostReservationTask extends AsyncTask<PostCallback,Void,Void>{
+        private PostCallback callback;
+        private Exception exception;
+
+        @Override
+        protected Void doInBackground(PostCallback... params) {
+            this.callback = params[0];
+            try {
+                 ReservationAPIService.this.executePostReservation();
+            } catch (Exception e) {
+                this.exception = e;
+            }
+           return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void a) {
+            if(exception != null) {
+                callback.onFailure(exception);
+            } else {
+                callback.onSuccess();
+            }
+        }
+    }
+
 
 
 }

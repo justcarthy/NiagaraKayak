@@ -12,7 +12,13 @@ public interface ReservationService {
      * @param Email email address of client to fetch reservations for
      */
     void getAllReservations(ReservationCallback callback,String Email);
-    String postReservationURL(Reservation reservation);
+
+    /**
+     *
+     * @param callback callback to use
+     * @param reservation Reservation to post
+     */
+    void postReservation(PostCallback callback,Reservation reservation);
 
     interface ReservationCallback {
         void onFailure(Exception e);
@@ -20,7 +26,7 @@ public interface ReservationService {
     }
 
     interface PostCallback{
-        void onFailure(int responseCode, String message);
+        void onFailure(Exception e);
         void onSuccess();
     }
 
