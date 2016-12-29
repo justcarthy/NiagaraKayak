@@ -28,6 +28,7 @@ public interface PreferencesContract {
         String getNameText();
         String getEmailText();
         String getPhoneText();
+        void goHome();
         void showToast(String message);
     }
 

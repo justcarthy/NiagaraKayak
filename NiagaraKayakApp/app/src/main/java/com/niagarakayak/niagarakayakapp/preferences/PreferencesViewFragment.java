@@ -1,5 +1,6 @@
 package com.niagarakayak.niagarakayakapp.preferences;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.niagarakayak.niagarakayakapp.R;
+import com.niagarakayak.niagarakayakapp.home.HomeActivity;
 
 public class PreferencesViewFragment extends Fragment implements PreferencesContract.View {
 
@@ -95,6 +97,13 @@ public class PreferencesViewFragment extends Fragment implements PreferencesCont
     }
 
     @Override
+    public void goHome() {
+        Intent i = new Intent(this.getContext(), HomeActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+    }
+
+    @Override
     public void showToast(String message) {
         Toast.makeText(this.getContext(), message, Toast.LENGTH_LONG).show();
     }
@@ -105,5 +114,7 @@ public class PreferencesViewFragment extends Fragment implements PreferencesCont
         preferencesViewFragment.setArguments(args);
         return preferencesViewFragment;
     }
+
+
 
 }

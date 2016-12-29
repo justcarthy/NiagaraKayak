@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ActivityUtils {
 
@@ -16,15 +18,6 @@ public class ActivityUtils {
         Objects.requireNonNull(frag);
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.add(frameId, frag);
-        transaction.commit();
-    }
-
-    public static void replaceFragmentInActivity(FragmentManager fm, Fragment replacement, int frameId) {
-        Objects.requireNonNull(fm);
-        Objects.requireNonNull(replacement);
-
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.replace(frameId, replacement);
         transaction.commit();
     }
 

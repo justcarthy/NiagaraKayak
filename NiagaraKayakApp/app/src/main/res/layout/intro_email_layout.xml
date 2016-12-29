@@ -40,6 +40,7 @@
             android:singleLine="true"
             android:textAlignment="center"
             android:imeOptions="actionDone"
+            android:textColor="@color/white"
             android:inputType="textEmailAddress"
             tools:text="John doe"
             android:layout_width="match_parent"

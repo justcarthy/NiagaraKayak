@@ -2,6 +2,7 @@ package com.niagarakayak.niagarakayakapp.service.reservation;
 
 import android.os.AsyncTask;
 
+import android.util.Log;
 import com.niagarakayak.niagarakayakapp.model.Reservation;
 
 import java.io.BufferedReader;
@@ -27,7 +28,7 @@ public class ReservationAPIService implements ReservationService {
     }
 
     @Override
-    public void postReservation(PostCallback callback,Reservation reservation){
+    public void postReservation(PostCallback callback, Reservation reservation){
         String postURL = UrlContainer.getPostURL();
         //apikey,reservationID,email,date,time,hours,single,tandem,location,adults,children;
         String reservationID = reservation.getReservationID();
@@ -43,6 +44,9 @@ public class ReservationAPIService implements ReservationService {
         postURL = String.format(postURL, APIKey, reservationID, email, date, time, hours, single,
                 tandem, location, adults, children);
         this.postURL = postURL;
+
+        Log.d("EXECUTE TASK", "postReservation: " + postURL);
+
         new PostReservationTask().execute(callback);
     }
 
@@ -103,6 +107,7 @@ public class ReservationAPIService implements ReservationService {
             case HttpURLConnection.HTTP_UNAUTHORIZED: //call failure
                  throw new Exception("HTTP_UNAUTHORIZED");
         }
+
         httpConnection.disconnect(); //close resources
     }
 

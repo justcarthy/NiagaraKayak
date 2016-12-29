@@ -3,6 +3,9 @@ package com.niagarakayak.niagarakayakapp.preferences;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
+import com.niagarakayak.niagarakayakapp.intro.EmailSlide;
+
+import java.util.regex.Pattern;
 
 public class PreferencesPresenter implements PreferencesContract.Presenter {
 
@@ -42,11 +45,10 @@ public class PreferencesPresenter implements PreferencesContract.Presenter {
             return false;
         }
 
-        if (!email.contains("@")) {
+        if (!EmailSlide.validEmail(email)) {
             mPrefsView.showToast("Invalid email");
             return false;
         }
-
 
 
         return true;
@@ -66,6 +68,7 @@ public class PreferencesPresenter implements PreferencesContract.Presenter {
     public void onClick(View v) {
         if(validInput()) {
             saveSettings();
+            mPrefsView.goHome();
         }
     }
 }

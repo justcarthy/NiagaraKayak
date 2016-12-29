@@ -24,6 +24,7 @@ public class Reservation {
                        String location, int adults, int children, boolean confirmed) {
         this.reservationID = reservationID;
         this.date = date;
+        this.email = email;
         this.time = time;
         this.hours = hours;
         this.singleKayaks = singleKayaks;

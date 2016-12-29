@@ -24,7 +24,7 @@ public class ReservationsViewFragment extends Fragment implements ReservationsCo
         View root  = inflater.inflate(R.layout.fragment_reservation, container, false);
         reservationList = (RecyclerView) root.findViewById(R.id.reservation_list);
         reservationList.setLayoutManager(new LinearLayoutManager(root.getContext()));
-        reservationList.setAdapter(new RecyclerViewAdapter(new ArrayList<Reservation>())); // MARK
+        reservationList.setAdapter(new RecyclerViewAdapter(new ArrayList<Reservation>()));
         return root;
     }
 

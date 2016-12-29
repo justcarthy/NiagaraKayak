@@ -103,7 +103,8 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
                 DatePickerDialog dpd = DatePickerDialog.newInstance(new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                        setDateText(year + "-" + monthOfYear + "-" + dayOfMonth);
+                        String month = monthOfYear < 10 ? "0"+(monthOfYear+1) : ""+(monthOfYear+1);
+                        setDateText(year + "-" + month + "-" + dayOfMonth);
                     }
                 }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
                 dpd.show(getFragmentManager(), "datePicker");
@@ -114,12 +115,11 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
                 TimePickerDialog tpd = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-                        String amOrpm = hourOfDay < 12 ? "AM" : "PM";
-                        String paddedMinute = minute < 10 ? "0"+minute+" ": minute+" ";
-                        String hour = hourOfDay > 12 ? ""+(hourOfDay-12) : ""+hourOfDay;
-                        setTimeText(hour+ ":" + paddedMinute + amOrpm);
+                        String minuteString = minute < 10 ? "0"+minute : ""+minute;
+                        String secondString = second < 10 ? "0"+second : ""+second;
+                        setTimeText(hourOfDay + ":" + minuteString + ":" + secondString);
                     }
-                }, 12, 0, false);
+                }, 12, 0, true);
                 tpd.show(getChildFragmentManager(), "timePicker");
                 break;
             }
