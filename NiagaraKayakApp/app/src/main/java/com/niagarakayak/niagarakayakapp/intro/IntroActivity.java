@@ -7,10 +7,8 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.github.paolorotolo.appintro.AppIntro2;
-import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.home.HomeActivity;
 
 public class IntroActivity extends AppIntro2 {
@@ -42,14 +40,14 @@ public class IntroActivity extends AppIntro2 {
 
     @Override
     public void onDonePressed(Fragment currentFragment) {
-//        super.onDonePressed(currentFragment);
 
-        boolean isNameEmpty = nameSlide.isInputValid();
-        boolean isEmailEmpty = emailSlide.isInputValid();
-        boolean isPhoneEmpty = phoneSlide.isInputValid();
+        boolean isNameValid = nameSlide.isInputValid();
+        boolean isEmailValid = emailSlide.isInputValid();
+        boolean isPhoneValid = phoneSlide.isInputValid();
 
         // First check input
-        if (!invalidInput(isNameEmpty, isEmailEmpty, isPhoneEmpty)) {
+        if (!invalidInput(isNameValid, isEmailValid, isPhoneValid)) {
+
             // If it's good, save it in shared preferences
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = prefs.edit();
@@ -74,10 +72,10 @@ public class IntroActivity extends AppIntro2 {
         }
 
         if (emailStatus) {
-            Toast.makeText(IntroActivity.this, "Invalid email! Please check the email field again", Toast.LENGTH_LONG).show();
+            Toast.makeText(IntroActivity.this, "You left the email field blank! Please tell us your email!", Toast.LENGTH_LONG).show();
             return true;
         }
-        
+
         if (phoneStatus) {
             Toast.makeText(IntroActivity.this, "You left the phone field blank! Please tell us your number!", Toast.LENGTH_SHORT).show();
             return true;

@@ -16,13 +16,14 @@ import java.util.List;
 
 public class DatabaseUtils {
 
-    public List getAllMeets(SQLiteDatabase db){
+    public List getAllMeets(SQLiteDatabase db) {
         List<Reservation> list = new ArrayList<>();
         //SharedPreferences
         String query = "SELECT * FROM reservations ";
 
         Cursor c = db.rawQuery(query, null);
-        while(c.moveToNext()){
+
+        while(c.moveToNext()) {
             int index0 = c.getColumnIndex("reservationID");
             int index1 = c.getColumnIndex("datetime");
             int index2 = c.getColumnIndex("location");
@@ -42,7 +43,7 @@ public class DatabaseUtils {
             int hours = c.getInt(index6);
             int singleKayaks = c.getInt(index7);
             int tandemKayaks = c.getInt(index8);
-            int confirmed = c.getInt(index9);
+            boolean confirmed = c.getInt(index9) == 1 ? true : false;
 
 
             String date = datetime.split(" ")[0];
@@ -50,7 +51,7 @@ public class DatabaseUtils {
 
             list.add(new Reservation(reservationID, email, date, time, hours, singleKayaks, tandemKayaks, location, adults, children, confirmed));
         }
-        meets = list;
+
+        return list;
     }
-    List<Reservation> = new Ar
 }

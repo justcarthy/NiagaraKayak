@@ -4,7 +4,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class HomeUtils {
     private static final String[] LOCATIONS = {
-        "charles daley park", "niagara on the lake"
+        "charles daley park", "niagara on the lake", "queenston"
     };
 
     private static final LatLng[] LOCATION_COORDS = {
