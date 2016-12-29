@@ -5,6 +5,10 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+
+/**
+ * Custom viewpager to enable and disable swiping programmatically.
+ */
 public class StepViewPager extends ViewPager {
 
     private boolean enabled;
@@ -16,20 +20,13 @@ public class StepViewPager extends ViewPager {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        if (this.enabled) {
-            return super.onTouchEvent(ev);
-        }
-
-        return false;
+        return this.enabled && super.onTouchEvent(ev);
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (this.enabled) {
-            return super.onInterceptTouchEvent(ev);
-        }
+        return this.enabled && super.onInterceptTouchEvent(ev);
 
-        return false;
     }
 
     public void setEnabled(boolean state) {

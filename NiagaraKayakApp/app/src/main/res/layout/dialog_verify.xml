@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/kayak_gif"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/kayak"/>
+
+    <TextView
+            android:layout_below="@id/kayak_gif"
+            android:layout_width="match_parent"
+            android:layout_margin="20dp"
+            android:textSize="16sp"
+            android:text="Thank you for making a reservation! We will send an email once we confirm the reservation."
+            android:layout_height="match_parent"/>
+
+</RelativeLayout>

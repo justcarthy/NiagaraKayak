@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="launch_points_array">
+        <item>Niagara-on-the-lake</item>
+        <item>Queenston</item>
+    </string-array>
+</resources>

@@ -2,16 +2,10 @@ package com.niagarakayak.niagarakayakapp.reservations;
 
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.view.View;
-import android.widget.Toast;
-import com.niagarakayak.niagarakayakapp.R;
-import com.niagarakayak.niagarakayakapp.add_reservations.AddReservationsContract;
-import com.niagarakayak.niagarakayakapp.add_reservations.AddReservationsViewFragment;
 import com.niagarakayak.niagarakayakapp.model.Reservation;
 import com.niagarakayak.niagarakayakapp.service.reservation.ReservationAPIService;
 import com.niagarakayak.niagarakayakapp.service.reservation.ReservationService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
-import com.niagarakayak.niagarakayakapp.util.SnackbarUtils;
 import com.niagarakayak.niagarakayakapp.util.SnackbarUtils.SnackbarColor;
 
 import java.util.ArrayList;
