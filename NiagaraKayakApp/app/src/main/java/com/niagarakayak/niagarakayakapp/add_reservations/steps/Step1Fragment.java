@@ -12,37 +12,34 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import com.niagarakayak.niagarakayakapp.R;
 
-public class Step1Fragment extends Fragment {
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+
+import java.util.Calendar;
+
+public class Step1Fragment extends Fragment implements View.OnClickListener {
 
     private TextInputEditText dateText;
     private TextInputEditText timeText;
     private AutoCompleteTextView hoursText;
-
-    private View.OnClickListener listener;
-
-    public Step1Fragment() {
-
-    }
-
-    public Step1Fragment(View.OnClickListener listener) {
-        this.listener = listener;
-    }
-
+    private Bundle mBundle;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            mBundle = savedInstanceState;
+        }
+
         View root = inflater.inflate(R.layout.fragment_step1, container, false);
-        dateText =  (TextInputEditText) root.findViewById(R.id.date_text);
+        dateText = (TextInputEditText) root.findViewById(R.id.date_text);
         timeText = (TextInputEditText) root.findViewById(R.id.time_text);
         hoursText = (AutoCompleteTextView) root.findViewById(R.id.hours_text);
-        dateText.setOnClickListener(listener);
-        timeText.setOnClickListener(listener);
+        dateText.setOnClickListener(this);
+        timeText.setOnClickListener(this);
         String[] hoursOptions = getResources().getStringArray(R.array.hour_options);
-        ArrayAdapter<String> optionsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, hoursOptions);
+        ArrayAdapter<String> optionsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, hoursOptions);
         hoursText.setAdapter(optionsAdapter);
-        hoursText.setOnClickListener(listener);
-        hoursText.setKeyListener(null);
         hoursText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -53,32 +50,80 @@ public class Step1Fragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mBundle != null) {
+            dateText.setText(mBundle.getString("date"));
+            timeText.setText(mBundle.getString("time"));
+            hoursText.setText(mBundle.getString("hour"));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("date", dateText.getText().toString());
+        outState.putString("time", timeText.getText().toString());
+        outState.putString("hour", hoursText.getText().toString());
+    }
+
+    public static Step1Fragment newInstance() {
+        Bundle args = new Bundle();
+        Step1Fragment fragment = new Step1Fragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public String getDateText() {
         return dateText.getText().toString();
-    }
-
-    public String getTimeText() {
-        return timeText.getText().toString();
-    }
-
-    public String getHoursText() {
-        return hoursText.getText().toString();
     }
 
     public void setDateText(String date) {
         dateText.setText(date);
     }
 
-    public void setHoursText(String hours) {
-        hoursText.setText(hours);
-    }
-
     public void setTimeText(String time) {
         timeText.setText(time);
     }
 
+    public String getTimeText() {
+        return timeText.getText().toString();
+    }
 
-    public String getHoursOptionSelected() {
+    public String getHourText() {
         return hoursText.getText().toString();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.date_text: {
+                Calendar now = Calendar.getInstance();
+                DatePickerDialog dpd = DatePickerDialog.newInstance(new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+                        setDateText(year + "-" + monthOfYear + "-" + dayOfMonth);
+                    }
+                }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
+                dpd.show(getFragmentManager(), "datePicker");
+                break;
+            }
+
+            case R.id.time_text: {
+                TimePickerDialog tpd = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+                        String amOrpm = hourOfDay < 12 ? "AM" : "PM";
+                        String paddedMinute = minute < 10 ? "0"+minute+" ": minute+" ";
+                        String hour = hourOfDay > 12 ? ""+(hourOfDay-12) : ""+hourOfDay;
+                        setTimeText(hour+ ":" + paddedMinute + amOrpm);
+                    }
+                }, 12, 0, false);
+                tpd.show(getChildFragmentManager(), "timePicker");
+                break;
+            }
+
+        }
     }
 }

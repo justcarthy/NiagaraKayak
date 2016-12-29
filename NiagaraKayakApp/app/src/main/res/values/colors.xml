@@ -13,4 +13,5 @@
     <color name="intro_email_color">#47a1b3</color>
     <color name="intro_phone_color">#66bed1</color>
     <color name="text_label_drawable_color">#b6b6b6</color>
+    <color name="verify_color">#70ab2b</color>
 </resources>
