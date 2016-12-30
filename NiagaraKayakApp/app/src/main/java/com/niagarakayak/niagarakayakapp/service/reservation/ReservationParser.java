@@ -19,10 +19,10 @@ public class ReservationParser {
     public static ArrayList<Reservation> getReservations(String json) throws JSONException {
         ArrayList<Reservation> reservations = new ArrayList<>();
         JSONArray jsonArray = new JSONArray(json);
-        JSONObject jsonObject = null;
-        Reservation reservation = null;
+        JSONObject jsonObject;
+        Reservation reservation;
 
-        for(int i=0; i<jsonArray.length(); i++) {
+        for(int i = 0; i < jsonArray.length(); i++) {
             jsonObject = jsonArray.getJSONObject(i);
             reservation = new Reservation();
             reservation.setReservationID(jsonObject.getString("ReservationID"));
@@ -35,6 +35,7 @@ public class ReservationParser {
             reservation.setAdults(jsonObject.getInt("adults"));
             reservation.setChildren(jsonObject.getInt("children"));
             reservation.setLocation(jsonObject.getString("location"));
+            reservation.setConfirmed(true);
             reservations.add(reservation);
         }
 

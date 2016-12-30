@@ -65,8 +65,7 @@ public class ReservationLocalDataService implements DataService{
         resForSQL.put(ReservationReaderContract.ReservationEntry.RESERVATION_CHILDREN, reservation.getChildren());
         resForSQL.put(ReservationReaderContract.ReservationEntry.RESERVATION_SINGLE, reservation.getSingleKayaks());
         resForSQL.put(ReservationReaderContract.ReservationEntry.RESERVATION_TANDEM, reservation.getTandemKayaks());
-        resForSQL.put(ReservationReaderContract.ReservationEntry.RESERVATION_CONFIRMED, reservation.isConfirmed());
-
+        resForSQL.put(ReservationReaderContract.ReservationEntry.RESERVATION_CONFIRMED, reservation.isConfirmed() ? 1 : 0);
         db.insert(ReservationReaderContract.ReservationEntry.RESERVATION_TABLE, null, resForSQL);
         db.close();
     }
@@ -97,6 +96,14 @@ public class ReservationLocalDataService implements DataService{
             return new ArrayList<>();
         }
 
+        @Override
+        protected void onPostExecute(ArrayList<Reservation> reservations) {
+            if (exception != null) {
+                callback.onFailure(exception);
+            } else {
+                callback.onSuccess(reservations);
+            }
+        }
     }
 
 
@@ -139,17 +146,15 @@ public class ReservationLocalDataService implements DataService{
         return list;
     }
 
-    public void confirmReservationLocal(UpdateCallback callback, String reservationID){
+    public void confirmReservationLocal(String reservationID){
         this.reservationID = reservationID;
-        new ConfirmLocalReservation().execute(callback);
+        new ConfirmLocalReservation().execute();
     }
 
-    private class ConfirmLocalReservation extends AsyncTask<UpdateCallback, Void, Void>{
-        private UpdateCallback callback;
+    private class ConfirmLocalReservation extends AsyncTask<Void, Void, Void>{
         private Exception exception;
         @Override
-        protected Void doInBackground(UpdateCallback... params) {
-            this.callback = params[0];
+        protected Void doInBackground(Void... params) {
             try{
                 executeConfirmReservations();
             } catch (Exception e){
@@ -163,7 +168,6 @@ public class ReservationLocalDataService implements DataService{
         SQLiteDatabase db = dbHelp.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(ReservationReaderContract.ReservationEntry.RESERVATION_CONFIRMED, true);
-
         String updateQuery = ReservationReaderContract.ReservationEntry.RESERVATION_ID + " LIKE ?";
         String[] updateArgs = {this.reservationID};
         db.update(ReservationReaderContract.ReservationEntry.RESERVATION_TABLE, values, updateQuery, updateArgs);

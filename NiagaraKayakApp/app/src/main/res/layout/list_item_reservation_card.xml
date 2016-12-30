@@ -14,10 +14,10 @@
         >
 
         <ImageButton
-                android:id="@+id/indicator"
+                android:id="@+id/confirmed_indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/indicator_dot_grey"
+                android:src="@drawable/ic_info_outline_black_24dp"
                 android:background="@null"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"

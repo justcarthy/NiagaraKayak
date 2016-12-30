@@ -27,7 +27,7 @@ public class EmailSlide extends Fragment implements ISlideBackgroundColorHolder{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.intro_email_layout, container, false);
+        View root = inflater.inflate(R.layout.fragment_intro_email_layout, container, false);
         this.container = root;
         this.input = (EditText) root.findViewById(R.id.intro_email_text);
         return root;

@@ -63,7 +63,9 @@ public class Reservation {
         this.singleKayaks = singleKayaks;
     }
 
-    public int getTandemKayaks() {return tandemKayaks;    }
+    public int getTandemKayaks() {
+        return tandemKayaks;
+    }
 
     public void setTandemKayaks(int tandemKayaks) {
         this.tandemKayaks = tandemKayaks;

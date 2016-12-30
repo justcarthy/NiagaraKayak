@@ -18,6 +18,7 @@ import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.add_reservations.AddReservationsActivity;
 import com.niagarakayak.niagarakayakapp.home.HomeActivity;
 import com.niagarakayak.niagarakayakapp.preferences.PreferencesActivity;
+import com.niagarakayak.niagarakayakapp.service.database.ReservationLocalDataService;
 import com.niagarakayak.niagarakayakapp.service.reservation.ReservationAPIService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 
@@ -53,11 +54,12 @@ public class ReservationActivity extends AppCompatActivity {
         }
 
         ReservationAPIService reservationAPIService = new ReservationAPIService(getString(R.string.NK_API_KEY));
+        ReservationLocalDataService reservationLocalDataService = new ReservationLocalDataService(this);
 
         setNavHeaderText(prefs.getString("name", ""), prefs.getString("email", ""));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
-        new ReservationsPresenter(prefs.getString("email", ""), reservationAPIService, reservationsViewFragment);
+        new ReservationsPresenter(prefs.getString("email", ""), reservationLocalDataService, reservationAPIService, reservationsViewFragment);
         setupDrawer();
     }
 
