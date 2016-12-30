@@ -17,7 +17,7 @@ public class ReservationReaderHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + ReservationReaderContract.ReservationEntry.RESERVATION_TABLE + " (" +
-                    ReservationReaderContract.ReservationEntry.RESERVATION_ID + " INTEGER PRIMARY KEY," +
+                    ReservationReaderContract.ReservationEntry.RESERVATION_ID + " TEXT PRIMARY KEY," +
                     ReservationReaderContract.ReservationEntry.RESERVATION_DATE + " TEXT," +
                     ReservationReaderContract.ReservationEntry.RESERVATION_LOCATION + " TEXT," +
                     ReservationReaderContract.ReservationEntry.RESERVATION_EMAIL + " TEXT," +
