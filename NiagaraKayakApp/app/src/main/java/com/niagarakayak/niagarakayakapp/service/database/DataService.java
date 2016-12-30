@@ -15,15 +15,23 @@ public interface DataService {
 
     void readLocalReservations(ReadCallback callback);
 
-    interface InsertCallback{
+    interface InsertCallback {
         void onFailure(Exception e);
+
         void onSuccess();
     }
 
-    interface ReadCallback{
+    interface ReadCallback {
         void onFailure(Exception e);
+
         void onSuccess(ArrayList<Reservation> reservations);
 
+    }
+
+    interface UpdateCallback {
+        void onFailure(Exception e);
+
+        void onSuccess();
     }
 
 }

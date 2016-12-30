@@ -20,6 +20,7 @@ public class ReservationLocalDataService implements DataService{
 
     private ReservationReaderHelper dbHelp;
     private Reservation reservation;
+    private String reservationID;
     private ContentValues resForSQL;
 
     public ReservationLocalDataService (Context context){
@@ -49,14 +50,6 @@ public class ReservationLocalDataService implements DataService{
             }
             return null;
         }
-
-        protected void onPostExecute(Void a){
-            if(exception != null){
-                callback.onFailure(exception);
-            } else {
-                callback.onSuccess();
-            }
-        }
     }
 
     private void executeInsertReservation() throws Exception{
@@ -73,8 +66,12 @@ public class ReservationLocalDataService implements DataService{
         resForSQL.put(ReservationReaderContract.ReservationEntry.RESERVATION_SINGLE, reservation.getSingleKayaks());
         resForSQL.put(ReservationReaderContract.ReservationEntry.RESERVATION_TANDEM, reservation.getTandemKayaks());
         resForSQL.put(ReservationReaderContract.ReservationEntry.RESERVATION_CONFIRMED, reservation.isConfirmed());
-        long newRowID = db.insert(ReservationReaderContract.ReservationEntry.RESERVATION_TABLE, null, resForSQL);
+
+        db.insert(ReservationReaderContract.ReservationEntry.RESERVATION_TABLE, null, resForSQL);
+        db.close();
     }
+
+
 
     /**
      *
@@ -100,14 +97,6 @@ public class ReservationLocalDataService implements DataService{
             return new ArrayList<>();
         }
 
-        @Override
-        protected void onPostExecute(ArrayList<Reservation> reservations) {
-            if(exception != null || reservations == null) {
-                callback.onFailure(exception);
-            } else {
-                callback.onSuccess(reservations);
-            }
-        }
     }
 
 
@@ -146,7 +135,38 @@ public class ReservationLocalDataService implements DataService{
 
             list.add(new Reservation(reservationID, email, date, time, hours, singleKayaks, tandemKayaks, location, adults, children, confirmed));
         }
-
+        db.close();
         return list;
+    }
+
+    public void confirmReservationLocal(UpdateCallback callback, String reservationID){
+        this.reservationID = reservationID;
+        new ConfirmLocalReservation().execute(callback);
+    }
+
+    private class ConfirmLocalReservation extends AsyncTask<UpdateCallback, Void, Void>{
+        private UpdateCallback callback;
+        private Exception exception;
+        @Override
+        protected Void doInBackground(UpdateCallback... params) {
+            this.callback = params[0];
+            try{
+                executeConfirmReservations();
+            } catch (Exception e){
+                this.exception = e;
+            }
+            return null;
+        }
+    }
+
+    private void executeConfirmReservations() throws Exception{
+        SQLiteDatabase db = dbHelp.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ReservationReaderContract.ReservationEntry.RESERVATION_CONFIRMED, true);
+
+        String updateQuery = ReservationReaderContract.ReservationEntry.RESERVATION_ID + " LIKE ?";
+        String[] updateArgs = {this.reservationID};
+        db.update(ReservationReaderContract.ReservationEntry.RESERVATION_TABLE, values, updateQuery, updateArgs);
+        db.close();
     }
 }
