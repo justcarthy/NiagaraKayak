@@ -24,7 +24,7 @@ public class ReservationsViewFragment extends Fragment implements ReservationsCo
         View root  = inflater.inflate(R.layout.fragment_reservation, container, false);
         reservationList = (RecyclerView) root.findViewById(R.id.reservation_list);
         reservationList.setLayoutManager(new LinearLayoutManager(root.getContext()));
-        reservationList.setAdapter(new RecyclerViewAdapter(new ArrayList<Reservation>()));
+        reservationList.setAdapter(new ReservationCardAdapter(new ArrayList<Reservation>()));
         return root;
     }
 
@@ -41,7 +41,7 @@ public class ReservationsViewFragment extends Fragment implements ReservationsCo
 
     @Override
     public void showReservations(ArrayList<Reservation> reservations) {
-       reservationList.setAdapter(new RecyclerViewAdapter(reservations));
+       reservationList.setAdapter(new ReservationCardAdapter(reservations));
     }
 
     public static ReservationsViewFragment newInstance() {

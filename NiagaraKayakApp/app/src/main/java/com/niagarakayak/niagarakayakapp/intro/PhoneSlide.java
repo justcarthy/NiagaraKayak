@@ -1,6 +1,5 @@
 package com.niagarakayak.niagarakayakapp.intro;
 
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
@@ -22,7 +21,7 @@ public class PhoneSlide extends Fragment implements ISlideBackgroundColorHolder{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.intro_phone_layout, container, false);
+        View root = inflater.inflate(R.layout.fragment_intro_phone_layout, container, false);
         this.container = root;
         this.input = (EditText) root.findViewById(R.id.intro_phone_text);
         return root;

@@ -44,9 +44,6 @@ public class ReservationAPIService implements ReservationService {
         postURL = String.format(postURL, APIKey, reservationID, email, date, time, hours, single,
                 tandem, location, adults, children);
         this.postURL = postURL;
-
-        Log.d("EXECUTE TASK", "postReservation: " + postURL);
-
         new PostReservationTask().execute(callback);
     }
 
@@ -68,7 +65,7 @@ public class ReservationAPIService implements ReservationService {
                     String json = getJSONString(httpConnection); //resources are closed
                     return ReservationParser.getReservations(json);
                 case HttpURLConnection.HTTP_UNAUTHORIZED: //call failure
-                    return null;
+                    throw new Exception("Unauthorized");
             }
         return null;
     }

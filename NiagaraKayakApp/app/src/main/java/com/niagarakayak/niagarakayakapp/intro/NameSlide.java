@@ -21,7 +21,7 @@ public class NameSlide extends Fragment implements ISlideBackgroundColorHolder {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.intro_name_layout, container, false);
+        View root = inflater.inflate(R.layout.fragment_intro_name_layout, container, false);
         this.container = root;
         this.input = (EditText) root.findViewById(R.id.intro_name_text);
         return root;

@@ -2,6 +2,7 @@ package com.niagarakayak.niagarakayakapp.add_reservations;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -22,6 +23,7 @@ import com.badoualy.stepperindicator.StepperIndicator;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.add_reservations.steps.VerifyDialog;
 import com.niagarakayak.niagarakayakapp.model.Reservation;
+import com.niagarakayak.niagarakayakapp.reservations.ReservationActivity;
 import com.niagarakayak.niagarakayakapp.service.database.DataService;
 import com.niagarakayak.niagarakayakapp.service.database.ReservationLocalDataService;
 import com.niagarakayak.niagarakayakapp.service.database.ReservationReaderHelper;
@@ -200,9 +202,10 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
                 // Save locally to the database
                 saveToLocal(reservation);
                 Log.d("reservationService", "onSuccess: SUCCESS");
+                Intent i = new Intent(AddReservationsActivity.this, ReservationActivity.class);
                 // TODO: Don't show snackbar here! Show it in the reservations list
-                ActivityUtils.showSnackbarWithMessage(root, "Loaded successfully", LENGTH_LONGER, SnackbarColor.SUCCESS_COLOR);
-                AddReservationsActivity.this.onBackPressed();
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
             }
         }, reservation);
     }
