@@ -21,12 +21,12 @@ public class ReservationReaderHelper extends SQLiteOpenHelper {
                     ReservationReaderContract.ReservationEntry.RESERVATION_DATE + " TEXT," +
                     ReservationReaderContract.ReservationEntry.RESERVATION_LOCATION + " TEXT," +
                     ReservationReaderContract.ReservationEntry.RESERVATION_EMAIL + " TEXT," +
-                    ReservationReaderContract.ReservationEntry.RESERVATION_ADULTS + " INT," +
-                    ReservationReaderContract.ReservationEntry.RESERVATION_CHILDREN + " INT," +
-                    ReservationReaderContract.ReservationEntry.RESERVATION_HOURS + " INT," +
-                    ReservationReaderContract.ReservationEntry.RESERVATION_SINGLE + " INT," +
-                    ReservationReaderContract.ReservationEntry.RESERVATION_TANDEM + " INT," +
-                    ReservationReaderContract.ReservationEntry.RESERVATION_CONFIRMED + " INT," +
+                    ReservationReaderContract.ReservationEntry.RESERVATION_ADULTS + " INTEGER," +
+                    ReservationReaderContract.ReservationEntry.RESERVATION_CHILDREN + " INTEGER," +
+                    ReservationReaderContract.ReservationEntry.RESERVATION_HOURS + " INTEGER," +
+                    ReservationReaderContract.ReservationEntry.RESERVATION_SINGLE + " INTEGER," +
+                    ReservationReaderContract.ReservationEntry.RESERVATION_TANDEM + " INTEGER," +
+                    ReservationReaderContract.ReservationEntry.RESERVATION_CONFIRMED + " INTEGER," +
                     " )";
 
     private static final String SQL_DELETE_ENTRIES =
