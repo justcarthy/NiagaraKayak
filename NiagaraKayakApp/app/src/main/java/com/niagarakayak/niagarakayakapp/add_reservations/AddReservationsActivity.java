@@ -154,9 +154,6 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
                                                 false
                                             );
 
-                                    //TODO: Put this in correct position
-                                    ReservationLocalDataService.getInstance(getApplication()).addReservationLocal(reservation);
-
                                     reservationAPIService.postReservation(new ReservationService.PostCallback() {
                                         @Override
                                         public void onFailure(Exception e) {

@@ -15,7 +15,8 @@ import com.niagarakayak.niagarakayakapp.R;
 public class Step2Fragment extends Fragment {
     private TextInputEditText adultText;
     private TextInputEditText childText;
-    private AutoCompleteTextView launchText;
+    private TextInputEditText singleText;
+    private TextInputEditText tandemText;
     private Bundle mBundle;
 
     @Nullable
@@ -29,18 +30,9 @@ public class Step2Fragment extends Fragment {
 
         adultText = (TextInputEditText) root.findViewById(R.id.adult_text);
         childText = (TextInputEditText) root.findViewById(R.id.child_text);
-        launchText = (AutoCompleteTextView) root.findViewById(R.id.launch_text);
+        singleText = (TextInputEditText) root.findViewById(R.id.single_text);
+        tandemText = (TextInputEditText) root.findViewById(R.id.tandem_text);
 
-        String[] launchOptions = getResources().getStringArray(R.array.launch_points_array);
-        ArrayAdapter<String> optionsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, launchOptions);
-        launchText.setAdapter(optionsAdapter);
-        launchText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                ((AutoCompleteTextView) v).showDropDown();
-                return false;
-            }
-        });
         return root;
     }
 
@@ -50,7 +42,8 @@ public class Step2Fragment extends Fragment {
         if (mBundle != null) {
             adultText.setText(mBundle.getString("adult"));
             childText.setText(mBundle.getString("child"));
-            launchText.setText(mBundle.getString("launch"));
+            singleText.setText(mBundle.getString("single"));
+            tandemText.setText(mBundle.getString("tandem"));
         }
     }
 
@@ -59,7 +52,8 @@ public class Step2Fragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putString("adult", adultText.getText().toString());
         outState.putString("child", childText.getText().toString());
-        outState.putString("launch", launchText.getText().toString());
+        outState.putString("single", singleText.getText().toString());
+        outState.putString("tandem", tandemText.getText().toString());
     }
 
     public static Step2Fragment newInstance() {
