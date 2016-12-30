@@ -1,7 +1,8 @@
 package com.niagarakayak.niagarakayakapp.add_reservations;
 
+
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -15,18 +16,17 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
-import com.afollestad.materialdialogs.MaterialDialog;
+
 import com.badoualy.stepperindicator.StepperIndicator;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.add_reservations.steps.VerifyDialog;
 import com.niagarakayak.niagarakayakapp.model.Reservation;
-import com.niagarakayak.niagarakayakapp.preferences.PreferencesActivity;
+import com.niagarakayak.niagarakayakapp.service.database.ReservationLocalDataService;
+import com.niagarakayak.niagarakayakapp.service.database.ReservationReaderHelper;
 import com.niagarakayak.niagarakayakapp.service.reservation.ReservationAPIService;
 import com.niagarakayak.niagarakayakapp.service.reservation.ReservationService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 import com.niagarakayak.niagarakayakapp.util.SnackbarUtils;
-
-import java.util.Calendar;
 
 public class AddReservationsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -41,6 +41,8 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
     private Toolbar mToolbar;
     private ReservationAPIService reservationAPIService;
     private String userEmail;
+    private ReservationReaderHelper dbHelp;
+    private SQLiteDatabase db;
     View root;
 
     @Override
@@ -72,6 +74,9 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
         setToolbarTitle("Add Reservation");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
+        dbHelp = new ReservationReaderHelper(this.getApplicationContext());
+        db = dbHelp.getWritableDatabase();
+
     }
 
     @Override
@@ -148,6 +153,9 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
                                                 Integer.parseInt(getChildText()),
                                                 false
                                             );
+
+                                    //TODO: Put this in correct position
+                                    ReservationLocalDataService.getInstance(getApplication()).addReservationLocal(reservation);
 
                                     reservationAPIService.postReservation(new ReservationService.PostCallback() {
                                         @Override

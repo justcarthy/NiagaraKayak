@@ -38,7 +38,10 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
             @Override
             public void onSuccess(ArrayList<Reservation> reservations) {
                 if (reservations.size() > 0) {
+
                     mReservationsView.showReservations(reservations);
+                    //save reservations to sqlite
+
                 }
             }
         }, email);
