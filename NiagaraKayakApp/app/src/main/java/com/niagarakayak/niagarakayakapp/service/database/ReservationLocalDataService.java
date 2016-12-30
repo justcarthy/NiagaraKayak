@@ -72,7 +72,7 @@ public class ReservationLocalDataService implements DataService{
         resForSQL.put(ReservationReaderContract.ReservationEntry.RESERVATION_CHILDREN, reservation.getChildren());
         resForSQL.put(ReservationReaderContract.ReservationEntry.RESERVATION_SINGLE, reservation.getSingleKayaks());
         resForSQL.put(ReservationReaderContract.ReservationEntry.RESERVATION_TANDEM, reservation.getTandemKayaks());
-        resForSQL.put(ReservationReaderContract.ReservationEntry.RESERVATION_CONFIRMED, reservation.getTandemKayaks());
+        resForSQL.put(ReservationReaderContract.ReservationEntry.RESERVATION_CONFIRMED, reservation.isConfirmed());
         long newRowID = db.insert(ReservationReaderContract.ReservationEntry.RESERVATION_TABLE, null, resForSQL);
     }
 

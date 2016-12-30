@@ -17,16 +17,20 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.badoualy.stepperindicator.StepperIndicator;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.add_reservations.steps.VerifyDialog;
 import com.niagarakayak.niagarakayakapp.model.Reservation;
+import com.niagarakayak.niagarakayakapp.service.database.DataService;
 import com.niagarakayak.niagarakayakapp.service.database.ReservationLocalDataService;
 import com.niagarakayak.niagarakayakapp.service.database.ReservationReaderHelper;
 import com.niagarakayak.niagarakayakapp.service.reservation.ReservationAPIService;
 import com.niagarakayak.niagarakayakapp.service.reservation.ReservationService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 import com.niagarakayak.niagarakayakapp.util.SnackbarUtils;
+
+import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.*;
 
 public class AddReservationsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -43,7 +47,8 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
     private String userEmail;
     private ReservationReaderHelper dbHelp;
     private SQLiteDatabase db;
-    View root;
+    private ReservationLocalDataService reservationLocalService;
+    private View root;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +75,7 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
         currentStep = 0;
         root = findViewById(android.R.id.content);
         reservationAPIService = new ReservationAPIService(getString(R.string.NK_API_KEY));
+        reservationLocalService = new ReservationLocalDataService(this);
         this.userEmail = PreferenceManager.getDefaultSharedPreferences(this).getString("email", "");
         setToolbarTitle("Add Reservation");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -111,8 +117,6 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
         }
     }
 
-
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -133,49 +137,26 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
 
             case R.id.submit_btn: {
                 if (isValid(currentStep)) {
-                    new VerifyDialog.Builder(this)
-                            .title("Thank you!")
-                            .customView(R.layout.dialog_verify, true)
-                            .positiveText("Got it")
-                            .dismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialog) {
-                                    Reservation reservation = new Reservation(
-                                                userEmail+System.currentTimeMillis(),
-                                                userEmail,
-                                                getDateText(),
-                                                getTimeText(),
-                                                convertHourText(getHourText()),
-                                                0,
-                                                0,
-                                                getLaunchText(),
-                                                Integer.parseInt(getAdultText()),
-                                                Integer.parseInt(getChildText()),
-                                                false
-                                            );
-
-                                    reservationAPIService.postReservation(new ReservationService.PostCallback() {
-                                        @Override
-                                        public void onFailure(Exception e) {
-                                            Log.d("reservationService", "onFailure: FAILED");
-                                            ActivityUtils.showSnackbarWithMessage(root, "Couldn't send reservation email", SnackbarUtils.LENGTH_LONGER, SnackbarUtils.SnackbarColor.ERROR_COLOR);
-                                        }
-
-                                        @Override
-                                        public void onSuccess() {
-                                            Log.d("reservationService", "onSuccess: SUCCESS");
-                                            ActivityUtils.showSnackbarWithMessage(root, "Loaded successfully", SnackbarUtils.LENGTH_LONGER, SnackbarUtils.SnackbarColor.SUCCESS_COLOR);
-                                            AddReservationsActivity.this.onBackPressed();
-                                        }
-                                    }, reservation);
-                                }
-                            })
-                            .show();
+                    showVerifyDialog();
                 } else {
                     showToastWithMessage("One or more fields are blank!");
                 }
             }
         }
+    }
+
+    private void showVerifyDialog() {
+        new VerifyDialog.Builder(this)
+                .title("Thank you!")
+                .customView(R.layout.dialog_verify, true)
+                .positiveText("Got it")
+                .dismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        sendEmailForReservation(getReservationFromFields());
+                    }
+                })
+                .show();
     }
 
     private boolean isValid(int page) {
@@ -187,6 +168,66 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
             default:
                 return false;
         }
+    }
+
+    private Reservation getReservationFromFields() {
+        // TODO: Add fields for single and tandem kayaks
+        return new Reservation(
+                userEmail+System.currentTimeMillis(),
+                userEmail,
+                getDateText(),
+                getTimeText(),
+                convertHourText(getHourText()),
+                Integer.parseInt(getSingleText()),
+                Integer.parseInt(getTandemText()),
+                getLaunchText(),
+                Integer.parseInt(getAdultText()),
+                Integer.parseInt(getChildText()),
+                false
+        );
+    }
+
+    private void sendEmailForReservation(final Reservation reservation) {
+        reservationAPIService.postReservation(new ReservationService.PostCallback() {
+            @Override
+            public void onFailure(Exception e) {
+                Log.d("reservationService", "onFailure: FAILED");
+                ActivityUtils.showSnackbarWithMessage(root, "Couldn't send reservation email", LENGTH_LONGER, SnackbarColor.ERROR_COLOR);
+            }
+
+            @Override
+            public void onSuccess() {
+                // Save locally to the database
+                saveToLocal(reservation);
+                Log.d("reservationService", "onSuccess: SUCCESS");
+                // TODO: Don't show snackbar here! Show it in the reservations list
+                ActivityUtils.showSnackbarWithMessage(root, "Loaded successfully", LENGTH_LONGER, SnackbarColor.SUCCESS_COLOR);
+                AddReservationsActivity.this.onBackPressed();
+            }
+        }, reservation);
+    }
+
+
+
+    private int convertHourText(String hourText) {
+        int toHours = 0;
+        int unit = Integer.parseInt(hourText.split(" ")[0]);
+        // Convert days to hours
+        return hourText.contains("day") ? unit * 24 : unit;
+    }
+
+    private void saveToLocal(Reservation reservation) {
+        reservationLocalService.addReservationLocal(new DataService.InsertCallback() {
+            @Override
+            public void onFailure(Exception e) {
+                Log.d("ADD LOCAL", "onFailure: Failed to write to database");
+            }
+
+            @Override
+            public void onSuccess() {
+                Log.d("ADD LOCAL", "onSuccess: Successfully wrote to database");
+            }
+        }, reservation);
     }
 
     private String getDateText() {
@@ -201,17 +242,6 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
         return ((AutoCompleteTextView) findViewById(R.id.hours_text)).getText().toString();
     }
 
-    private int convertHourText(String hourText) {
-        int toHours = 0;
-
-        if (hourText.contains("day")) {
-            toHours = Integer.parseInt(hourText.split(" ")[0]) * 24;
-        } else {
-            toHours = Integer.parseInt(hourText.split(" ")[0]);
-        }
-
-        return toHours;
-    }
 
     private String getAdultText() {
         return ((TextInputEditText) findViewById(R.id.adult_text)).getText().toString();
@@ -224,6 +254,15 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
     private String getLaunchText() {
         return ((AutoCompleteTextView) findViewById(R.id.launch_text)).getText().toString();
     }
+
+    private String getSingleText() {
+        return ((TextInputEditText) findViewById(R.id.single_text)).getText().toString();
+    }
+
+    private String getTandemText() {
+        return ((TextInputEditText) findViewById(R.id.tandem_text)).getText().toString();
+    }
+
 
     private void showToastWithMessage(String message) {
         Toast.makeText(AddReservationsActivity.this, message, Toast.LENGTH_SHORT).show();

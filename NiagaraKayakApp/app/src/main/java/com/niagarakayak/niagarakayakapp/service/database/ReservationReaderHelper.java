@@ -26,7 +26,7 @@ public class ReservationReaderHelper extends SQLiteOpenHelper {
                     ReservationReaderContract.ReservationEntry.RESERVATION_HOURS + " INTEGER," +
                     ReservationReaderContract.ReservationEntry.RESERVATION_SINGLE + " INTEGER," +
                     ReservationReaderContract.ReservationEntry.RESERVATION_TANDEM + " INTEGER," +
-                    ReservationReaderContract.ReservationEntry.RESERVATION_CONFIRMED + " INTEGER," +
+                    ReservationReaderContract.ReservationEntry.RESERVATION_CONFIRMED + " INTEGER" +
                     " )";
 
     private static final String SQL_DELETE_ENTRIES =
