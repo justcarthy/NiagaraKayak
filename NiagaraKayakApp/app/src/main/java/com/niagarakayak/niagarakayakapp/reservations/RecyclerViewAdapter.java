@@ -41,19 +41,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     class ReservationViewHolder extends RecyclerView.ViewHolder {
-        private ImageView weatherPic;
-        private TextView weatherDetails;
         private TextView reservationDate;
-        private TextView reservationWeatherDetails;
         private TextView reservationNumberLocations;
         private TextView reservationGroupDetails;
 
         public ReservationViewHolder(View itemView) {
             super(itemView);
-            weatherPic = (ImageView) itemView.findViewById(R.id.reservation_weather_pic);
-            weatherDetails = (TextView) itemView.findViewById(R.id.reservation_weather_details);
             reservationDate = (TextView) itemView.findViewById(R.id.reservation_date);
-            reservationWeatherDetails = (TextView) itemView.findViewById(R.id.reservation_weather_details);
             reservationNumberLocations = (TextView) itemView.findViewById(R.id.reservation_number_location);
             reservationGroupDetails = (TextView) itemView.findViewById(R.id.reservation_group_details);
         }

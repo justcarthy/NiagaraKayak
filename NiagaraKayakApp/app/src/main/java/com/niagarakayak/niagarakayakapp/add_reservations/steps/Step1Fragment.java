@@ -52,7 +52,7 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
 
         String[] launchOptions = getResources().getStringArray(R.array.launch_points_array);
         ArrayAdapter<String> launchOptionsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, launchOptions);
-        launchText.setAdapter(optionsAdapter);
+        launchText.setAdapter(launchOptionsAdapter);
         launchText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

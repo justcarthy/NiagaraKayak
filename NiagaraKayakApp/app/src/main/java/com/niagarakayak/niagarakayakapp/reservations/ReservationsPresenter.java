@@ -29,6 +29,9 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
 
     @Override
     public void loadReservations() {
+
+        //
+
         reservationAPIService.getAllReservations(new ReservationService.ReservationCallback() {
             @Override
             public void onFailure(Exception e) {
@@ -40,8 +43,6 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
                 if (reservations.size() > 0) {
                     writeReservationsLocal(reservations);
                     mReservationsView.showReservations(reservations);
-                    //save reservations to sqlite
-
                 }
             }
         }, email);
