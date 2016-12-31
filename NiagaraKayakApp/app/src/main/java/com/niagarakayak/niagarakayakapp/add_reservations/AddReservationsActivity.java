@@ -3,7 +3,6 @@ package com.niagarakayak.niagarakayakapp.add_reservations;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -18,7 +17,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.badoualy.stepperindicator.StepperIndicator;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.add_reservations.steps.VerifyDialog;
@@ -26,32 +24,28 @@ import com.niagarakayak.niagarakayakapp.model.Reservation;
 import com.niagarakayak.niagarakayakapp.reservations.ReservationActivity;
 import com.niagarakayak.niagarakayakapp.service.database.DataService;
 import com.niagarakayak.niagarakayakapp.service.database.ReservationLocalDataService;
-import com.niagarakayak.niagarakayakapp.service.database.ReservationReaderHelper;
 import com.niagarakayak.niagarakayakapp.service.reservation.ReservationAPIService;
 import com.niagarakayak.niagarakayakapp.service.reservation.ReservationService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
-import com.niagarakayak.niagarakayakapp.util.SnackbarUtils;
 import com.niagarakayak.niagarakayakapp.util.TimeUtils;
 
 import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.*;
 
 public class AddReservationsActivity extends AppCompatActivity implements View.OnClickListener {
-
+    private View root;
     private StepperIndicator indicator;
     private StepViewPager stepPager;
     private Button submitButton;
     private ImageButton continueOrDoneButton;
     private ImageButton backButton;
     private StepPagerAdapter stepPagerAdapter;
-    private int currentStep;
     private Bundle mBundle;
     private Toolbar mToolbar;
     private ReservationAPIService reservationAPIService;
-    private String userEmail;
-    private ReservationReaderHelper dbHelp;
-    private SQLiteDatabase db;
     private ReservationLocalDataService reservationLocalService;
-    private View root;
+
+    private String userEmail;
+    private int currentStep;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,9 +77,6 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
         setToolbarTitle("Add Reservation");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
-        dbHelp = new ReservationReaderHelper(this.getApplicationContext());
-        db = dbHelp.getWritableDatabase();
-
     }
 
     @Override
@@ -193,23 +184,19 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
         reservationAPIService.postReservation(new ReservationService.PostCallback() {
             @Override
             public void onFailure(Exception e) {
-                Log.d("reservationService", "onFailure: FAILED");
-                ActivityUtils.showSnackbarWithMessage(root, "Couldn't send reservation email", LENGTH_LONGER, SnackbarColor.ERROR_COLOR);
+                ActivityUtils.showSnackbarWithMessage(root, "Couldn't send reservation email.", LENGTH_LONGER, SnackbarColor.ERROR_COLOR);
             }
 
             @Override
             public void onSuccess() {
                 // Save locally to the database
                 saveToLocal(reservation);
-                Log.d("reservationService", "onSuccess: SUCCESS");
                 Intent i = new Intent(AddReservationsActivity.this, ReservationActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
             }
         }, reservation);
     }
-
-
 
     private int convertHourText(String hourText) {
         int toHours = 0;

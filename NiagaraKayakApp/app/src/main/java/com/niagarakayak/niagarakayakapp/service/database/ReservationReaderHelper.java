@@ -4,9 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by Justin on 2016-12-29.
- */
 
 public class ReservationReaderHelper extends SQLiteOpenHelper {
 

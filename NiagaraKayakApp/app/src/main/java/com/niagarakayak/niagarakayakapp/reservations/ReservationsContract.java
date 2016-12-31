@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public interface ReservationsContract {
 
     interface Presenter extends BasePresenter {
-        void loadReservations();
+        void loadReservationsFromServerAndLocal();
     }
 
     interface View extends BaseView<Presenter> {

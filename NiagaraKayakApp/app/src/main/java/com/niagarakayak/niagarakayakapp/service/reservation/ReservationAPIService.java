@@ -12,6 +12,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+/**
+ * This class contains methods and AsyncTasks to fetch reservations from the PHP server.
+ */
+
 public class ReservationAPIService implements ReservationService {
     private final String APIKey;
     private String Email;  //email for getAllReservations
@@ -28,7 +32,7 @@ public class ReservationAPIService implements ReservationService {
     }
 
     @Override
-    public void postReservation(PostCallback callback, Reservation reservation){
+    public void postReservation(PostCallback callback, Reservation reservation) {
         String postURL = UrlContainer.getPostURL();
         //apikey,reservationID,email,date,time,hours,single,tandem,location,adults,children;
         String reservationID = reservation.getReservationID();
@@ -48,7 +52,7 @@ public class ReservationAPIService implements ReservationService {
     }
 
     /**
-     *
+     * This method fetches reservations for a given email.
      * @return Reservation for the given Email,null if unauthorized
      */
     private ArrayList<Reservation> executeFetchReservations() throws Exception {
@@ -64,14 +68,31 @@ public class ReservationAPIService implements ReservationService {
                 case HttpURLConnection.HTTP_OK:
                     String json = getJSONString(httpConnection); //resources are closed
                     return ReservationParser.getReservations(json);
-                case HttpURLConnection.HTTP_UNAUTHORIZED: //call failure
-                    throw new Exception("Unauthorized");
+                case HttpURLConnection.HTTP_UNAUTHORIZED:
+                case HttpURLConnection.HTTP_UNAVAILABLE:
+                case HttpURLConnection.HTTP_BAD_GATEWAY:
+                case HttpURLConnection.HTTP_BAD_REQUEST:
+                case HttpURLConnection.HTTP_CLIENT_TIMEOUT:
+                case HttpURLConnection.HTTP_RESET:
+                case HttpURLConnection.HTTP_USE_PROXY:
+                case HttpURLConnection.HTTP_CONFLICT:
+                case HttpURLConnection.HTTP_BAD_METHOD:
+                case HttpURLConnection.HTTP_REQ_TOO_LONG:
+                case HttpURLConnection.HTTP_UNSUPPORTED_TYPE:
+                case HttpURLConnection.HTTP_GATEWAY_TIMEOUT:
+                case HttpURLConnection.HTTP_FORBIDDEN:
+                case HttpURLConnection.HTTP_NOT_FOUND:
+                case HttpURLConnection.HTTP_INTERNAL_ERROR:
+                case HttpURLConnection.HTTP_GONE:
+                case HttpURLConnection.HTTP_NO_CONTENT:
+                case HttpURLConnection.HTTP_NOT_ACCEPTABLE:
+                    throw new Exception();
             }
         return null;
     }
 
     /**
-     * method gets the json object and closes all resources
+     * Method gets the json object and closes all resources.
      * @param httpConnection connection to extract the JSON object from
      * @return JSON object as string
      * @throws Exception throws IOException
@@ -91,23 +112,45 @@ public class ReservationAPIService implements ReservationService {
         return buffer.toString();
     }
 
-    private void executePostReservation() throws Exception{
-        HttpURLConnection httpConnection = (HttpURLConnection)new URL(this.postURL).openConnection();
+    /**
+     * This method posts a reservation using the postURL.
+     * @throws Exception
+     */
+    private void executePostReservation() throws Exception {
+        HttpURLConnection httpConnection = (HttpURLConnection) new URL(this.postURL).openConnection();
         httpConnection.setRequestMethod("GET");
         httpConnection.setUseCaches(false);
         httpConnection.connect();
 
         int response_code = httpConnection.getResponseCode();
+
         switch(response_code) {
-            case HttpURLConnection.HTTP_OK: // on succesful post return OK
+            // on successful post return OK
+            case HttpURLConnection.HTTP_OK:
                   break;
-            case HttpURLConnection.HTTP_UNAUTHORIZED: //call failure
-                 throw new Exception("HTTP_UNAUTHORIZED");
+            case HttpURLConnection.HTTP_UNAUTHORIZED:
+            case HttpURLConnection.HTTP_UNAVAILABLE:
+            case HttpURLConnection.HTTP_BAD_GATEWAY:
+            case HttpURLConnection.HTTP_BAD_REQUEST:
+            case HttpURLConnection.HTTP_CLIENT_TIMEOUT:
+            case HttpURLConnection.HTTP_RESET:
+            case HttpURLConnection.HTTP_USE_PROXY:
+            case HttpURLConnection.HTTP_CONFLICT:
+            case HttpURLConnection.HTTP_BAD_METHOD:
+            case HttpURLConnection.HTTP_REQ_TOO_LONG:
+            case HttpURLConnection.HTTP_UNSUPPORTED_TYPE:
+            case HttpURLConnection.HTTP_GATEWAY_TIMEOUT:
+            case HttpURLConnection.HTTP_FORBIDDEN:
+            case HttpURLConnection.HTTP_NOT_FOUND:
+            case HttpURLConnection.HTTP_INTERNAL_ERROR:
+            case HttpURLConnection.HTTP_GONE:
+            case HttpURLConnection.HTTP_NO_CONTENT:
+            case HttpURLConnection.HTTP_NOT_ACCEPTABLE:
+                throw new Exception();
         }
 
         httpConnection.disconnect(); //close resources
     }
-
 
     private class getReservationsTask extends AsyncTask<ReservationCallback, Void, ArrayList<Reservation>> {
         private ReservationCallback callback;

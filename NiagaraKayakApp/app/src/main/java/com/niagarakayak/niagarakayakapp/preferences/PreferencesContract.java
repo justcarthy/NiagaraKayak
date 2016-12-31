@@ -6,9 +6,6 @@ import android.view.View;
 import com.niagarakayak.niagarakayakapp.BasePresenter;
 import com.niagarakayak.niagarakayakapp.BaseView;
 
-/**
- * Created by justin on 21/12/16.
- */
 
 public interface PreferencesContract {
 

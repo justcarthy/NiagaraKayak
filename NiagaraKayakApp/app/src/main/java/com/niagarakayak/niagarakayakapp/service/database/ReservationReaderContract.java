@@ -3,12 +3,10 @@ package com.niagarakayak.niagarakayakapp.service.database;
 import android.provider.BaseColumns;
 
 /**
- * Created by Justin on 2016-12-29.
+ * Inner class that defines the table contents
  */
 
 public final class ReservationReaderContract {
-
-    /* Inner class that defines the table contents */
 
     public static class ReservationEntry implements BaseColumns {
         public static final String RESERVATION_TABLE = "reservations";
@@ -22,7 +20,5 @@ public final class ReservationReaderContract {
         public static final String RESERVATION_SINGLE = "singleKayaks";
         public static final String RESERVATION_TANDEM = "tandemKayaks";
         public static final String RESERVATION_CONFIRMED = "confirmed";
-
-
     }
 }
