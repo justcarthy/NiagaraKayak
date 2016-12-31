@@ -10,6 +10,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * This class contains methods and AsyncTasks to fetch reservations from the OpenWeather API.
+ */
+
+
 public class OpenWeatherAPIService implements WeatherService {
 
     private static String BASE_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
@@ -79,7 +84,7 @@ public class OpenWeatherAPIService implements WeatherService {
 
             try {
                 weather = JSONWeatherParser.getWeather(data);
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 this.exception = e;
             }
 

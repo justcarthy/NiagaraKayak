@@ -8,7 +8,7 @@ public interface TwitterService {
     void loadLastTweet(TwitterAPIService.TwitterCallback callback);
 
     interface TwitterCallback {
-        void onFailure(TwitterException e);
+        void onFailure(Exception e);
         void onSuccess(Status tweet);
     }
 }

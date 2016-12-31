@@ -1,11 +1,8 @@
 package com.niagarakayak.niagarakayakapp.home;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -29,10 +26,10 @@ import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 import com.niagarakayak.niagarakayakapp.util.WeatherUtils;
 
 import static android.support.design.widget.Snackbar.LENGTH_LONG;
+import static com.niagarakayak.niagarakayakapp.util.ActivityUtils.isConnectedOrConnecting;
 import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.LENGTH_LONGER;
 import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.SnackbarColor.ERROR_COLOR;
 import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.SnackbarColor.WEATHER_COLOR;
-
 
 public class HomeActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
@@ -83,6 +80,7 @@ public class HomeActivity extends AppCompatActivity {
                 getString(R.string.OPEN_WEATHER_API_KEY)
         );
 
+
         if (savedInstanceState == null) {
             homeViewFragment = HomeViewFragment.newInstance();
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), homeViewFragment, R.id.contentView);
@@ -92,7 +90,7 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         setNavHeaderText(prefs.getString("name", ""), prefs.getString("email", ""));
-        new HomePresenter(twitterAPIService, homeViewFragment, isConnectedOrConnecting());
+        new HomePresenter(twitterAPIService, homeViewFragment, isConnectedOrConnecting(this));
         setupDrawer();
     }
 
@@ -163,28 +161,33 @@ public class HomeActivity extends AppCompatActivity {
 
     private void selectDrawerItem(MenuItem item) {
 
+        int itemClicked = 0;
         switch (item.getItemId()) {
             case R.id.nav_home: {
                 // Do nothing, we are already here
                 break;
             }
 
-            case R.id.nav_preferences: {
-                // Preferences
-                Intent i = new Intent(this, PreferencesActivity.class);
+            case R.id.nav_reservations: {
+                // Reservations
+                Intent i = new Intent(this, ReservationActivity.class);
+                itemClicked = 1;
+                i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(i);
                 break;
             }
 
-            case R.id.nav_reservations: {
-                // Reservations
-                Intent i = new Intent(this, ReservationActivity.class);
+            case R.id.nav_preferences: {
+                // Preferences
+                Intent i = new Intent(this, PreferencesActivity.class);
+                itemClicked = 2;
+                i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(i);
                 break;
             }
         }
 
-        mNavigationView.getMenu().getItem(0).setChecked(true);
+        mNavigationView.getMenu().getItem(itemClicked).setChecked(true);
         mDrawer.closeDrawers();
     }
     @Override
@@ -202,16 +205,7 @@ public class HomeActivity extends AppCompatActivity {
         return new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.access_drawer_open,  R.string.accesss_drawer_close);
     }
 
-    private boolean isConnectedOrConnecting() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
 
-        if (activeNetwork != null) {
-            return activeNetwork.isConnectedOrConnecting();
-        }
-
-        return false;
-    }
 
     public void setToolbarTitle(CharSequence title) {
         getSupportActionBar().setTitle(title);

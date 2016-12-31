@@ -48,7 +48,6 @@ public class ReservationActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             reservationsViewFragment = ReservationsViewFragment.newInstance();
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), reservationsViewFragment, R.id.contentView);
-
         } else {
             reservationsViewFragment = (ReservationsViewFragment) getSupportFragmentManager().findFragmentById(R.id.contentView);
         }
@@ -59,7 +58,8 @@ public class ReservationActivity extends AppCompatActivity {
         setNavHeaderText(prefs.getString("name", ""), prefs.getString("email", ""));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
-        new ReservationsPresenter(prefs.getString("email", ""), reservationLocalDataService, reservationAPIService, reservationsViewFragment);
+        new ReservationsPresenter(prefs.getString("email", ""), reservationLocalDataService,
+                reservationAPIService, reservationsViewFragment);
         setupDrawer();
     }
 
@@ -107,15 +107,12 @@ public class ReservationActivity extends AppCompatActivity {
 
     private void selectDrawerItem(MenuItem item) {
 
+        int itemClicked = 1;
         switch (item.getItemId()) {
             case R.id.nav_home: {
                 Intent i = new Intent(this, HomeActivity.class);
-                startActivity(i);
-                break;
-            }
-
-            case R.id.nav_preferences: {
-                Intent i = new Intent(this, PreferencesActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                itemClicked = 0;
                 startActivity(i);
                 break;
             }
@@ -124,9 +121,17 @@ public class ReservationActivity extends AppCompatActivity {
                 // Do nothing, we are already here
                 break;
             }
+
+            case R.id.nav_preferences: {
+                Intent i = new Intent(this, PreferencesActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                itemClicked = 2;
+                startActivity(i);
+                break;
+            }
         }
 
-        mNavigationView.getMenu().getItem(1).setChecked(true);
+        mNavigationView.getMenu().getItem(itemClicked).setChecked(true);
         mDrawer.closeDrawers();
     }
 

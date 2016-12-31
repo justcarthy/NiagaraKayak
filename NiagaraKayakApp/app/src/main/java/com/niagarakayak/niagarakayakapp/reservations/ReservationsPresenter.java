@@ -19,7 +19,8 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
     private ReservationAPIService reservationAPIService;
     private ReservationLocalDataService reservationLocalDataService;
 
-    public ReservationsPresenter(String email, ReservationLocalDataService reservationLocalDataService, ReservationAPIService reservationAPIService, ReservationsContract.View mReservationsView) {
+    public ReservationsPresenter(String email, ReservationLocalDataService reservationLocalDataService, ReservationAPIService reservationAPIService,
+                                 ReservationsContract.View mReservationsView) {
         this.mReservationsView = mReservationsView;
         this.reservationLocalDataService = reservationLocalDataService;
         this.reservationAPIService = reservationAPIService;
@@ -28,16 +29,14 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
     }
     @Override
     public void start() {
-        loadReservations();
+        loadReservationsFromServerAndLocal();
     }
 
     @Override
-    public void loadReservations() {
+    public void loadReservationsFromServerAndLocal() {
         getRemoteReservations(new LoadReservationsCallback() {
             @Override
             public void onSuccess(final ArrayList<Reservation> remoteReservations) {
-                ArrayList<Reservation> toUpdate = new ArrayList<>();
-
                 reservationLocalDataService.readLocalReservations(new DataService.ReadCallback() {
                     @Override
                     public void onFailure(Exception e) {}
@@ -52,7 +51,7 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
                             }
                         }
 
-                        displayReservationsFromDatabase();
+                        loadReservationsFromDatabase();
                         mReservationsView.setRefreshing(false);
                     }
                 });
@@ -66,6 +65,8 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
             @Override
             public void onFailure(Exception e) {
                 ActivityUtils.showSnackbarWithMessage(((Fragment) mReservationsView).getView(), "Couldn't fetch reservations from server", Snackbar.LENGTH_LONG, SnackbarColor.ERROR_COLOR);
+                loadReservationsFromDatabase();
+                mReservationsView.setRefreshing(false);
             }
 
             @Override
@@ -75,23 +76,25 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
         }, email);
     }
 
-    private void displayReservationsFromDatabase() {
+    private void loadReservationsFromDatabase() {
         reservationLocalDataService.readLocalReservations(new DataService.ReadCallback() {
             @Override
             public void onFailure(Exception e) {
                 ActivityUtils.showSnackbarWithMessage(((Fragment) mReservationsView).getView(), "Couldn't load reservations from phone", Snackbar.LENGTH_LONG, SnackbarColor.ERROR_COLOR);
+                mReservationsView.setRefreshing(false);
             }
 
             @Override
             public void onSuccess(ArrayList<Reservation> reservations) {
                 mReservationsView.showReservations(reservations);
+                mReservationsView.setRefreshing(false);
             }
         });
     }
 
 
     private interface LoadReservationsCallback {
-        public void onSuccess(ArrayList<Reservation> remoteReservations);
+        void onSuccess(ArrayList<Reservation> remoteReservations);
     }
 
 }

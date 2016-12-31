@@ -8,28 +8,29 @@ import android.os.AsyncTask;
 import com.niagarakayak.niagarakayakapp.model.Reservation;
 import java.util.ArrayList;
 
-
 /**
- * Created by Justin on 2016-12-29.
+ * This class contains methods and AsyncTasks to fetch reservations from the local SQLite database.
  */
 
-/**
- *
- */
-public class ReservationLocalDataService implements DataService{
+public class ReservationLocalDataService implements DataService {
 
     private ReservationReaderHelper dbHelp;
     private Reservation reservation;
     private String reservationID;
     private ContentValues resForSQL;
 
-    public ReservationLocalDataService (Context context){
+    /**
+     * Constructor
+     * @param context   To initialize the ReservationReaderHelper.
+     */
+    public ReservationLocalDataService(Context context){
         dbHelp = new ReservationReaderHelper(context);
     }
 
     /**
-     * @param callback
-     * @param reservation, Reservation to be added to SQLite
+     * Adds a reservation to the local database.
+     * @param callback      Provided callback for onFailure(), onSuccess()
+     * @param reservation   Reservation to be added to SQLite
      */
     @Override
     public void addReservationLocal(InsertCallback callback, Reservation reservation) {
@@ -69,8 +70,6 @@ public class ReservationLocalDataService implements DataService{
         db.insert(ReservationReaderContract.ReservationEntry.RESERVATION_TABLE, null, resForSQL);
         db.close();
     }
-
-
 
     /**
      *

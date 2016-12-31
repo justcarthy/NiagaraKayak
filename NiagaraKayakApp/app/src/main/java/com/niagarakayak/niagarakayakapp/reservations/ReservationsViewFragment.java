@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.model.Reservation;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ReservationsViewFragment extends Fragment implements ReservationsContract.View {
@@ -46,7 +45,7 @@ public class ReservationsViewFragment extends Fragment implements ReservationsCo
         swipeToRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.loadReservations();
+                mPresenter.start();
             }
         });
 

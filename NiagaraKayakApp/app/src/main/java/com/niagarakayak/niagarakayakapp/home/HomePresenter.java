@@ -1,6 +1,7 @@
 package com.niagarakayak.niagarakayakapp.home;
 
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -52,7 +53,7 @@ public class HomePresenter implements HomeContract.Presenter {
         if (isConnected) {
             loadTweetCard();
         } else {
-            ActivityUtils.showSnackbarWithMessage((View) mHomeView, "No internet connection found!", LENGTH_LONG, ERROR_COLOR);
+            ActivityUtils.showSnackbarWithMessage(((Fragment) mHomeView).getView(), "No internet connection found!", LENGTH_LONG, ERROR_COLOR);
             loadErrorTweetCard();
         }
     }
@@ -61,7 +62,7 @@ public class HomePresenter implements HomeContract.Presenter {
     public void loadTweetCard() {
         mTwitterAPI.loadLastTweet(new TwitterService.TwitterCallback() {
             @Override
-            public void onFailure(TwitterException e) {
+            public void onFailure(Exception e) {
                 ActivityUtils.showSnackbarWithMessage((View) mHomeView, "Failed to fetch most recent tweet", LENGTH_SHORT, ERROR_COLOR);
                 loadErrorTweetCard();
             }

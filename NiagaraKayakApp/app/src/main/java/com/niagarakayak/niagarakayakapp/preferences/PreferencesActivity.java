@@ -85,9 +85,20 @@ public class PreferencesActivity extends AppCompatActivity {
 
     private void selectDrawerItem(MenuItem item) {
 
+        int itemClicked = 2;
         switch (item.getItemId()) {
             case R.id.nav_home: {
                 Intent i = new Intent(this, HomeActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                itemClicked = 0;
+                startActivity(i);
+                break;
+            }
+
+            case R.id.nav_reservations: {
+                Intent i = new Intent(this, ReservationActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                itemClicked = 1;
                 startActivity(i);
                 break;
             }
@@ -96,15 +107,9 @@ public class PreferencesActivity extends AppCompatActivity {
                 // Do nothing, we are already here
                 break;
             }
-
-            case R.id.nav_reservations: {
-                Intent i = new Intent(this, ReservationActivity.class);
-                startActivity(i);
-                break;
-            }
         }
 
-        mNavigationView.getMenu().getItem(2).setChecked(true);
+        mNavigationView.getMenu().getItem(itemClicked).setChecked(true);
         mDrawer.closeDrawers();
     }
 
