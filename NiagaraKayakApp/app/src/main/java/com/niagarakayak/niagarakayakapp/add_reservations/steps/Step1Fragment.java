@@ -90,9 +90,6 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
         return fragment;
     }
 
-    public String getDateText() {
-        return dateText.getText().toString();
-    }
 
     public void setDateText(String date) {
         dateText.setText(date);
@@ -100,6 +97,10 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
 
     public void setTimeText(String time) {
         timeText.setText(time);
+    }
+
+    public String getDateText() {
+        return dateText.getText().toString();
     }
 
     public String getTimeText() {
@@ -130,11 +131,12 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
                 TimePickerDialog tpd = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-                        String minuteString = minute < 10 ? "0"+minute : ""+minute;
-                        String secondString = second < 10 ? "0"+second : ""+second;
-                        setTimeText(hourOfDay + ":" + minuteString + ":" + secondString);
+                        String amOrpm = hourOfDay < 12 ? "AM" : "PM";
+                        String paddedMinute = minute < 10 ? "0"+minute : ""+minute;
+                        String hour = hourOfDay > 12 ? ""+(hourOfDay-12) : ""+hourOfDay;
+                        setTimeText(hour+ ":" + paddedMinute + " " + amOrpm);
                     }
-                }, 12, 0, true);
+                }, 12, 0, false);
                 tpd.show(getChildFragmentManager(), "timePicker");
                 break;
             }

@@ -135,4 +135,3 @@ public class ReservationActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(title);
     }
 }
-

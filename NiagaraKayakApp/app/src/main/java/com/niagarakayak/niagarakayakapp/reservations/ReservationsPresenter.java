@@ -2,7 +2,6 @@ package com.niagarakayak.niagarakayakapp.reservations;
 
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import com.niagarakayak.niagarakayakapp.model.Reservation;
 import com.niagarakayak.niagarakayakapp.service.database.DataService;
 import com.niagarakayak.niagarakayakapp.service.database.ReservationLocalDataService;
@@ -34,7 +33,7 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
 
     @Override
     public void loadReservations() {
-        getRemoteReservations(new RemoteReservationsCallback() {
+        getRemoteReservations(new LoadReservationsCallback() {
             @Override
             public void onSuccess(final ArrayList<Reservation> remoteReservations) {
                 ArrayList<Reservation> toUpdate = new ArrayList<>();
@@ -54,6 +53,7 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
                         }
 
                         displayReservationsFromDatabase();
+                        mReservationsView.setRefreshing(false);
                     }
                 });
             }
@@ -61,8 +61,7 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
 
     }
 
-
-    private void getRemoteReservations(final RemoteReservationsCallback callback) {
+    private void getRemoteReservations(final LoadReservationsCallback callback) {
         reservationAPIService.getAllReservations(new ReservationService.ReservationCallback() {
             @Override
             public void onFailure(Exception e) {
@@ -85,14 +84,13 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
 
             @Override
             public void onSuccess(ArrayList<Reservation> reservations) {
-                ActivityUtils.showSnackbarWithMessage(((Fragment) mReservationsView).getView(), "Successfully loaded reservations", Snackbar.LENGTH_LONG, SnackbarColor.SUCCESS_COLOR);
                 mReservationsView.showReservations(reservations);
             }
         });
     }
 
 
-    private interface RemoteReservationsCallback {
+    private interface LoadReservationsCallback {
         public void onSuccess(ArrayList<Reservation> remoteReservations);
     }
 
