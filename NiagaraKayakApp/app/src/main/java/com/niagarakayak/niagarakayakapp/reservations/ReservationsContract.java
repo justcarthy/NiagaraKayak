@@ -12,13 +12,11 @@ public interface ReservationsContract {
 
     interface Presenter extends BasePresenter {
         void loadReservations();
-
-        @Override
-        void start();
     }
 
     interface View extends BaseView<Presenter> {
         void showReservations(ArrayList<Reservation> reservations);
+        void setRefreshing(boolean refresh);
     }
 
 }

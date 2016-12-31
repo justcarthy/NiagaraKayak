@@ -31,6 +31,7 @@ import com.niagarakayak.niagarakayakapp.service.reservation.ReservationAPIServic
 import com.niagarakayak.niagarakayakapp.service.reservation.ReservationService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 import com.niagarakayak.niagarakayakapp.util.SnackbarUtils;
+import com.niagarakayak.niagarakayakapp.util.TimeUtils;
 
 import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.*;
 
@@ -173,7 +174,6 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
     }
 
     private Reservation getReservationFromFields() {
-        // TODO: Add fields for single and tandem kayaks
         return new Reservation(
                 userEmail+System.currentTimeMillis(),
                 userEmail,
@@ -203,7 +203,6 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
                 saveToLocal(reservation);
                 Log.d("reservationService", "onSuccess: SUCCESS");
                 Intent i = new Intent(AddReservationsActivity.this, ReservationActivity.class);
-                // TODO: Don't show snackbar here! Show it in the reservations list
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
             }
@@ -238,7 +237,9 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
     }
 
     private String getTimeText() {
-        return ((TextInputEditText) findViewById(R.id.time_text)).getText().toString();
+        String timeText = ((TextInputEditText) findViewById(R.id.time_text)).getText().toString();
+        String result = TimeUtils.get24HrTime(timeText.split(" ")) + ":00";
+        return result;
     }
 
     private String getHourText() {

@@ -1,10 +1,12 @@
 package com.niagarakayak.niagarakayakapp.model;
 
+import java.io.Serializable;
+
 /**
  * This class represents a reservation.
  */
 
-public class Reservation {
+public class Reservation implements Serializable {
 
     private String email;
     private String reservationID;
