@@ -76,6 +76,21 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
         }, email);
     }
 
+    private void syncDbWithRemote(ArrayList<Reservation> remoteReservations) {
+        for (Reservation remoteReservation : remoteReservations) {
+            reservationLocalDataService.addReservationLocal(new DataService.InsertCallback() {
+                @Override
+                public void onFailure(Exception e) {}
+
+                @Override
+                public void onSuccess() {
+                }
+            }, remoteReservation);
+        }
+
+        mReservationsView.setRefreshing(false);
+    }
+
     private void loadReservationsFromDatabase() {
         reservationLocalDataService.readLocalReservations(new DataService.ReadCallback() {
             @Override
@@ -85,11 +100,15 @@ public class ReservationsPresenter implements ReservationsContract.Presenter {
             }
 
             @Override
-            public void onSuccess(ArrayList<Reservation> reservations) {
-                mReservationsView.showReservations(reservations);
-                mReservationsView.setRefreshing(false);
+            public void onSuccess(ArrayList<Reservation> reservationsFromDb) {
+                showReservations(reservationsFromDb);
             }
         });
+    }
+
+    private void showReservations(ArrayList<Reservation> reservations) {
+        mReservationsView.showReservations(reservations);
+        mReservationsView.setRefreshing(false);
     }
 
 

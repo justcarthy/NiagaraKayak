@@ -97,7 +97,7 @@ public class Reservation implements Serializable {
         return reservationID;
     }
 
-    public void setLocation(String location){ this.location = location; }
+    public void setLocation(String location) { this.location = location; }
 
     public String getLocation() { return location ;}
 
@@ -105,15 +105,15 @@ public class Reservation implements Serializable {
 
     public int getAdults(){ return adults; }
 
-    public int getChildren() { return children;}
+    public int getChildren() { return children; }
 
-    public void setChildren(int children) { this.children = children;    }
+    public void setChildren(int children) { this.children = children; }
 
-    public int getHours() { return hours;}
+    public int getHours() { return hours; }
 
-    public void setHours(int hours) { this.hours = hours;    }
+    public void setHours(int hours) { this.hours = hours; }
 
-    public String getTime() { return time;    }
+    public String getTime() { return time; }
 
-    public void setTime(String time) { this.time = time;    }
+    public void setTime(String time) { this.time = time; }
 }
