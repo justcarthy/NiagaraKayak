@@ -103,7 +103,7 @@ public class Reservation implements Serializable {
 
     public void setAdults(int adults){ this.adults = adults; }
 
-    public int getAdults(){ return adults; }
+    public int getAdults() { return adults; }
 
     public int getChildren() { return children; }
 

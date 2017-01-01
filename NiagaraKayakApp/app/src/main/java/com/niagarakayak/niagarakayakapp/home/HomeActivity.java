@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import com.niagarakayak.niagarakayakapp.R;
-import com.niagarakayak.niagarakayakapp.logo.LogoActivity;
+import com.niagarakayak.niagarakayakapp.login_activity.LoginActivity;
 import com.niagarakayak.niagarakayakapp.model.Weather;
 import com.niagarakayak.niagarakayakapp.preferences.PreferencesActivity;
 import com.niagarakayak.niagarakayakapp.reservations.ReservationActivity;
@@ -54,7 +54,7 @@ public class HomeActivity extends AppCompatActivity {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         if (!checkSettings(prefs)) {
-            Intent i = new Intent(this, LogoActivity.class);
+            Intent i = new Intent(this, LoginActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }
@@ -92,12 +92,6 @@ public class HomeActivity extends AppCompatActivity {
         setNavHeaderText(prefs.getString("name", ""), prefs.getString("email", ""));
         new HomePresenter(twitterAPIService, homeViewFragment, isConnectedOrConnecting(this));
         setupDrawer();
-    }
-
-    private void clearSharedPrefs(SharedPreferences prefs) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.clear();
-        editor.commit();
     }
 
     private void setNavHeaderText(String username, String email) {

@@ -16,7 +16,7 @@ import com.niagarakayak.niagarakayakapp.R;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EmailSlide extends Fragment implements ISlideBackgroundColorHolder{
+public class EmailSlide extends Fragment implements ISlideBackgroundColorHolder {
 
     private View container;
     private EditText input;

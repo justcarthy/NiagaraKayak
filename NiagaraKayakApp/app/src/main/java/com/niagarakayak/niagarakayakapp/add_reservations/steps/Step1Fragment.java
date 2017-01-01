@@ -99,18 +99,6 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
         timeText.setText(time);
     }
 
-    public String getDateText() {
-        return dateText.getText().toString();
-    }
-
-    public String getTimeText() {
-        return timeText.getText().toString();
-    }
-
-    public String getHourText() {
-        return hoursText.getText().toString();
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
