@@ -22,7 +22,6 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
     private TextInputEditText dateText;
     private TextInputEditText timeText;
     private AutoCompleteTextView hoursText;
-    private AutoCompleteTextView launchText;
     private Bundle mBundle;
 
     @Nullable
@@ -36,7 +35,6 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
         dateText = (TextInputEditText) root.findViewById(R.id.date_text);
         timeText = (TextInputEditText) root.findViewById(R.id.time_text);
         hoursText = (AutoCompleteTextView) root.findViewById(R.id.hours_text);
-        launchText = (AutoCompleteTextView) root.findViewById(R.id.launch_text);
         dateText.setOnClickListener(this);
         timeText.setOnClickListener(this);
         String[] hoursOptions = getResources().getStringArray(R.array.hour_options);
@@ -50,16 +48,6 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        String[] launchOptions = getResources().getStringArray(R.array.launch_points_array);
-        ArrayAdapter<String> launchOptionsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, launchOptions);
-        launchText.setAdapter(launchOptionsAdapter);
-        launchText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                ((AutoCompleteTextView) v).showDropDown();
-                return false;
-            }
-        });
         return root;
     }
 
@@ -70,7 +58,6 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
             dateText.setText(mBundle.getString("date"));
             timeText.setText(mBundle.getString("time"));
             hoursText.setText(mBundle.getString("hour"));
-            launchText.setText(mBundle.getString("launch"));
         }
     }
 
@@ -80,7 +67,6 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
         outState.putString("date", dateText.getText().toString());
         outState.putString("time", timeText.getText().toString());
         outState.putString("hour", hoursText.getText().toString());
-        outState.putString("launch", launchText.getText().toString());
     }
 
     public static Step1Fragment newInstance() {

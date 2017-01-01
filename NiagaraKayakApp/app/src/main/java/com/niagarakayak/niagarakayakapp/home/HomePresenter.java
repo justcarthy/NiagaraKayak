@@ -3,31 +3,19 @@ package com.niagarakayak.niagarakayakapp.home;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.View;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.niagarakayak.niagarakayakapp.model.Weather;
 import com.niagarakayak.niagarakayakapp.service.twitter.TwitterAPIService;
 import com.niagarakayak.niagarakayakapp.service.twitter.TwitterService;
-import com.niagarakayak.niagarakayakapp.service.weather.OpenWeatherAPIService;
-import com.niagarakayak.niagarakayakapp.service.weather.WeatherService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
-import com.niagarakayak.niagarakayakapp.util.HomeUtils;
-import com.niagarakayak.niagarakayakapp.util.WeatherUtils;
+import com.niagarakayak.niagarakayakapp.util.MapUtils;
 import twitter4j.Status;
-import twitter4j.TwitterException;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import static android.support.design.widget.Snackbar.*;
 
-import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.LENGTH_LONGER;
-
 import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.SnackbarColor.ERROR_COLOR;
-import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.SnackbarColor.WEATHER_COLOR;
 
 public class HomePresenter implements HomeContract.Presenter {
 
@@ -75,7 +63,7 @@ public class HomePresenter implements HomeContract.Presenter {
                 mHomeView.setTweetHandle("@" + lastTweet.getUser().getScreenName());
                 mHomeView.setTweetDescription(tweetText);
                 mHomeView.setTweetDate(tweetDate.toString());
-                LatLng coords = HomeUtils.getLocationFromTweet(tweetText);
+                LatLng coords = MapUtils.getLocationFromTweet(tweetText);
                 loadMapCard(tweetDate, coords);
             }
         });
