@@ -2,9 +2,9 @@ package com.niagarakayak.niagarakayakapp.util;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class HomeUtils {
+public class MapUtils {
     private static final String[] LOCATIONS = {
-        "charles daley park", "niagara on the lake", "queenston"
+        "charles daley park", "queenston"
     };
 
     private static final LatLng[] LOCATION_COORDS = {
@@ -18,15 +18,19 @@ public class HomeUtils {
         // We only have a set of defined points to deal with:
         // Logic is simple, check if the tweet text contains
         // Any of the launch point words, return the first match.
-        tweet = tweet.toLowerCase().replace("-", " ");
+        return getLocation(tweet);
+    }
+
+    public static LatLng getLocation(String location) {
+        location = location.toLowerCase().replace("-", " ");
 
         for (int i = 0; i < LOCATIONS.length; i++) {
-            if (tweet.contains(LOCATIONS[i])) {
+            if (location.contains(LOCATIONS[i])) {
                 return LOCATION_COORDS[i];
             }
         }
 
-        return null;
+        return new LatLng(0, 0);
     }
 
     public static String getEmojiByUnicode(int unicode){

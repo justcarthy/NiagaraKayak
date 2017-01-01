@@ -60,17 +60,17 @@ public class WeatherUtils {
         switch (type) {
             case SEVERE:
                 return "Not the best day outside for kayaking "
-                        + HomeUtils.getEmojiByUnicode(UNI_SAD) + " "
-                        + HomeUtils.getEmojiByUnicode(UNI_RAIN) + " "
+                        + MapUtils.getEmojiByUnicode(UNI_SAD) + " "
+                        + MapUtils.getEmojiByUnicode(UNI_RAIN) + " "
                         + "\nMaybe tomorrow?";
             case MILD:
                 return "It's a little windy, \nbut that's no reason to stay inside"
-                        + HomeUtils.getEmojiByUnicode(UNI_CLOUD) + " "
-                        + HomeUtils.getEmojiByUnicode(UNI_WIND) + " ";
+                        + MapUtils.getEmojiByUnicode(UNI_CLOUD) + " "
+                        + MapUtils.getEmojiByUnicode(UNI_WIND) + " ";
             default:
                 return "Perfect weather outside today! \nCome kayaking!"
-                        + HomeUtils.getEmojiByUnicode(UNI_HAPPY) + " "
-                        + HomeUtils.getEmojiByUnicode(UNI_SUN) + " ";
+                        + MapUtils.getEmojiByUnicode(UNI_HAPPY) + " "
+                        + MapUtils.getEmojiByUnicode(UNI_SUN) + " ";
         }
     }
 }

@@ -10,50 +10,55 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.niagarakayak.niagarakayakapp.R;
+import com.niagarakayak.niagarakayakapp.util.MapUtils;
 
 public class Step2Fragment extends Fragment {
-    private TextInputEditText adultText;
-    private TextInputEditText childText;
-    private TextInputEditText singleText;
-    private TextInputEditText tandemText;
-    private Bundle mBundle;
+
+    private MapFragment mapFragment;
+    private GoogleMap map;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            mBundle = savedInstanceState;
-        }
-
-        View root = inflater.inflate(R.layout.fragment_step2, container, false);
-
-        adultText = (TextInputEditText) root.findViewById(R.id.adult_text);
-        childText = (TextInputEditText) root.findViewById(R.id.child_text);
-        singleText = (TextInputEditText) root.findViewById(R.id.single_text);
-        tandemText = (TextInputEditText) root.findViewById(R.id.tandem_text);
-
-        return root;
+        return inflater.inflate(R.layout.fragment_step2, container, false);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (mBundle != null) {
-            adultText.setText(mBundle.getString("adult"));
-            childText.setText(mBundle.getString("child"));
-            singleText.setText(mBundle.getString("single"));
-            tandemText.setText(mBundle.getString("tandem"));
+        setUpMapIfNeeded();
+    }
+
+    private void setUpMapIfNeeded() {
+        // Do a null check to confirm that we have not already instantiated the map.
+        if (map == null) {
+            // Try to obtain the map from the MapFragment.
+            mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment);
+            mapFragment.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    map = googleMap;
+                    setUpMap();
+                }
+            });
         }
+    }
+
+    private void setUpMap() {
+        LatLng charlesDaleyPark = MapUtils.getLocation("charles daley park");
+        LatLng queenston = MapUtils.getLocation("queenston");
+        map.addMarker(new MarkerOptions().position(charlesDaleyPark));
+        map.addMarker(new MarkerOptions().position(queenston));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(charlesDaleyPark, 4));
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("adult", adultText.getText().toString());
-        outState.putString("child", childText.getText().toString());
-        outState.putString("single", singleText.getText().toString());
-        outState.putString("tandem", tandemText.getText().toString());
     }
 
     public static Step2Fragment newInstance() {

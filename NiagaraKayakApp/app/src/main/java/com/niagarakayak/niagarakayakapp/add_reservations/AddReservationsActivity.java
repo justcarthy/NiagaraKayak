@@ -65,7 +65,7 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
         stepPagerAdapter = new StepPagerAdapter(getFragmentManager());
         stepPager.setAdapter(stepPagerAdapter);
         indicator.setViewPager(stepPager, true);
-        indicator.setStepCount(2);
+        indicator.setStepCount(3);
         continueOrDoneButton.setOnClickListener(this);
         backButton.setOnClickListener(this);
         submitButton.setOnClickListener(this);
@@ -104,7 +104,7 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
                 backButton.setVisibility(View.VISIBLE);
             }
 
-            if (currentStep == 1) {
+            if (currentStep == 2) {
                 continueOrDoneButton.setVisibility(View.INVISIBLE);
                 submitButton.setVisibility(View.VISIBLE);
             }
@@ -153,12 +153,14 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
                 .show();
     }
 
-    private boolean isValid(int page) {
-        switch (page) {
+    private boolean isValid(int step) {
+        switch (step) {
             case StepPagerAdapter.STEP_ONE:
                 return !(getDateText().isEmpty() || getTimeText().isEmpty() || getHourText().isEmpty());
             case StepPagerAdapter.STEP_TWO:
-                return !(getAdultText().isEmpty() || getChildText().isEmpty() || getLaunchText().isEmpty());
+                return true;
+            case StepPagerAdapter.STEP_THREE:
+                return !(getAdultText().isEmpty() || getChildText().isEmpty() || getSingleText().isEmpty() || getTimeText().isEmpty());
             default:
                 return false;
         }
@@ -173,7 +175,7 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
                 convertHourText(getHourText()),
                 Integer.parseInt(getSingleText()),
                 Integer.parseInt(getTandemText()),
-                getLaunchText(),
+                "Charles Daley Park",
                 Integer.parseInt(getAdultText()),
                 Integer.parseInt(getChildText()),
                 false
@@ -199,9 +201,7 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
     }
 
     private int convertHourText(String hourText) {
-        int toHours = 0;
         int unit = Integer.parseInt(hourText.split(" ")[0]);
-        // Convert days to hours
         return hourText.contains("day") ? unit * 24 : unit;
     }
 
@@ -242,10 +242,6 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
         return ((TextInputEditText) findViewById(R.id.child_text)).getText().toString();
     }
 
-    private String getLaunchText() {
-        return ((AutoCompleteTextView) findViewById(R.id.launch_text)).getText().toString();
-    }
-
     private String getSingleText() {
         return ((TextInputEditText) findViewById(R.id.single_text)).getText().toString();
     }
@@ -261,14 +257,19 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
 
 
     private void showNextPage() {
-        if (currentStep < 1) {
+        if (currentStep < 2) {
             currentStep++;
             // Fake a drag in the x direction by 1000 pixels to the right
             fakeDrag(-1000);
         }
 
-        if (currentStep > 0) {
+        if (currentStep == 1) {
             backButton.setVisibility(View.VISIBLE);
+            continueOrDoneButton.setVisibility(View.VISIBLE);
+            submitButton.setVisibility(View.INVISIBLE);
+        }
+
+        if (currentStep == 2) {
             continueOrDoneButton.setVisibility(View.INVISIBLE);
             submitButton.setVisibility(View.VISIBLE);
         }

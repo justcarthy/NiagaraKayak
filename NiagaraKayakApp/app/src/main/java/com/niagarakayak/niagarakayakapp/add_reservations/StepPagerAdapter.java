@@ -5,11 +5,13 @@ import android.app.FragmentManager;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import com.niagarakayak.niagarakayakapp.add_reservations.steps.Step1Fragment;
 import com.niagarakayak.niagarakayakapp.add_reservations.steps.Step2Fragment;
+import com.niagarakayak.niagarakayakapp.add_reservations.steps.Step3Fragment;
 
 public class StepPagerAdapter extends FragmentStatePagerAdapter {
 
     static final int STEP_ONE = 0;
     static final int STEP_TWO = 1;
+    static final int STEP_THREE = 2;
 
     public StepPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -26,12 +28,16 @@ public class StepPagerAdapter extends FragmentStatePagerAdapter {
                 return Step2Fragment.newInstance();
             }
 
+            case STEP_THREE: {
+                return Step3Fragment.newInstance();
+            }
+
             default:
                 return Step1Fragment.newInstance();
         }
     }
 
     public int getCount() {
-        return 2;
+        return 3;
     }
 }
