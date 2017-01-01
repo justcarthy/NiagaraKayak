@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:background="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <ImageView
+            android:id="@+id/nk_logo"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/large_logo"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    <Button
+            android:id="@+id/btn_sign_up"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="Sign up"
+            android:layout_marginBottom="30dp"
+            android:layout_below="@id/nk_logo"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <Button
+            android:id="@+id/btn_sign_in"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="Sign in"
+            android:layout_marginBottom="30dp"
+            android:layout_below="@+id/btn_sign_up"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+</RelativeLayout>

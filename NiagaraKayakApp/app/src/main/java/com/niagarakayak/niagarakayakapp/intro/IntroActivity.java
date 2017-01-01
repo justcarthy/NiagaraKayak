@@ -15,6 +15,7 @@ public class IntroActivity extends AppIntro2 {
     private NameSlide nameSlide;
     private EmailSlide emailSlide;
     private PhoneSlide phoneSlide;
+    private VerificationSlide verificationSlide;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -23,9 +24,11 @@ public class IntroActivity extends AppIntro2 {
         nameSlide = new NameSlide();
         emailSlide = new EmailSlide();
         phoneSlide = new PhoneSlide();
+        verificationSlide = new VerificationSlide();
 
         addSlide(nameSlide);
         addSlide(emailSlide);
+        addSlide(verificationSlide);
         addSlide(phoneSlide);
 
         setColorTransitionsEnabled(true);
