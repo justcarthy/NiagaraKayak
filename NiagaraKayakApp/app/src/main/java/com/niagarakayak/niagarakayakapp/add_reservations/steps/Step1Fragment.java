@@ -93,8 +93,9 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
                 DatePickerDialog dpd = DatePickerDialog.newInstance(new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+                        String day = dayOfMonth < 10 ? "0"+dayOfMonth : ""+(dayOfMonth);
                         String month = monthOfYear < 10 ? "0"+(monthOfYear+1) : ""+(monthOfYear+1);
-                        setDateText(year + "-" + month + "-" + dayOfMonth);
+                        setDateText(year + "-" + month + "-" + day);
                     }
                 }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
                 dpd.show(getFragmentManager(), "datePicker");
