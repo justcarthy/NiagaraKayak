@@ -2,7 +2,6 @@ package com.niagarakayak.niagarakayakapp.service.reservation;
 
 import android.os.AsyncTask;
 
-import android.util.Log;
 import com.niagarakayak.niagarakayakapp.model.Reservation;
 
 import java.io.BufferedReader;
@@ -33,7 +32,7 @@ public class ReservationAPIService implements ReservationService {
 
     @Override
     public void postReservation(PostCallback callback, Reservation reservation) {
-        String postURL = UrlContainer.getPostURL();
+        String postURL = UrlContainer.getmakeReservationURL();
         //apikey,reservationID,email,date,time,hours,single,tandem,location,adults,children;
         String reservationID = reservation.getReservationID();
         String email = reservation.getEmail();
