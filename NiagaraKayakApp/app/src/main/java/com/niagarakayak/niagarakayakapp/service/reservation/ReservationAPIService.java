@@ -127,10 +127,10 @@ public class ReservationAPIService implements ReservationService {
             // on successful post return OK
             case HttpURLConnection.HTTP_OK:
                   break;
-            case HttpURLConnection.HTTP_UNAUTHORIZED:
+            case HttpURLConnection.HTTP_UNAUTHORIZED: //api key not valid
             case HttpURLConnection.HTTP_UNAVAILABLE:
             case HttpURLConnection.HTTP_BAD_GATEWAY:
-            case HttpURLConnection.HTTP_BAD_REQUEST:
+            case HttpURLConnection.HTTP_BAD_REQUEST:  //invalid url
             case HttpURLConnection.HTTP_CLIENT_TIMEOUT:
             case HttpURLConnection.HTTP_RESET:
             case HttpURLConnection.HTTP_USE_PROXY:
@@ -141,7 +141,7 @@ public class ReservationAPIService implements ReservationService {
             case HttpURLConnection.HTTP_GATEWAY_TIMEOUT:
             case HttpURLConnection.HTTP_FORBIDDEN:
             case HttpURLConnection.HTTP_NOT_FOUND:
-            case HttpURLConnection.HTTP_INTERNAL_ERROR:
+            case HttpURLConnection.HTTP_INTERNAL_ERROR: //server error
             case HttpURLConnection.HTTP_GONE:
             case HttpURLConnection.HTTP_NO_CONTENT:
             case HttpURLConnection.HTTP_NOT_ACCEPTABLE:

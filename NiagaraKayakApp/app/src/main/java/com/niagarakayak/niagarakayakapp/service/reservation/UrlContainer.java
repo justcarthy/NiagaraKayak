@@ -18,6 +18,37 @@ public class UrlContainer {
     private static final String updateCustomerURL = "http://www.niagarakayak.com/kayakAPI/customer.php/?type=UPDATE";
     private static final String updateCustomerURLparam = "api=%s&Email=%s&NameUP=%s&PhoneUP=%s";
 
+    private static final String sendVerificationURL = "http://www.niagarakayak.com/kayakAPI/sverification.php/";
+    private static final String sendVerificationURLparam = "api=%s&Email=%s";
+
+
+    private static final String VerificationURL = "http://www.niagarakayak.com/kayakAPI/verify.php/";
+    private static final String VerificationURLparam = "api=%s&Email=%s&Code=%s";
+
+    /**
+     *
+     * @return URL to send verification code to customer
+     */
+    public static String getSendVerificationURL() { return sendVerificationURL; }
+
+    /**
+     *
+     * @return parameters to be supplied for sending verification code URL
+     */
+    public static String getSendVerificationURLparam() { return sendVerificationURLparam; }
+
+    /**
+     *
+     * @return URL to verify the code provided by the customer
+     */
+    public static String getVerificationURL() { return VerificationURL; }
+
+    /**
+     *
+     * @return param to be supplied with URL used to do verification
+     */
+    public static String getVerificationURLparam() { return VerificationURLparam; }
+
     /**
      *
      * @return URL to update customer record
