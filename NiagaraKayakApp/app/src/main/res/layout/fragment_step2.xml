@@ -5,11 +5,19 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please select one of the markers as a launch point:"
+            android:textSize="16sp"
+            android:layout_margin="20dp"
+    />
+
     <fragment
             android:id="@+id/map_fragment"
             android:name="com.google.android.gms.maps.MapFragment"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="200dp"
             map:liteMode="true"/>
 
 
