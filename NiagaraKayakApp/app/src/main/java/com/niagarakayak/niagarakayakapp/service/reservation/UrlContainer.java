@@ -18,6 +18,26 @@ public class UrlContainer {
     private static final String updateCustomerURL = "http://www.niagarakayak.com/kayakAPI/customer.php/?type=UPDATE";
     private static final String updateCustomerURLparam = "api=%s&Email=%s&NameUP=%s&PhoneUP=%s";
 
+
+    private static final String checkCustomerEmailURL = "http://www.niagarakayak.com/kayakAPI/customer.php/?type=CHECKFREE";
+    private static final String checkCustomerEmailURLparam = "api=%s&Email=%s";
+
+    /**
+     *
+     * @return URL to check if email is available for customer to use for registration
+     */
+    public static String getCheckCustomerEmailURL() {
+        return checkCustomerEmailURL;
+    }
+
+    /**
+     *
+     * @return parameter to supply for checking customer Email URL
+     */
+    public static String getCheckCustomerEmailURLparam() {
+        return checkCustomerEmailURLparam;
+    }
+
     private static final String sendVerificationURL = "http://www.niagarakayak.com/kayakAPI/sverification.php/";
     private static final String sendVerificationURLparam = "api=%s&Email=%s";
 
@@ -26,67 +46,73 @@ public class UrlContainer {
     private static final String VerificationURLparam = "api=%s&Email=%s&Code=%s";
 
     /**
-     *
      * @return URL to send verification code to customer
      */
-    public static String getSendVerificationURL() { return sendVerificationURL; }
+    public static String getSendVerificationURL() {
+        return sendVerificationURL;
+    }
 
     /**
-     *
      * @return parameters to be supplied for sending verification code URL
      */
-    public static String getSendVerificationURLparam() { return sendVerificationURLparam; }
+    public static String getSendVerificationURLparam() {
+        return sendVerificationURLparam;
+    }
 
     /**
-     *
      * @return URL to verify the code provided by the customer
      */
-    public static String getVerificationURL() { return VerificationURL; }
+    public static String getVerificationURL() {
+        return VerificationURL;
+    }
 
     /**
-     *
      * @return param to be supplied with URL used to do verification
      */
-    public static String getVerificationURLparam() { return VerificationURLparam; }
+    public static String getVerificationURLparam() {
+        return VerificationURLparam;
+    }
 
     /**
-     *
      * @return URL to update customer record
      */
-    public static String getUpdateCustomerURL() {return updateCustomerURL;}
+    public static String getUpdateCustomerURL() {
+        return updateCustomerURL;
+    }
 
     /**
-     *
      * @return parameter string to be passed for updating record
      */
-    public static String getUpdateCustomerURLparam() {return updateCustomerURLparam;}
+    public static String getUpdateCustomerURLparam() {
+        return updateCustomerURLparam;
+    }
 
     /**
-     *
-     * @return  URL to fetch reservations for a customer
+     * @return URL to fetch reservations for a customer
      */
-    public static String getReservationUrl(){
+    public static String getReservationUrl() {
         return reservationUrl;
     }
 
 
     /**
-     *
      * @return URL to call script to send email to Buisness owner
      */
-    public static String getmakeReservationURL(){
+    public static String getmakeReservationURL() {
         return makeReservationURL;
     }
 
     /**
-     *
      * @return parameter to be supplied to post customers to the table
      */
-    public static String getPostCustomerURLparam() {return PostCustomerURLparam; }
+    public static String getPostCustomerURLparam() {
+        return PostCustomerURLparam;
+    }
 
     /**
-     *
      * @return url for posting customer to the table
      */
-    public static String getPostCustomerURL() {return postCustomerURL; }
+    public static String getPostCustomerURL() {
+        return postCustomerURL;
+    }
 }
