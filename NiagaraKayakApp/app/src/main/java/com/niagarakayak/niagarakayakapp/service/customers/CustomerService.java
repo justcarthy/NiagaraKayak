@@ -21,11 +21,19 @@ public interface CustomerService {
     void updateCustomer(String emailID, String newName, String newPhone,CustomerCallback callback);
 
     /**
+     *
+     * @param email                 Email to check for availability
+     * @param callback              Callback to pass to async task
+     * @throws CustomerExistsException
+     */
+    void checkEmailFree(String email,CustomerCallback callback);
+
+    /**
      * Sends a verification email to a customers email.
      * @param email         The email of the customer.
      * @throws Exception    If any errors are found, an exception should be thrown.
      */
-    void sendVerificationEmail(String email,CustomerCallback callback) throws Exception;
+    void sendVerificationEmail(String email,CustomerCallback callback);
 
     /**
      * Verifies from the server if the code was valid or not.
@@ -34,7 +42,7 @@ public interface CustomerService {
      * @throws InvalidValidationCode wrong or expired validation code
      * @throws  Exception Connection or server related errors
      */
-    void verify(String email,String verificationCode,CustomerCallback callback) throws InvalidValidationCode,Exception;
+    void verify(String email,String verificationCode,CustomerCallback callback);
 
     /**
      * This exception should be thrown if a customer exists
