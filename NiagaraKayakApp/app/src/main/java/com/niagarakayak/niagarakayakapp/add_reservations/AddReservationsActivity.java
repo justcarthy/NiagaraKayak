@@ -1,6 +1,7 @@
 package com.niagarakayak.niagarakayakapp.add_reservations;
 
 
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import com.badoualy.stepperindicator.StepperIndicator;
 import com.niagarakayak.niagarakayakapp.R;
+import com.niagarakayak.niagarakayakapp.add_reservations.steps.Step2Fragment;
 import com.niagarakayak.niagarakayakapp.add_reservations.steps.VerifyDialog;
 import com.niagarakayak.niagarakayakapp.model.Reservation;
 import com.niagarakayak.niagarakayakapp.reservations.ReservationActivity;
@@ -43,6 +45,17 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
     private Toolbar mToolbar;
     private ReservationAPIService reservationAPIService;
     private ReservationLocalDataService reservationLocalService;
+
+    private String dateText;
+    private String timeText;
+    private String hourText;
+
+    private String launchText;
+
+    private String adultText;
+    private String childText;
+    private String singleText;
+    private String tandemText;
 
     private String userEmail;
     private int currentStep;
@@ -99,7 +112,7 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
         super.onResume();
 
         if (mBundle != null) {
-            currentStep = mBundle.getInt("currentStep");
+            currentStep = mBundle.getInt("currentStep", 0);
             if (currentStep > 0) {
                 backButton.setVisibility(View.VISIBLE);
             }
@@ -119,7 +132,11 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
                 if (isValid(currentStep)) {
                     showNextPage();
                 } else {
-                    showToastWithMessage("One or more fields are blank!");
+                    if (currentStep == 1) {
+                        showToastWithMessage("Please select a launch point!");
+                    } else {
+                        showToastWithMessage("One or more fields are blank!");
+                    }
                 }
                 break;
             }
@@ -158,9 +175,9 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
             case StepPagerAdapter.STEP_ONE:
                 return !(getDateText().isEmpty() || getTimeText().isEmpty() || getHourText().isEmpty());
             case StepPagerAdapter.STEP_TWO:
-                return true;
+                return !getLaunchText().isEmpty();
             case StepPagerAdapter.STEP_THREE:
-                return !(getAdultText().isEmpty() || getChildText().isEmpty() || getSingleText().isEmpty() || getTimeText().isEmpty());
+                return !(getAdultText().isEmpty() || getChildText().isEmpty() || getSingleText().isEmpty() || getTandemText().isEmpty());
             default:
                 return false;
         }
@@ -170,14 +187,14 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
         return new Reservation(
                 userEmail+System.currentTimeMillis(),
                 userEmail,
-                getDateText(),
-                getTimeText(),
-                convertHourText(getHourText()),
-                Integer.parseInt(getSingleText()),
-                Integer.parseInt(getTandemText()),
-                "Charles Daley Park",
-                Integer.parseInt(getAdultText()),
-                Integer.parseInt(getChildText()),
+                dateText,
+                timeText,
+                convertHourText(hourText),
+                Integer.parseInt(singleText),
+                Integer.parseInt(tandemText),
+                launchText,
+                Integer.parseInt(adultText),
+                Integer.parseInt(childText),
                 false
         );
     }
@@ -186,6 +203,7 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
         reservationAPIService.postReservation(new ReservationService.PostCallback() {
             @Override
             public void onFailure(Exception e) {
+                e.printStackTrace();
                 ActivityUtils.showSnackbarWithMessage(root, "Couldn't send reservation email.", LENGTH_LONGER, SnackbarColor.ERROR_COLOR);
             }
 
@@ -220,34 +238,57 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
     }
 
     private String getDateText() {
-        return ((TextInputEditText) findViewById(R.id.date_text)).getText().toString();
+        dateText =  ((TextInputEditText) findViewById(R.id.date_text)).getText().toString();
+        return dateText;
     }
 
     private String getTimeText() {
-        String timeText = ((TextInputEditText) findViewById(R.id.time_text)).getText().toString();
-        String result = TimeUtils.get24HrTime(timeText.split(" ")) + ":00";
-        return result;
+        timeText = ((TextInputEditText) findViewById(R.id.time_text)).getText().toString();
+
+        if (!timeText.isEmpty()) {
+            timeText = TimeUtils.get24HrTime(timeText.split(" ")) + ":00";
+        }
+
+        return timeText;
     }
 
     private String getHourText() {
-        return ((AutoCompleteTextView) findViewById(R.id.hours_text)).getText().toString();
+        hourText = ((AutoCompleteTextView) findViewById(R.id.hours_text)).getText().toString();
+        return hourText;
     }
 
+    private String getLaunchText() {
+        if (currentStep == 1) {
+            Fragment page = stepPagerAdapter.getCurrentFragment();
+
+            if (page != null) {
+                launchText = ((Step2Fragment) page).getLaunchPointText();
+            } else {
+                launchText = "";
+            }
+        }
+
+        return launchText;
+    }
 
     private String getAdultText() {
-        return ((TextInputEditText) findViewById(R.id.adult_text)).getText().toString();
+        adultText = ((TextInputEditText) findViewById(R.id.adult_text)).getText().toString();
+        return adultText;
     }
 
     private String getChildText() {
-        return ((TextInputEditText) findViewById(R.id.child_text)).getText().toString();
+        childText = ((TextInputEditText) findViewById(R.id.child_text)).getText().toString();
+        return childText;
     }
 
     private String getSingleText() {
-        return ((TextInputEditText) findViewById(R.id.single_text)).getText().toString();
+        singleText = ((TextInputEditText) findViewById(R.id.single_text)).getText().toString();
+        return singleText;
     }
 
     private String getTandemText() {
-        return ((TextInputEditText) findViewById(R.id.tandem_text)).getText().toString();
+        tandemText = ((TextInputEditText) findViewById(R.id.tandem_text)).getText().toString();
+        return tandemText;
     }
 
 
@@ -260,10 +301,10 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
         if (currentStep < 2) {
             currentStep++;
             // Fake a drag in the x direction by 1000 pixels to the right
-            fakeDrag(-1000);
+            fakeDrag(-2000);
         }
 
-        if (currentStep == 1) {
+        if (currentStep > 0) {
             backButton.setVisibility(View.VISIBLE);
             continueOrDoneButton.setVisibility(View.VISIBLE);
             submitButton.setVisibility(View.INVISIBLE);
@@ -273,20 +314,26 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
             continueOrDoneButton.setVisibility(View.INVISIBLE);
             submitButton.setVisibility(View.VISIBLE);
         }
+
     }
 
     private void showPrevPage() {
         if (currentStep > 0) {
             currentStep--;
             // Fake a drag in the x direction by 1000 pixels to the left
-            fakeDrag(1000);
+            fakeDrag(2000);
+        }
+
+        if (currentStep < 2) {
+            backButton.setVisibility(View.VISIBLE);
+            continueOrDoneButton.setVisibility(View.VISIBLE);
+            submitButton.setVisibility(View.INVISIBLE);
         }
 
         if (currentStep == 0) {
             backButton.setVisibility(View.INVISIBLE);
-            continueOrDoneButton.setVisibility(View.VISIBLE);
-            submitButton.setVisibility(View.INVISIBLE);
         }
+
     }
 
     private void fakeDrag(float amount) {
