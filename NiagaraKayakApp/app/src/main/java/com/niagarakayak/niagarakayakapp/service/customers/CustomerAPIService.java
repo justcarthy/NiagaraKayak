@@ -1,5 +1,7 @@
 package com.niagarakayak.niagarakayakapp.service.customers;
 
+import android.os.AsyncTask;
+
 import com.niagarakayak.niagarakayakapp.service.reservation.UrlContainer;
 
 import java.io.DataOutputStream;
@@ -13,38 +15,46 @@ import java.net.URL;
 public class CustomerAPIService implements CustomerService {
 
     private String APIKey;
+    private String URL;
+    private String URLparam;
 
     public CustomerAPIService(String APIKey) {
         this.APIKey = APIKey;
     }
 
     @Override
-    public void postCustomer(String name, String email, String phone) throws CustomerExistsException, Exception {
-        String url = UrlContainer.getPostCustomerURL();
+    public void postCustomer(String name, String email, String phone,CustomerCallback callback){
+        this.URL = UrlContainer.getPostCustomerURL();
         String urlParameters = UrlContainer.getPostCustomerURLparam(); //api,email,name,phone
-        urlParameters = String.format(urlParameters,this.APIKey,email,name,phone);
-        this.sendData(url,urlParameters);
+        this.URLparam = String.format(urlParameters,this.APIKey,email,name,phone);
+        new CustomerBackgroundTask().execute(callback); //task to post customer info
     }
 
     @Override
-    public void updateCustomer(String emailID, String newName, String newPhone) throws Exception {
-        String url = UrlContainer.getUpdateCustomerURL();
+    public void updateCustomer(String emailID, String newName, String newPhone,CustomerCallback callback){
+        this.URL = UrlContainer.getUpdateCustomerURL();
         String urlparam = UrlContainer.getUpdateCustomerURLparam();
-        urlparam = String.format(urlparam,this.APIKey,emailID,newName,newPhone);
-        this.sendData(url,urlparam);
+        this.URLparam = String.format(urlparam,this.APIKey,emailID,newName,newPhone);
+        new CustomerBackgroundTask().execute(callback); //task to updateCustomer info
     }
 
     @Override
-    public void sendVerificationEmail(String email) throws Exception {
-
+    public void sendVerificationEmail(String email,CustomerCallback callback) throws Exception {
+        this.URL = UrlContainer.getSendVerificationURL();
+        String urlparam = UrlContainer.getSendVerificationURLparam();
+        this.URLparam = String.format(urlparam,this.APIKey,email);
+        new CustomerBackgroundTask().execute(callback); //task to updateCustomer info
     }
 
     @Override
-    public void verify(String verificationCode) {
-
+    public void verify(String email, String verificationCode, CustomerCallback callback) throws InvalidValidationCode, Exception {
+        this.URL = UrlContainer.getVerificationURL();
+        String urlparam = UrlContainer.getVerificationURLparam();
+        this.URLparam = String.format(urlparam,this.APIKey,email,verificationCode);
+        new CustomerBackgroundTask().execute(callback); //task to updateCustomer info
     }
 
-    private void sendData(String url,String urlParameters) throws CustomerExistsException,Exception {
+    private void sendData(String url, String urlParameters) throws CustomerExistsException,Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("POST");
@@ -68,10 +78,37 @@ public class CustomerAPIService implements CustomerService {
             case HttpURLConnection.HTTP_BAD_REQUEST:
                 throw new Exception("Bad request");
             case HttpURLConnection.HTTP_CONFLICT:
-                throw new CustomerExistsException();
+                throw new CustomerExistsException(); //customer email already exists
+            case HttpURLConnection.HTTP_FORBIDDEN:
+                throw new InvalidValidationCode();  //Invalid code given
         }
         //close resources
         con.getInputStream().close();
         con.disconnect();
+    }
+
+    private class CustomerBackgroundTask extends AsyncTask<CustomerCallback,Void,Void>{
+        private CustomerCallback callback;
+        private Exception exception;
+
+        @Override
+        protected Void doInBackground(CustomerCallback... params) {
+            callback = params[0];
+            try{
+                CustomerAPIService.this.sendData(CustomerAPIService.this.URL,CustomerAPIService.this.URLparam);
+            }catch (Exception ex){
+                this.exception = ex;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(exception != null) {
+                callback.onFailure(exception);
+            } else {
+                callback.onSuccess();
+            }
+        }
     }
 }
