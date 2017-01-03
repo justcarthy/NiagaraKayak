@@ -39,7 +39,15 @@ public class CustomerAPIService implements CustomerService {
     }
 
     @Override
-    public void sendVerificationEmail(String email,CustomerCallback callback) throws Exception {
+    public void checkEmailFree(String email, CustomerCallback callback){
+        this.URL = UrlContainer.getCheckCustomerEmailURL();
+        String urlparam = UrlContainer.getUpdateCustomerURLparam();
+        this.URLparam = String.format(urlparam,this.APIKey,email);
+        new CustomerBackgroundTask().execute(callback); //task to updateCustomer info
+    }
+
+    @Override
+    public void sendVerificationEmail(String email,CustomerCallback callback){
         this.URL = UrlContainer.getSendVerificationURL();
         String urlparam = UrlContainer.getSendVerificationURLparam();
         this.URLparam = String.format(urlparam,this.APIKey,email);
@@ -47,14 +55,14 @@ public class CustomerAPIService implements CustomerService {
     }
 
     @Override
-    public void verify(String email, String verificationCode, CustomerCallback callback) throws InvalidValidationCode, Exception {
+    public void verify(String email, String verificationCode, CustomerCallback callback){
         this.URL = UrlContainer.getVerificationURL();
         String urlparam = UrlContainer.getVerificationURLparam();
         this.URLparam = String.format(urlparam,this.APIKey,email,verificationCode);
         new CustomerBackgroundTask().execute(callback); //task to updateCustomer info
     }
 
-    private void sendData(String url, String urlParameters) throws CustomerExistsException,Exception {
+    private void sendData(String url, String urlParameters) throws CustomerExistsException,InvalidValidationCode,Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("POST");
