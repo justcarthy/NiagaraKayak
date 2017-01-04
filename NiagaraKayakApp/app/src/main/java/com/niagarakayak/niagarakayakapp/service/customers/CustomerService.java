@@ -22,8 +22,8 @@ public interface CustomerService {
 
     /**
      *
-     * @param email                 Email to check for availability
-     * @param callback              Callback to pass to async task
+     * @param email      Email to check for availability
+     * @param callback   Callback to pass to async task
      * @throws CustomerExistsException
      */
     void checkEmailFree(String email,CustomerCallback callback);
@@ -37,10 +37,10 @@ public interface CustomerService {
 
     /**
      * Verifies from the server if the code was valid or not.
-     * @param email                 Email of client whose code is being verified
-     * @param verificationCode      Verification code input by the user to check.
-     * @throws InvalidValidationCode wrong or expired validation code
-     * @throws  Exception Connection or server related errors
+     * @param email                     Email of client whose code is being verified
+     * @param verificationCode          Verification code input by the user to check
+     * @throws InvalidValidationCode    Wrong or expired validation code
+     * @throws  Exception               Connection or server related errors
      */
     void verify(String email,String verificationCode,CustomerCallback callback);
 
@@ -57,7 +57,7 @@ public interface CustomerService {
      *  Exception thrown when customer enters wrong validation code or
      *  when the validation code is expired
      */
-    class InvalidValidationCode extends Exception{
+    class InvalidValidationCode extends Exception {
         public InvalidValidationCode() {
             super("The validation code provided by the user is expired or wrong");
         }

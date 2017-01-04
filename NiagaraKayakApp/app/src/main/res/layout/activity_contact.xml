@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <include
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+        <android.support.v7.widget.CardView
+                android:layout_margin="20dp"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:id="@+id/contact_us_label"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/contact_us"
+                            android:textSize="20sp"
+                            android:layout_margin="20sp"
+                            android:textColor="@color/colorPrimary"
+                    />
+
+                    <RelativeLayout
+                            android:id="@+id/telephone_container"
+                            android:layout_width="match_parent"
+                            android:clickable="true"
+                            android:foreground="?android:selectableItemBackground"
+                            android:layout_below="@id/contact_us_label"
+                            android:layout_height="match_parent">
+
+                        <ImageView
+                                android:id="@+id/contact_telephone_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tint="@color/colorAccent"
+                                android:src="@drawable/ic_phone_black_24dp"
+                                android:layout_margin="20dp"/>
+
+                        <TextView
+                                android:id="@+id/telephone_number"
+                                android:text="289-534-3242"
+                                android:textSize="20sp"
+                                android:layout_alignBaseline="@id/contact_telephone_icon"
+                                android:layout_toEndOf="@id/contact_telephone_icon"
+                                android:layout_marginTop="20dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <TextView
+                                android:id="@+id/contact_telephone_label"
+                                android:text="Telephone"
+                                android:textSize="12sp"
+                                android:layout_below="@id/telephone_number"
+                                android:textColor="@color/colorAccent"
+                                android:layout_marginTop="5dp"
+                                android:layout_alignBaseline="@id/contact_telephone_icon"
+                                android:layout_alignStart="@id/telephone_number"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                    </RelativeLayout>
+
+
+                <RelativeLayout
+                        android:id="@+id/email_container"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="20dp"
+                        android:clickable="true"
+                        android:foreground="?android:selectableItemBackground"
+                        android:layout_below="@id/telephone_container"
+                        android:layout_height="match_parent">
+                    <ImageView
+                            android:id="@+id/contact_mail_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:tint="@color/colorAccent"
+                            android:src="@drawable/ic_email_black_24dp"
+                            android:layout_margin="20dp"/>
+
+                    <TextView
+                            android:id="@+id/email"
+                            android:text="hello@niagarakayak.com"
+                            android:textSize="20sp"
+                            android:layout_alignBaseline="@id/contact_mail_icon"
+                            android:layout_toEndOf="@id/contact_mail_icon"
+                            android:layout_marginTop="20dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    <TextView
+                            android:id="@+id/contact_email_label"
+                            android:text="E-mail"
+                            android:textSize="12sp"
+                            android:layout_below="@id/email"
+                            android:textColor="@color/colorAccent"
+                            android:layout_marginTop="5dp"
+                            android:layout_alignBaseline="@id/contact_mail_icon"
+                            android:layout_alignStart="@id/email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                            android:id="@+id/web_container"
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:clickable="true"
+                            android:foreground="?android:selectableItemBackground"
+                            android:layout_below="@id/email_container"
+                            android:layout_height="match_parent">
+                        <ImageView
+                                android:id="@+id/contact_web_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tint="@color/colorAccent"
+                                android:src="@drawable/ic_web_black_24dp"
+                                android:layout_margin="20dp"/>
+
+                        <TextView
+                                android:id="@+id/website"
+                                android:text="niagarakayak.com"
+                                android:textSize="20sp"
+                                android:layout_alignBaseline="@id/contact_web_icon"
+                                android:layout_toEndOf="@id/contact_web_icon"
+                                android:layout_marginTop="20dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <TextView
+                                android:id="@+id/contact_website_label"
+                                android:text="Website"
+                                android:textSize="12sp"
+                                android:layout_below="@id/website"
+                                android:textColor="@color/colorAccent"
+                                android:layout_marginTop="5dp"
+                                android:layout_alignBaseline="@id/contact_web_icon"
+                                android:layout_alignStart="@id/website"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+            </ScrollView>
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
+</LinearLayout>

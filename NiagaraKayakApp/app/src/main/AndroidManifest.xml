@@ -18,7 +18,7 @@
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyBbFFll_Z94x6kKA-9zCqe1T1TsjrPEUUA"/>
         <activity android:name=".login_activity.LoginActivity"/>
-        <activity android:name=".intro.IntroActivity"/>
+        <activity android:name=".sign_up.SignUpActivity"/>
         <activity
                 android:name=".home.HomeActivity"
                 android:launchMode="singleTask">
@@ -34,5 +34,7 @@
                 android:name=".reservations.ReservationActivity"
                 android:launchMode="singleTask"/>
         <activity android:name=".add_reservations.AddReservationsActivity"/>
+        <activity android:name=".contact.ContactActivity"
+                  android:launchMode="singleTask"/>
     </application>
 </manifest>

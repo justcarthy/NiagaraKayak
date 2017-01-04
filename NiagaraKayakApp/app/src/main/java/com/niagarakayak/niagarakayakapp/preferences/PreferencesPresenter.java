@@ -1,11 +1,8 @@
 package com.niagarakayak.niagarakayakapp.preferences;
 
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.View;
-import com.niagarakayak.niagarakayakapp.intro.EmailSlide;
-
-import java.util.regex.Pattern;
+import com.niagarakayak.niagarakayakapp.sign_up.EmailSlide;
 
 public class PreferencesPresenter implements PreferencesContract.Presenter {
 

@@ -1,4 +1,4 @@
-package com.niagarakayak.niagarakayakapp.intro;
+package com.niagarakayak.niagarakayakapp.sign_up;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -6,12 +6,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.widget.Toast;
+import android.view.View;
 import com.github.paolorotolo.appintro.AppIntro2;
 import com.niagarakayak.niagarakayakapp.home.HomeActivity;
 
-public class IntroActivity extends AppIntro2 {
+public class SignUpActivity extends AppIntro2 {
     private NameSlide nameSlide;
     private EmailSlide emailSlide;
     private PhoneSlide phoneSlide;
@@ -31,59 +30,51 @@ public class IntroActivity extends AppIntro2 {
         addSlide(verificationSlide);
         addSlide(phoneSlide);
 
+        setFadeAnimation();
         setColorTransitionsEnabled(true);
 
-        // Hide Skip/Done button.
+        // Don't let the user swipe through it.
+        setSwipeLock(true);
+
+        // Hide Skip button.
         showSkipButton(false);
 
         // Turn vibration on and set intensity.
         setVibrate(true);
         setVibrateIntensity(30);
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SignUpSlide currentSlide = (SignUpSlide) mPagerAdapter.getItem(pager.getCurrentItem());
+                currentSlide.handleContinue(new SignUpSlide.GoToNextPageCallback() {
+                    @Override
+                    public void nextPage() {
+                        pager.setCurrentItem(pager.getCurrentItem() + 1);
+                    }
+                });
+            }
+        });
     }
 
     @Override
     public void onDonePressed(Fragment currentFragment) {
+        SignUpSlide slide = (SignUpSlide) currentFragment;
 
-        boolean isNameValid = nameSlide.isInputValid();
-        boolean isEmailValid = emailSlide.isInputValid();
-        boolean isPhoneValid = phoneSlide.isInputValid();
-
-        // First check input
-        if (!invalidInput(isNameValid, isEmailValid, isPhoneValid)) {
-
-            // If it's good, save it in shared preferences
+        if (slide.isValid()) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = prefs.edit();
 
             editor.putString("name", nameSlide.getInput());
             editor.putString("email", emailSlide.getInput());
             editor.putString("phone", phoneSlide.getInput());
-
             editor.commit();
 
-            // Close this activity, Start the home activity!
             Intent i = new Intent(this, HomeActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
+        } else {
+            slide.input.setHint("Phone is empty!");
         }
-    }
-
-    private boolean invalidInput(boolean nameStatus, boolean emailStatus, boolean phoneStatus) {
-        if (nameStatus) {
-            Toast.makeText(IntroActivity.this, "You left the name field blank! Please tell us your name!", Toast.LENGTH_LONG).show();
-            return true;
-        }
-
-        if (emailStatus) {
-            Toast.makeText(IntroActivity.this, "You left the email field blank! Please tell us your email!", Toast.LENGTH_LONG).show();
-            return true;
-        }
-
-        if (phoneStatus) {
-            Toast.makeText(IntroActivity.this, "You left the phone field blank! Please tell us your number!", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
-        return false;
     }
 }
