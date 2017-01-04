@@ -22,6 +22,7 @@ public class HomePresenter implements HomeContract.Presenter {
     private final HomeContract.View mHomeView;
     private final TwitterService mTwitterAPI;
     private final boolean isConnected;
+    private boolean twitterLoaded;
 
     public HomePresenter(@NonNull TwitterAPIService twitterAPIService,
                          @NonNull HomeContract.View mHomeView, boolean isConnected) {
@@ -29,6 +30,7 @@ public class HomePresenter implements HomeContract.Presenter {
         this.mHomeView = mHomeView;
         this.isConnected = isConnected;
         mHomeView.setPresenter(this);
+        twitterLoaded = false;
     }
 
     @Override
@@ -57,6 +59,7 @@ public class HomePresenter implements HomeContract.Presenter {
 
             @Override
             public void onSuccess(Status lastTweet) {
+                twitterLoaded = true;
                 String tweetText = lastTweet.getText();
                 Date tweetDate = lastTweet.getCreatedAt();
                 mHomeView.setTweetLabel("Last tweet from ");
@@ -80,16 +83,15 @@ public class HomePresenter implements HomeContract.Presenter {
         Calendar todaysCal = Calendar.getInstance();
         tweetCal.setTime(tweetDate);
         todaysCal.setTime(new Date());
-
-        String mapsLabelText = "Here's where we were last";
-
-        if (tweetCal.get(Calendar.DAY_OF_YEAR) == todaysCal.get(Calendar.DAY_OF_YEAR)) {
-            // The tweet was today
-            mapsLabelText = "Here's where we are for today";
-        }
-
-        mHomeView.setMapsLabel(mapsLabelText);
+        int dayOfTweet = tweetCal.get(Calendar.DAY_OF_YEAR);
+        int today = todaysCal.get(Calendar.DAY_OF_YEAR);
+        mHomeView.setMapsLabel(dayOfTweet == today ? "Here's where are for today" : "Here's where we were last");
         mHomeView.showMapsLabel();
         mHomeView.showMapsCardWithCoords(coords);
+    }
+
+    @Override
+    public boolean hasTwitterLoaded() {
+        return twitterLoaded;
     }
 }

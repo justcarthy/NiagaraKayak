@@ -42,7 +42,7 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:imeOptions="actionDone"
-            android:inputType="phone"
+            android:inputType="text"
             android:backgroundTint="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

@@ -8,10 +8,6 @@ import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by bala on 1/1/17.
- */
-
 public class CustomerAPIService implements CustomerService {
 
     private String APIKey;
@@ -41,7 +37,7 @@ public class CustomerAPIService implements CustomerService {
     @Override
     public void checkEmailFree(String email, CustomerCallback callback){
         this.URL = UrlContainer.getCheckCustomerEmailURL();
-        String urlparam = UrlContainer.getUpdateCustomerURLparam();
+        String urlparam = UrlContainer.getCheckCustomerEmailURLparam();
         this.URLparam = String.format(urlparam,this.APIKey,email);
         new CustomerBackgroundTask().execute(callback); //task to updateCustomer info
     }
@@ -54,7 +50,6 @@ public class CustomerAPIService implements CustomerService {
         new CustomerBackgroundTask().execute(callback); //task to updateCustomer info
     }
 
-    @Override
     public void verify(String email, String verificationCode, CustomerCallback callback){
         this.URL = UrlContainer.getVerificationURL();
         String urlparam = UrlContainer.getVerificationURLparam();
@@ -62,7 +57,7 @@ public class CustomerAPIService implements CustomerService {
         new CustomerBackgroundTask().execute(callback); //task to updateCustomer info
     }
 
-    private void sendData(String url, String urlParameters) throws CustomerExistsException,InvalidValidationCode,Exception {
+    private void sendData(String url, String urlParameters) throws CustomerExistsException, InvalidValidationCode, Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("POST");
