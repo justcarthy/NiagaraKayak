@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import com.niagarakayak.niagarakayakapp.R;
+import com.niagarakayak.niagarakayakapp.service.customers.CustomerAPIService;
+import com.niagarakayak.niagarakayakapp.service.customers.CustomerService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 import com.niagarakayak.niagarakayakapp.util.SnackbarUtils;
 
@@ -15,6 +17,11 @@ import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.LENGTH_LONGER;
 
 public class PhoneSlide extends SignUpSlide {
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
@@ -35,12 +42,14 @@ public class PhoneSlide extends SignUpSlide {
     }
 
     @Override
-    void onIllegalyRequestedContinue() {
-        ActivityUtils.showSnackbarWithMessage(getView(), "Invalid phone!", LENGTH_LONGER, SnackbarUtils.SnackbarColor.ERROR_COLOR);
+    void handleContinue(GoToNextPageCallback callback) {
+        // Never gets called. The continue button is not visible on this slide.
     }
 
     @Override
-    void handleContinue(GoToNextPageCallback callback) {
-        // Not required
+    void onIllegalyRequestedContinue() {
+        ActivityUtils.showSnackbarWithMessage(getView(),
+                "Invalid phone!",
+                LENGTH_LONGER, SnackbarUtils.SnackbarColor.ERROR_COLOR);
     }
 }
