@@ -22,6 +22,30 @@ public class UrlContainer {
     private static final String checkCustomerEmailURL = "http://www.niagarakayak.com/kayakAPI/customer.php/?type=CHECKFREE";
     private static final String checkCustomerEmailURLparam = "api=%s&Email=%s";
 
+    private static final String  CustomerInfoURL= "http://www.niagarakayak.com/kayakAPI/customer.php/?type=GET";
+    private static final String  CustomerInfoURLparam = "api=%s&Email=%s";
+
+
+    private static final String sendVerificationURL = "http://www.niagarakayak.com/kayakAPI/sverification.php/";
+    private static final String sendVerificationURLparam = "api=%s&Email=%s";
+
+
+    private static final String VerificationURL = "http://www.niagarakayak.com/kayakAPI/verify.php/";
+    private static final String VerificationURLparam = "api=%s&Email=%s&Code=%s";
+
+
+    /**
+     *
+     * @return URL for script to get customer information
+     */
+    public static String getCustomerInfoURL() {return CustomerInfoURL;}
+
+    /**
+     *
+     * @return paramters to pass to url to get customer information
+     */
+    public static String getCustomerInfoURLparam() {return CustomerInfoURLparam;}
+
     /**
      *
      * @return URL to check if email is available for customer to use for registration
@@ -37,13 +61,6 @@ public class UrlContainer {
     public static String getCheckCustomerEmailURLparam() {
         return checkCustomerEmailURLparam;
     }
-
-    private static final String sendVerificationURL = "http://www.niagarakayak.com/kayakAPI/sverification.php/";
-    private static final String sendVerificationURLparam = "api=%s&Email=%s";
-
-
-    private static final String VerificationURL = "http://www.niagarakayak.com/kayakAPI/verify.php/";
-    private static final String VerificationURLparam = "api=%s&Email=%s&Code=%s";
 
     /**
      * @return URL to send verification code to customer
