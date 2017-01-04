@@ -19,6 +19,8 @@
                 android:value="AIzaSyBbFFll_Z94x6kKA-9zCqe1T1TsjrPEUUA"/>
         <activity android:name=".login_activity.LoginActivity"/>
         <activity android:name=".sign_up.SignUpActivity"/>
+        <activity android:name=".sign_in.SignInActivity"/>
+        <activity android:name=".sign_in.VerifyActivity"/>
         <activity
                 android:name=".home.HomeActivity"
                 android:launchMode="singleTask">

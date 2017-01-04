@@ -61,7 +61,8 @@ public class EmailSlide extends SignUpSlide {
                 @Override
                 public void onFailure(Exception ex) {
                     if (ex instanceof CustomerService.CustomerExistsException) {
-                        input.setHint("Email is already taken!");
+                        ActivityUtils.showSnackbarWithMessage(getView(), "Email is already taken",
+                                LENGTH_LONGER, SnackbarColor.ERROR_COLOR);
                     }
                 }
 

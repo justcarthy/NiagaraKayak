@@ -15,4 +15,5 @@
     <color name="text_label_drawable_color">#b6b6b6</color>
     <color name="verify_color">#70ab2b</color>
     <color name="contact_form_accent">#979797</color>
+    <color name="preferences_not_editable">#979797</color>
 </resources>

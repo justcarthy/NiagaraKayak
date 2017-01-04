@@ -45,6 +45,12 @@ public abstract class SignUpSlide extends Fragment implements ISlideBackgroundCo
 
     abstract void handleContinue(final GoToNextPageCallback callback);
 
+    void handleDone(final OnDoneCallback callback) {
+        if (isValid()) {
+            callback.onDone();
+        }
+    }
+
     @Override
     public void setBackgroundColor(@ColorInt int backgroundColor) {
         if (mRoot != null) {
@@ -54,5 +60,9 @@ public abstract class SignUpSlide extends Fragment implements ISlideBackgroundCo
 
     interface GoToNextPageCallback {
         void nextPage();
+    }
+
+    interface OnDoneCallback {
+        void onDone();
     }
 }
