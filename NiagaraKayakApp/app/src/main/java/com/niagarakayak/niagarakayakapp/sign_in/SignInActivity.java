@@ -9,10 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import com.niagarakayak.niagarakayakapp.R;
+import com.niagarakayak.niagarakayakapp.model.Customer;
 import com.niagarakayak.niagarakayakapp.service.customers.CustomerAPIService;
 import com.niagarakayak.niagarakayakapp.service.customers.CustomerService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 import com.niagarakayak.niagarakayakapp.util.SnackbarUtils.SnackbarColor;
+
+import java.util.ArrayList;
 
 import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.LENGTH_LONGER;
 
@@ -67,6 +70,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                                         i.putExtra("email", getEmailText());
                                         startActivity(i);
                                     }
+
+                                    @Override
+                                    public void onSuccess(ArrayList<Customer> customers){}
                                 });
                             } else {
                                 // It failed to check the email, server issues.
@@ -82,6 +88,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                                     "No account with that email. Sign up!",
                                     LENGTH_LONGER, SnackbarColor.ERROR_COLOR);
                         }
+
+                        @Override
+                        public void onSuccess(ArrayList<Customer> customers) {}
                     });
                 }
                 break;
