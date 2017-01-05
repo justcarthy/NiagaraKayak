@@ -10,10 +10,13 @@ import android.view.View;
 import com.github.paolorotolo.appintro.AppIntro2;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.home.HomeActivity;
+import com.niagarakayak.niagarakayakapp.model.Customer;
 import com.niagarakayak.niagarakayakapp.service.customers.CustomerAPIService;
 import com.niagarakayak.niagarakayakapp.service.customers.CustomerService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 import com.niagarakayak.niagarakayakapp.util.SnackbarUtils;
+
+import java.util.ArrayList;
 
 import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.LENGTH_LONGER;
 
@@ -93,6 +96,11 @@ public class SignUpActivity extends AppIntro2 {
                                 Intent i = new Intent(SignUpActivity.this, HomeActivity.class);
                                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(i);
+                            }
+
+                            @Override
+                            public void onSuccess(ArrayList<Customer> customers) {
+                                //d
                             }
                         });
                     }
