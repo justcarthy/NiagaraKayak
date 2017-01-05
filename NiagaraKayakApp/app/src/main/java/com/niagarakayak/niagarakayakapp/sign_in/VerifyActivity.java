@@ -12,9 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.home.HomeActivity;
+import com.niagarakayak.niagarakayakapp.model.Customer;
 import com.niagarakayak.niagarakayakapp.service.customers.CustomerAPIService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 import com.niagarakayak.niagarakayakapp.util.SnackbarUtils.SnackbarColor;
+
+import java.util.ArrayList;
 
 import static android.support.design.widget.Snackbar.LENGTH_SHORT;
 import static com.niagarakayak.niagarakayakapp.service.customers.CustomerService.*;
@@ -81,6 +84,9 @@ public class VerifyActivity extends AppCompatActivity {
                             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(i);
                         }
+
+                        @Override
+                        public void onSuccess(ArrayList<Customer> customers){}
                     });
                 } else {
                     showInvalidErrorSnackbar("Verification code can't be empty!");
