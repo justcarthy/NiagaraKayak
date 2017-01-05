@@ -14,35 +14,39 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import com.niagarakayak.niagarakayakapp.R;
+import com.niagarakayak.niagarakayakapp.contact.ContactActivity;
 import com.niagarakayak.niagarakayakapp.home.HomeActivity;
+import com.niagarakayak.niagarakayakapp.login_activity.LoginActivity;
 import com.niagarakayak.niagarakayakapp.reservations.ReservationActivity;
 import com.niagarakayak.niagarakayakapp.service.customers.CustomerAPIService;
+import com.niagarakayak.niagarakayakapp.service.database.ReservationLocalDataService;
+import com.niagarakayak.niagarakayakapp.service.database.ReservationReaderContract;
+import com.niagarakayak.niagarakayakapp.service.database.ReservationReaderHelper;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 
 public class PreferencesActivity extends AppCompatActivity {
 
-    private Toolbar mToolbar;
-    private NavigationView mNavigationView;
-    private String[] mDrawerTitles;
-    private DrawerLayout mDrawer;
-    private PreferencesViewFragment preferencesViewFragment;
-    private DrawerLayout.DrawerListener mDrawerToggle;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
     private SharedPreferences prefs;
-    View headerLayout;
+    private View headerLayout;
+
+    private ReservationReaderHelper dbHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.activity_preferences);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         setToolbarTitle("Preferences");
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header);
-        mDrawerTitles = getResources().getStringArray(R.array.menu_titles);
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+        PreferencesViewFragment preferencesViewFragment;
         if (savedInstanceState == null) {
             preferencesViewFragment = PreferencesViewFragment.newInstance();
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), preferencesViewFragment, R.id.contentView);
@@ -55,6 +59,9 @@ public class PreferencesActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         new PreferencesPresenter(prefs, preferencesViewFragment, new CustomerAPIService(getString(R.string.NK_API_KEY)));
         setNavHeaderText(prefs.getString("name", ""), prefs.getString("email", ""));
+
+        dbHelper = new ReservationReaderHelper(this);
+
         setupDrawer();
     }
 
@@ -67,9 +74,9 @@ public class PreferencesActivity extends AppCompatActivity {
     }
 
     private void setupDrawer() {
-        mDrawerToggle = setupDrawerToggle();
-        mDrawer.addDrawerListener(mDrawerToggle);
-        mNavigationView.setNavigationItemSelectedListener(
+        DrawerLayout.DrawerListener mDrawerToggle = setupDrawerToggle();
+        drawerLayout.addDrawerListener(mDrawerToggle);
+        navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem item) {
@@ -81,7 +88,7 @@ public class PreferencesActivity extends AppCompatActivity {
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
-        return new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.access_drawer_open,  R.string.accesss_drawer_close);
+        return new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.access_drawer_open,  R.string.accesss_drawer_close);
     }
 
     private void selectDrawerItem(MenuItem item) {
@@ -108,10 +115,28 @@ public class PreferencesActivity extends AppCompatActivity {
                 // Do nothing, we are already here
                 break;
             }
+
+            case R.id.nav_contact: {
+                Intent i = new Intent(this, ContactActivity.class);
+                itemClicked = 3;
+                navigationView.getMenu().getItem(itemClicked).setChecked(true);
+                i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(i);
+                break;
+            }
+
+            case R.id.nav_sign_out: {
+                dbHelper.reset(dbHelper.getWritableDatabase(), ReservationReaderContract.ReservationEntry.RESERVATION_TABLE);
+                ActivityUtils.clearSharedPrefs(prefs);
+                Intent i = new Intent(this, LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+                break;
+            }
         }
 
-        mNavigationView.getMenu().getItem(itemClicked).setChecked(true);
-        mDrawer.closeDrawers();
+        navigationView.getMenu().getItem(itemClicked).setChecked(true);
+        drawerLayout.closeDrawers();
     }
 
 

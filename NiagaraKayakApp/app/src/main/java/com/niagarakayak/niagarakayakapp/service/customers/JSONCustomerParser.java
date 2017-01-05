@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Created by bala on 4/1/17.
  */
 
-public class CustomerJSONParser {
+public class JSONCustomerParser {
 
     public static ArrayList<Customer> getCustomers(String json) throws JSONException {
         ArrayList<Customer> customers = new ArrayList<>();

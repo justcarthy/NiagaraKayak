@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *  Class is a parser to build reservation object from json
  */
 
-public class ReservationParser {
+public class JSONReservationParser {
 
    // [{"ReservationID":"bala@bala.com1","Email":"bala@bala.com","Date":"2016-12-29","Time":"11:20:00","Hours":"2","Single":"3","Tandem":"0"}]
 
