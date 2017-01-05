@@ -2,17 +2,24 @@ package com.niagarakayak.niagarakayakapp.preferences;
 
 import android.content.SharedPreferences;
 import android.view.View;
-import com.niagarakayak.niagarakayakapp.sign_up.EmailSlide;
+import com.niagarakayak.niagarakayakapp.model.Customer;
+import com.niagarakayak.niagarakayakapp.service.customers.CustomerAPIService;
+import com.niagarakayak.niagarakayakapp.service.customers.CustomerService;
+
+import java.util.ArrayList;
 
 public class PreferencesPresenter implements PreferencesContract.Presenter {
 
-    private final PreferencesContract.View mPrefsView;
+    private final PreferencesContract.View prefsView;
     private final SharedPreferences prefs;
+    private final CustomerAPIService customerAPIService;
+    private String nameSetting, emailSetting, phoneSetting;
 
-    public PreferencesPresenter(SharedPreferences prefs, PreferencesContract.View prefsView) {
+    public PreferencesPresenter(SharedPreferences prefs, PreferencesContract.View prefsView, CustomerAPIService customerAPIService) {
         this.prefs = prefs;
-        mPrefsView = prefsView;
-        mPrefsView.setPresenter(this);
+        this.prefsView = prefsView;
+        this.prefsView.setPresenter(this);
+        this.customerAPIService = customerAPIService;
     }
 
     @Override
@@ -22,50 +29,65 @@ public class PreferencesPresenter implements PreferencesContract.Presenter {
 
     @Override
     public void loadSettings() {
-        String nameSetting = prefs.getString("name", "");
-        String emailSetting = prefs.getString("email", "");
-        String phoneSetting = prefs.getString("phone", "");
+        nameSetting = prefs.getString("name", "");
+        emailSetting = prefs.getString("email", "");
+        phoneSetting = prefs.getString("phone", "");
 
-        mPrefsView.setName(nameSetting);
-        mPrefsView.setEmail(emailSetting);
-        mPrefsView.setPhone(phoneSetting);
+        prefsView.setName(nameSetting);
+        prefsView.setEmail(emailSetting);
+        prefsView.setPhone(phoneSetting);
     }
 
     @Override
     public boolean validInput() {
-        String name = mPrefsView.getNameText();
-        String email = mPrefsView.getEmailText();
-        String phone = mPrefsView.getPhoneText();
+        String name = prefsView.getNameText();
+        String phone = prefsView.getPhoneText();
 
-        if (name.isEmpty()|| email.isEmpty()|| phone.isEmpty()) {
-            mPrefsView.showToast("Fields cannot be blank");
+        if (name.isEmpty() || phone.isEmpty()) {
+            prefsView.showToast("Fields cannot be blank");
             return false;
         }
-
-        if (!EmailSlide.validEmail(email)) {
-            mPrefsView.showToast("Invalid email");
-            return false;
-        }
-
 
         return true;
     }
 
     @Override
     public void saveSettings() {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("name", mPrefsView.getNameText());
-        editor.putString("email", mPrefsView.getEmailText());
-        editor.putString("phone", mPrefsView.getPhoneText());
-        editor.commit();
-        mPrefsView.showToast("Saved!");
+        String inputName = prefsView.getNameText();
+        String inputPhone = prefsView.getPhoneText();
+        String inputEmail = prefsView.getEmailText();
+
+        boolean nameChanged = !nameSetting.equals(inputName);
+        boolean phoneChanged = !phoneSetting.equals(inputPhone);
+
+        // If either name or phone changed, fire a request to update the customer table.
+        if (nameChanged || phoneChanged) {
+            customerAPIService.updateCustomer(inputEmail, inputName, inputPhone, new CustomerService.CustomerCallback() {
+                @Override
+                public void onFailure(Exception ex) {
+                    prefsView.showToast("Unable to update. Server issues. Try again later.");
+                }
+
+                @Override
+                public void onSuccess() {
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("name", prefsView.getNameText());
+                    editor.putString("phone", prefsView.getPhoneText());
+                    editor.commit();
+                    prefsView.showToast("Saved!");
+                    prefsView.goHome();
+                }
+
+                @Override
+                public void onSuccess(ArrayList<Customer> customers) {}
+            });
+        }
     }
 
     @Override
     public void onClick(View v) {
         if(validInput()) {
             saveSettings();
-            mPrefsView.goHome();
         }
     }
 }

@@ -46,9 +46,9 @@ public class CustomerAPIService implements CustomerService {
     @Override
     public void checkEmailFree(String email, CustomerCallback callback){
         this.URL = UrlContainer.getCheckCustomerEmailURL();
-        String urlparam = UrlContainer.getUpdateCustomerURLparam();
+        String urlparam = UrlContainer.getCheckCustomerEmailURLparam();
         this.URLparam = String.format(urlparam,this.APIKey,email);
-        new CustomerBackgroundTask().execute(callback); //task to updateCustomer info
+        new CustomerBackgroundTask().execute(callback);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class CustomerAPIService implements CustomerService {
         this.URL = UrlContainer.getSendVerificationURL();
         String urlparam = UrlContainer.getSendVerificationURLparam();
         this.URLparam = String.format(urlparam,this.APIKey,email);
-        new CustomerBackgroundTask().execute(callback); //task to updateCustomer info
+        new CustomerBackgroundTask().execute(callback);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class CustomerAPIService implements CustomerService {
         new CustomerBackgroundTask().execute(callback); //task to updateCustomer info
     }
 
-    public void getCusomter(String email,CustomerCallback callback){
+    public void getCustomer(String email, CustomerCallback callback){
         this.URL = UrlContainer.getCustomerInfoURL();
         String urlparam = UrlContainer.getCustomerInfoURLparam();
         this.URLparam = String.format(urlparam,this.APIKey,email);

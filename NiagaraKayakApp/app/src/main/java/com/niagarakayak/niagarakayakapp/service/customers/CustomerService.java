@@ -48,7 +48,7 @@ public interface CustomerService {
     /**
      * @param email         Email of client to fetch inforamtion for
      */
-    void getCusomter(String email,CustomerCallback callback);
+    void getCustomer(String email, CustomerCallback callback);
 
     /**
      * This exception should be thrown if a customer exists

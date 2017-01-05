@@ -84,7 +84,9 @@ public class HomeActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             homeViewFragment = HomeViewFragment.newInstance();
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), homeViewFragment, R.id.contentView);
-            loadWeatherBar("St.Catharines");
+            if (isConnectedOrConnecting(this)) {
+                loadWeatherBar("St.Catharines");
+            }
         } else {
             homeViewFragment = (HomeViewFragment) getSupportFragmentManager().findFragmentById(R.id.contentView);
         }
