@@ -92,7 +92,8 @@ public class EmailSlide extends SignUpSlide {
         customerAPIService.sendVerificationEmail(email, new CustomerService.CustomerCallback() {
             @Override
             public void onFailure(Exception ex) {
-                ActivityUtils.showSnackbarWithMessage(getView(), "Unable to send email. Try again later.", LENGTH_LONGER, SnackbarColor.ERROR_COLOR);
+                ActivityUtils.showSnackbarWithMessage(getView(), "Unable to send email. Try again later.",
+                        LENGTH_LONGER, SnackbarColor.ERROR_COLOR);
             }
 
             @Override

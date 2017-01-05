@@ -129,7 +129,7 @@ public class CustomerAPIService implements CustomerService {
         int responseCode = con.getResponseCode(); //connection
         switch(responseCode){
             case HttpURLConnection.HTTP_OK:  //successfully inserted into the customer table
-                return (CustomerJSONParser.getCustomers(getJSONString(con)));
+                return (JSONCustomerParser.getCustomers(getJSONString(con)));
             case HttpURLConnection.HTTP_INTERNAL_ERROR:
                 throw new Exception("Internal server error");
             case HttpURLConnection.HTTP_UNAUTHORIZED:

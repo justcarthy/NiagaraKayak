@@ -2,6 +2,7 @@ package com.niagarakayak.niagarakayakapp.util;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
@@ -23,6 +24,12 @@ public class ActivityUtils {
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.add(frameId, frag);
         transaction.commit();
+    }
+
+    public static void clearSharedPrefs(SharedPreferences prefs) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+        editor.commit();
     }
 
     public static void showSnackbarWithMessage(View view, String message, int length, SnackbarUtils.SnackbarColor snackbarColor) {

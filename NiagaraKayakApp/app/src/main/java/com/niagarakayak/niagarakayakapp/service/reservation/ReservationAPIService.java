@@ -2,16 +2,13 @@ package com.niagarakayak.niagarakayakapp.service.reservation;
 
 import android.os.AsyncTask;
 
-import android.util.Log;
 import com.niagarakayak.niagarakayakapp.model.Reservation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
 /**
@@ -70,7 +67,7 @@ public class ReservationAPIService implements ReservationService {
             switch(response_code) {
                 case HttpURLConnection.HTTP_OK:
                     String json = getJSONString(httpConnection); //resources are closed
-                    return ReservationParser.getReservations(json);
+                    return JSONReservationParser.getReservations(json);
                 case HttpURLConnection.HTTP_UNAUTHORIZED:
                 case HttpURLConnection.HTTP_UNAVAILABLE:
                 case HttpURLConnection.HTTP_BAD_GATEWAY:
