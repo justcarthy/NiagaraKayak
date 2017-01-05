@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import com.niagarakayak.niagarakayakapp.R;
+import com.niagarakayak.niagarakayakapp.sign_in.SignInActivity;
+import com.niagarakayak.niagarakayakapp.sign_up.SignUpActivity;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -24,14 +26,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_sign_in: {
-                Intent i = new Intent(LoginActivity.this, com.niagarakayak.niagarakayakapp.intro.IntroActivity.class);
+                Intent i = new Intent(LoginActivity.this, SignInActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 break;
             }
 
             case R.id.btn_sign_up: {
-                Intent i = new Intent(LoginActivity.this, com.niagarakayak.niagarakayakapp.intro.IntroActivity.class);
+                Intent i = new Intent(LoginActivity.this, SignUpActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 break;

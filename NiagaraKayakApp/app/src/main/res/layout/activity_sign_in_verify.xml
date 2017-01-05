@@ -15,29 +15,29 @@
 
 
     <TextView
-            android:id="@+id/label_email_sign_in"
+            android:id="@+id/label_verify_sign_in"
             android:layout_width="match_parent"
             android:layout_margin="20dp"
             android:layout_height="wrap_content"
-            android:text="Email"
+            android:text="Verification code"
             android:textColor="@color/white"
             android:textSize="20dp"
             android:layout_below="@id/nk_logo"
     />
 
     <EditText
-            android:id="@+id/text_email_sign_in"
+            android:id="@+id/text_verify_sign_in"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_below="@id/label_email_sign_in"
+            android:layout_below="@id/label_verify_sign_in"
             android:textColor="@color/white"
     />
 
     <Button
-            android:id="@+id/btn_sign_in"
+            android:id="@+id/btn_verify"
             android:foreground="?android:attr/selectableItemBackground"
-            android:text="Sign in"
+            android:text="Verify"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="30dp"
             android:layout_centerHorizontal="true"

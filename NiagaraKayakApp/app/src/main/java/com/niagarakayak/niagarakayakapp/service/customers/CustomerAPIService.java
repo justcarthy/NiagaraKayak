@@ -76,8 +76,6 @@ public class CustomerAPIService implements CustomerService {
 
 
 
-
-
     private void sendData(String url, String urlParameters) throws CustomerExistsException,InvalidValidationCode,Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -191,7 +189,7 @@ public class CustomerAPIService implements CustomerService {
         private Exception exception;
 
         @Override
-        protected ArrayList<Customer> doInBackground(CustomerCallback... params) {
+        protected ArrayList<Customer> doInBackground(CustomerCallback... params){
             callback = params[0];
             try{
                 return getCustomerData(CustomerAPIService.this.URL,CustomerAPIService.this.URLparam);

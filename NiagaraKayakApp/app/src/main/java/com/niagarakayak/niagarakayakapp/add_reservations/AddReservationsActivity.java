@@ -232,7 +232,7 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
 
             @Override
             public void onSuccess() {
-                Log.d("ADD LOCAL", "onSuccess: Successfully wrote to database");
+                Log.d("ADD LOCAL", "nextPage: Successfully wrote to database");
             }
         }, reservation);
     }

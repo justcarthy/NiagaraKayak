@@ -26,6 +26,7 @@ public interface HomeContract {
         void checkInternet();
         void loadTweetCard();
         void loadMapCard(Date tweetDate, LatLng coords);
+        boolean hasTwitterLoaded();
     }
 
 }

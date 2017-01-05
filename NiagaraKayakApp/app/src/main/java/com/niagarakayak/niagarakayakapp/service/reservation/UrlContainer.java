@@ -46,6 +46,8 @@ public class UrlContainer {
      */
     public static String getCustomerInfoURLparam() {return CustomerInfoURLparam;}
 
+
+
     /**
      *
      * @return URL to check if email is available for customer to use for registration
