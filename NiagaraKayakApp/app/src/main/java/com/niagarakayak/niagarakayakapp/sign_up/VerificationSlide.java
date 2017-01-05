@@ -9,10 +9,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 import com.niagarakayak.niagarakayakapp.R;
+import com.niagarakayak.niagarakayakapp.model.Customer;
 import com.niagarakayak.niagarakayakapp.service.customers.CustomerAPIService;
 import com.niagarakayak.niagarakayakapp.service.customers.CustomerService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 import com.niagarakayak.niagarakayakapp.util.SnackbarUtils.SnackbarColor;
+
+import java.util.ArrayList;
 
 import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.LENGTH_LONGER;
 
@@ -66,6 +69,9 @@ public class VerificationSlide extends SignUpSlide implements ISlideBackgroundCo
             public void onSuccess() {
                 callback.nextPage();
             }
+
+            @Override
+            public void onSuccess(ArrayList<Customer> customers) {}
         });
     }
 }
