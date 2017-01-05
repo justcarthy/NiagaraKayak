@@ -73,6 +73,7 @@ public class Step2Fragment extends Fragment implements GoogleMap.OnMarkerClickLi
         LatLng charlesDaleyPark = MapUtils.getLocation("charles daley park");
         LatLng queenston = MapUtils.getLocation("queenston");
         LatLng niagaraOnTheLake = MapUtils.getLocation("niagara on the lake");
+
         Marker charlesDaleyMarker = MapUtils.addMarkerToMap(map, charlesDaleyPark, "Charles Daley Park",
                 "Start kayaking near Charles Daley Park!");
         Marker queenstonMarker = MapUtils.addMarkerToMap(map, queenston, "Queenston",

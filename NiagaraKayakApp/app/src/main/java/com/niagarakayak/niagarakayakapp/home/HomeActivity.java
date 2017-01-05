@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import com.niagarakayak.niagarakayakapp.R;
+import com.niagarakayak.niagarakayakapp.contact.ContactActivity;
 import com.niagarakayak.niagarakayakapp.login_activity.LoginActivity;
 import com.niagarakayak.niagarakayakapp.model.Weather;
 import com.niagarakayak.niagarakayakapp.preferences.PreferencesActivity;
@@ -67,7 +68,6 @@ public class HomeActivity extends AppCompatActivity {
         headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header);
         mDrawerTitles = getResources().getStringArray(R.array.menu_titles);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
 
         twitterAPIService = new TwitterAPIService(
                 getString(R.string.TWITTER_CONSUMER_KEY),
@@ -166,6 +166,7 @@ public class HomeActivity extends AppCompatActivity {
                 // Reservations
                 Intent i = new Intent(this, ReservationActivity.class);
                 itemClicked = 1;
+                mNavigationView.getMenu().getItem(itemClicked).setChecked(true);
                 i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(i);
                 break;
@@ -175,13 +176,23 @@ public class HomeActivity extends AppCompatActivity {
                 // Preferences
                 Intent i = new Intent(this, PreferencesActivity.class);
                 itemClicked = 2;
+                mNavigationView.getMenu().getItem(itemClicked).setChecked(true);
+                i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(i);
+                break;
+            }
+
+            case R.id.nav_contact: {
+                Intent i = new Intent(this, ContactActivity.class);
+                itemClicked = 3;
+                mNavigationView.getMenu().getItem(itemClicked).setChecked(true);
                 i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(i);
                 break;
             }
         }
 
-        mNavigationView.getMenu().getItem(itemClicked).setChecked(true);
+        mNavigationView.getMenu().getItem(itemClicked).setChecked(false);
         mDrawer.closeDrawers();
     }
     @Override

@@ -29,7 +29,7 @@ public class ReservationLocalDataService implements DataService {
 
     /**
      * Adds a reservation to the local database.
-     * @param callback      Provided callback for onFailure(), onSuccess()
+     * @param callback      Provided callback for onFailure(), nextPage()
      * @param reservation   Reservation to be added to SQLite
      */
     @Override
