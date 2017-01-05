@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.home.HomeActivity;
 import com.niagarakayak.niagarakayakapp.reservations.ReservationActivity;
+import com.niagarakayak.niagarakayakapp.service.customers.CustomerAPIService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 
 public class PreferencesActivity extends AppCompatActivity {
@@ -52,7 +53,7 @@ public class PreferencesActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
-        new PreferencesPresenter(prefs, preferencesViewFragment);
+        new PreferencesPresenter(prefs, preferencesViewFragment, new CustomerAPIService(getString(R.string.NK_API_KEY)));
         setNavHeaderText(prefs.getString("name", ""), prefs.getString("email", ""));
         setupDrawer();
     }

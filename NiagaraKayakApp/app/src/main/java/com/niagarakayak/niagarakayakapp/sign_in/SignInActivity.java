@@ -64,7 +64,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
                                     @Override
                                     public void onSuccess() {
-                                        // If the email went through, show the verification screen.
                                         Intent i = new Intent(SignInActivity.this, VerifyActivity.class);
                                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         i.putExtra("email", getEmailText());
@@ -72,7 +71,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                                     }
 
                                     @Override
-                                    public void onSuccess(ArrayList<Customer> customers){}
+                                    public void onSuccess(ArrayList<Customer> customers){
+
+                                    }
                                 });
                             } else {
                                 // It failed to check the email, server issues.

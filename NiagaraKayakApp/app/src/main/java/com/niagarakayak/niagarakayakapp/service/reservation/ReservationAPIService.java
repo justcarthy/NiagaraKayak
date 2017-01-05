@@ -2,13 +2,16 @@ package com.niagarakayak.niagarakayakapp.service.reservation;
 
 import android.os.AsyncTask;
 
+import android.util.Log;
 import com.niagarakayak.niagarakayakapp.model.Reservation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 /**
@@ -46,6 +49,7 @@ public class ReservationAPIService implements ReservationService {
         String location = reservation.getLocation();
         postURL = String.format(postURL, APIKey, reservationID, email, date, time, hours, single,
                 tandem, location, adults, children);
+        postURL = postURL.replace(" ", "%20");
         this.postURL = postURL;
         new PostReservationTask().execute(callback);
     }
@@ -57,10 +61,10 @@ public class ReservationAPIService implements ReservationService {
     private ArrayList<Reservation> executeFetchReservations() throws Exception {
         String url = UrlContainer.getReservationUrl();
         url = String.format(url, APIKey, this.Email);
-            HttpURLConnection httpConnection = (HttpURLConnection)new URL(url).openConnection();
-            httpConnection.setRequestMethod("GET");
-            httpConnection.setUseCaches(false);
-            httpConnection.connect();
+        HttpURLConnection httpConnection = (HttpURLConnection)new URL(url).openConnection();
+        httpConnection.setRequestMethod("GET");
+        httpConnection.setUseCaches(false);
+        httpConnection.connect();
 
             int response_code = httpConnection.getResponseCode();
             switch(response_code) {
@@ -127,25 +131,15 @@ public class ReservationAPIService implements ReservationService {
             // on successful post return OK
             case HttpURLConnection.HTTP_OK:
                   break;
-            case HttpURLConnection.HTTP_UNAUTHORIZED: //api key not valid
-            case HttpURLConnection.HTTP_UNAVAILABLE:
-            case HttpURLConnection.HTTP_BAD_GATEWAY:
-            case HttpURLConnection.HTTP_BAD_REQUEST:  //invalid url
-            case HttpURLConnection.HTTP_CLIENT_TIMEOUT:
-            case HttpURLConnection.HTTP_RESET:
-            case HttpURLConnection.HTTP_USE_PROXY:
-            case HttpURLConnection.HTTP_CONFLICT:
-            case HttpURLConnection.HTTP_BAD_METHOD:
-            case HttpURLConnection.HTTP_REQ_TOO_LONG:
-            case HttpURLConnection.HTTP_UNSUPPORTED_TYPE:
-            case HttpURLConnection.HTTP_GATEWAY_TIMEOUT:
-            case HttpURLConnection.HTTP_FORBIDDEN:
-            case HttpURLConnection.HTTP_NOT_FOUND:
-            case HttpURLConnection.HTTP_INTERNAL_ERROR: //server error
-            case HttpURLConnection.HTTP_GONE:
-            case HttpURLConnection.HTTP_NO_CONTENT:
-            case HttpURLConnection.HTTP_NOT_ACCEPTABLE:
-                throw new Exception();
+            //api key not valid
+            case HttpURLConnection.HTTP_UNAUTHORIZED:
+                throw new Exception("Not authorized");
+            //invalid url
+            case HttpURLConnection.HTTP_BAD_REQUEST:
+                throw new Exception("Bad request");
+            //server error
+            case HttpURLConnection.HTTP_INTERNAL_ERROR:
+                throw new Exception("Internal error");
         }
 
         httpConnection.disconnect(); //close resources

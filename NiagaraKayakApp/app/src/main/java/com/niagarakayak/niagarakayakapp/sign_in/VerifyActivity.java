@@ -68,21 +68,34 @@ public class VerifyActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess() {
                             // Next we need to get their customer information.
+                            customerAPIService.getCustomer(email, new CustomerCallback() {
+                                @Override
+                                public void onFailure(Exception ex) {
+                                    showInvalidErrorSnackbar("Failed to login.");
+                                }
 
-                            // TODO: Get their information from the customers table and put it in shared prefs.
-                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(VerifyActivity.this);
-                            SharedPreferences.Editor editor = prefs.edit();
+                                @Override
+                                public void onSuccess() {
 
-                            // This is just dummy data for now.
-                            editor.putString("name", "Test");
-                            editor.putString("email", email);
-                            editor.putString("phone", "911");
+                                }
 
-                            editor.commit();
+                                @Override
+                                public void onSuccess(ArrayList<Customer> customers) {
+                                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(VerifyActivity.this);
+                                    SharedPreferences.Editor editor = prefs.edit();
 
-                            Intent i = new Intent(VerifyActivity.this, HomeActivity.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(i);
+                                    // This is just dummy data for now.
+                                    editor.putString("name", customers.get(0).getName());
+                                    editor.putString("email", email);
+                                    editor.putString("phone", customers.get(0).getPhone());
+                                    editor.commit();
+
+                                    Intent i = new Intent(VerifyActivity.this, HomeActivity.class);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(i);
+
+                                }
+                            });
                         }
 
                         @Override
