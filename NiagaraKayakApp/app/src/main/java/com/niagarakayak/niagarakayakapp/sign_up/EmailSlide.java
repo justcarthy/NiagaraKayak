@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import com.niagarakayak.niagarakayakapp.R;
+import com.niagarakayak.niagarakayakapp.model.Customer;
 import com.niagarakayak.niagarakayakapp.service.customers.CustomerAPIService;
 import com.niagarakayak.niagarakayakapp.service.customers.CustomerService;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 import com.niagarakayak.niagarakayakapp.util.SnackbarUtils.SnackbarColor;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,6 +72,9 @@ public class EmailSlide extends SignUpSlide {
                 public void onSuccess() {
                     sendVerificationEmail(callback);
                 }
+
+                @Override
+                public void onSuccess(ArrayList<Customer> customers) {}
             });
         } else {
             onIllegalyRequestedContinue();
@@ -94,6 +99,9 @@ public class EmailSlide extends SignUpSlide {
             public void onSuccess() {
                 callback.nextPage();
             }
+
+            @Override
+            public void onSuccess(ArrayList<Customer> customers) {}
         });
     }
 }
