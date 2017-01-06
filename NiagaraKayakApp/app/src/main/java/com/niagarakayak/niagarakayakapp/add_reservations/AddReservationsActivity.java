@@ -4,8 +4,10 @@ package com.niagarakayak.niagarakayakapp.add_reservations;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +20,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.badoualy.stepperindicator.StepperIndicator;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.add_reservations.steps.Step2Fragment;
@@ -105,7 +109,26 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("currentStep", currentStep);
+        putTextInBundle(outState, "dateText", dateText);
+        putTextInBundle(outState, "hourText", hourText);
+        putTextInBundle(outState, "timeText", timeText);
+        putTextInBundle(outState, "launchText", launchText);
+        putTextInBundle(outState, "adultText", adultText);
+        putTextInBundle(outState, "childText", childText);
+        putTextInBundle(outState, "singleText", singleText);
+        putTextInBundle(outState, "tandemText", tandemText);
     }
+
+    private void putTextInBundle(Bundle bundle, String bundleText, String text) {
+        if (text != null) {
+            bundle.putString(text, bundleText);
+        }
+    }
+
+    private boolean getTextFromBundle(Bundle bundle, String bundleText) {
+        return bundle.getBundle(bundleText) != null;
+    }
+
 
     @Override
     protected void onResume() {
@@ -113,6 +136,7 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
 
         if (mBundle != null) {
             currentStep = mBundle.getInt("currentStep", 0);
+
             if (currentStep > 0) {
                 backButton.setVisibility(View.VISIBLE);
             }
@@ -121,6 +145,7 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
                 continueOrDoneButton.setVisibility(View.INVISIBLE);
                 submitButton.setVisibility(View.VISIBLE);
             }
+
         }
     }
 
@@ -161,9 +186,9 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
                 .title("Thank you!")
                 .customView(R.layout.dialog_verify, true)
                 .positiveText("Got it")
-                .dismissListener(new DialogInterface.OnDismissListener() {
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onDismiss(DialogInterface dialog) {
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         sendEmailForReservation(getReservationFromFields());
                     }
                 })
