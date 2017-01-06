@@ -1,6 +1,7 @@
 package com.niagarakayak.niagarakayakapp.add_reservations.steps;
 
 import android.app.Fragment;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -45,6 +46,8 @@ public class Step3Fragment extends Fragment {
             singleText.setText(mBundle.getString("single"));
             tandemText.setText(mBundle.getString("tandem"));
         }
+
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override
