@@ -119,7 +119,9 @@ public class HomeActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(Weather weather) {
-                        ActivityUtils.showSnackbarWithMessage(homeViewFragment.getView(), WeatherUtils.getWeatherString(weather), LENGTH_LONGER, WEATHER_COLOR);
+                        if (homeViewFragment != null) {
+                            ActivityUtils.showSnackbarWithMessage(homeViewFragment.getView(), WeatherUtils.getWeatherString(weather), LENGTH_LONGER, WEATHER_COLOR);
+                        }
                     }
                 }));
     }
