@@ -46,8 +46,6 @@ public class Step3Fragment extends Fragment {
             singleText.setText(mBundle.getString("single"));
             tandemText.setText(mBundle.getString("tandem"));
         }
-
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override

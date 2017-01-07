@@ -201,27 +201,28 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
                 return !(getDateText().isEmpty() || getTimeText().isEmpty() || getHourText().isEmpty());
             case StepPagerAdapter.STEP_TWO:
                 return !getLaunchText().isEmpty();
-            case StepPagerAdapter.STEP_THREE:
+            case StepPagerAdapter.STEP_THREE: {
                 return !(getAdultText().isEmpty() || getChildText().isEmpty() || getSingleText().isEmpty() || getTandemText().isEmpty());
+            }
             default:
                 return false;
         }
     }
 
     private Reservation getReservationFromFields() {
-        return new Reservation(
-                userEmail+System.currentTimeMillis(),
-                userEmail,
-                dateText,
-                timeText,
-                convertHourText(hourText),
-                Integer.parseInt(singleText),
-                Integer.parseInt(tandemText),
-                launchText,
-                Integer.parseInt(adultText),
-                Integer.parseInt(childText),
-                false
-        );
+            return new Reservation(
+                    userEmail+System.currentTimeMillis(),
+                    userEmail,
+                    dateText,
+                    timeText,
+                    convertHourText(hourText),
+                    Integer.parseInt(singleText),
+                    Integer.parseInt(tandemText),
+                    launchText,
+                    Integer.parseInt(adultText),
+                    Integer.parseInt(childText),
+                    false
+            );
     }
 
     private void sendEmailForReservation(final Reservation reservation) {
@@ -320,7 +321,6 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
     private void showToastWithMessage(String message) {
         Toast.makeText(AddReservationsActivity.this, message, Toast.LENGTH_SHORT).show();
     }
-
 
     private void showNextPage() {
         if (currentStep < 2) {

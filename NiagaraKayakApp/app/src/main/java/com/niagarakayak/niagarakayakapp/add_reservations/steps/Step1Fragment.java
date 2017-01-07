@@ -16,6 +16,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class Step1Fragment extends Fragment implements View.OnClickListener {
 
@@ -98,6 +99,12 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
                         setDateText(year + "-" + month + "-" + day);
                     }
                 }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
+                dpd.setMinDate(now);
+                int noOfDays = 14; //i.e two weeks
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(new Date());
+                cal.add(Calendar.DAY_OF_YEAR, noOfDays);
+                dpd.setMaxDate(cal);
                 dpd.show(getFragmentManager(), "datePicker");
                 break;
             }
