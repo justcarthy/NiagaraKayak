@@ -2,7 +2,6 @@ package com.niagarakayak.niagarakayakapp.service.reservation;
 
 import android.os.AsyncTask;
 
-import android.util.Log;
 import com.niagarakayak.niagarakayakapp.model.Reservation;
 
 import java.io.BufferedReader;
@@ -33,7 +32,7 @@ public class ReservationAPIService implements ReservationService {
 
     @Override
     public void postReservation(PostCallback callback, Reservation reservation) {
-        String postURL = UrlContainer.getPostURL();
+        String postURL = UrlContainer.getmakeReservationURL();
         //apikey,reservationID,email,date,time,hours,single,tandem,location,adults,children;
         String reservationID = reservation.getReservationID();
         String email = reservation.getEmail();
@@ -47,6 +46,7 @@ public class ReservationAPIService implements ReservationService {
         String location = reservation.getLocation();
         postURL = String.format(postURL, APIKey, reservationID, email, date, time, hours, single,
                 tandem, location, adults, children);
+        postURL = postURL.replace(" ", "%20");
         this.postURL = postURL;
         new PostReservationTask().execute(callback);
     }
@@ -58,16 +58,16 @@ public class ReservationAPIService implements ReservationService {
     private ArrayList<Reservation> executeFetchReservations() throws Exception {
         String url = UrlContainer.getReservationUrl();
         url = String.format(url, APIKey, this.Email);
-            HttpURLConnection httpConnection = (HttpURLConnection)new URL(url).openConnection();
-            httpConnection.setRequestMethod("GET");
-            httpConnection.setUseCaches(false);
-            httpConnection.connect();
+        HttpURLConnection httpConnection = (HttpURLConnection)new URL(url).openConnection();
+        httpConnection.setRequestMethod("GET");
+        httpConnection.setUseCaches(false);
+        httpConnection.connect();
 
             int response_code = httpConnection.getResponseCode();
             switch(response_code) {
                 case HttpURLConnection.HTTP_OK:
                     String json = getJSONString(httpConnection); //resources are closed
-                    return ReservationParser.getReservations(json);
+                    return JSONReservationParser.getReservations(json);
                 case HttpURLConnection.HTTP_UNAUTHORIZED:
                 case HttpURLConnection.HTTP_UNAVAILABLE:
                 case HttpURLConnection.HTTP_BAD_GATEWAY:
@@ -128,25 +128,15 @@ public class ReservationAPIService implements ReservationService {
             // on successful post return OK
             case HttpURLConnection.HTTP_OK:
                   break;
+            //api key not valid
             case HttpURLConnection.HTTP_UNAUTHORIZED:
-            case HttpURLConnection.HTTP_UNAVAILABLE:
-            case HttpURLConnection.HTTP_BAD_GATEWAY:
+                throw new Exception("Not authorized");
+            //invalid url
             case HttpURLConnection.HTTP_BAD_REQUEST:
-            case HttpURLConnection.HTTP_CLIENT_TIMEOUT:
-            case HttpURLConnection.HTTP_RESET:
-            case HttpURLConnection.HTTP_USE_PROXY:
-            case HttpURLConnection.HTTP_CONFLICT:
-            case HttpURLConnection.HTTP_BAD_METHOD:
-            case HttpURLConnection.HTTP_REQ_TOO_LONG:
-            case HttpURLConnection.HTTP_UNSUPPORTED_TYPE:
-            case HttpURLConnection.HTTP_GATEWAY_TIMEOUT:
-            case HttpURLConnection.HTTP_FORBIDDEN:
-            case HttpURLConnection.HTTP_NOT_FOUND:
+                throw new Exception("Bad request");
+            //server error
             case HttpURLConnection.HTTP_INTERNAL_ERROR:
-            case HttpURLConnection.HTTP_GONE:
-            case HttpURLConnection.HTTP_NO_CONTENT:
-            case HttpURLConnection.HTTP_NOT_ACCEPTABLE:
-                throw new Exception();
+                throw new Exception("Internal error");
         }
 
         httpConnection.disconnect(); //close resources

@@ -74,8 +74,7 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
     public void onResume() {
         super.onResume();
         setTweetImage(ContextCompat.getDrawable(getActivity(), R.drawable.nk_twitter_logo));
-
-        if (mBundle == null) {
+        if (mBundle == null || !mPresenter.hasTwitterLoaded()) {
             mPresenter.start();
         } else {
             tweetLabel.setText(mBundle.getCharSequence("tweetLabel"));
@@ -142,7 +141,7 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
                 public void onMapReady(GoogleMap googleMap) {
                     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coords, 10));
                     googleMap.addMarker(new MarkerOptions().position(coords));
-                    googleMap.getUiSettings().setScrollGesturesEnabled(false);
+                    googleMap.getUiSettings().setAllGesturesEnabled(false);
                 }
             });
         }

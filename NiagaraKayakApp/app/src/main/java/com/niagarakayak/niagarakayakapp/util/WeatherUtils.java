@@ -60,17 +60,21 @@ public class WeatherUtils {
         switch (type) {
             case SEVERE:
                 return "Not the best day outside for kayaking "
-                        + HomeUtils.getEmojiByUnicode(UNI_SAD) + " "
-                        + HomeUtils.getEmojiByUnicode(UNI_RAIN) + " "
+                        + getEmojiByUnicode(UNI_SAD) + " "
+                        + getEmojiByUnicode(UNI_RAIN) + " "
                         + "\nMaybe tomorrow?";
             case MILD:
-                return "It's a little windy, \nbut that's no reason to stay inside"
-                        + HomeUtils.getEmojiByUnicode(UNI_CLOUD) + " "
-                        + HomeUtils.getEmojiByUnicode(UNI_WIND) + " ";
+                return "It's a little windy, \nbut that's no reason to stay inside!"
+                        + getEmojiByUnicode(UNI_CLOUD) + " "
+                        + getEmojiByUnicode(UNI_WIND) + " ";
             default:
                 return "Perfect weather outside today! \nCome kayaking!"
-                        + HomeUtils.getEmojiByUnicode(UNI_HAPPY) + " "
-                        + HomeUtils.getEmojiByUnicode(UNI_SUN) + " ";
+                        + getEmojiByUnicode(UNI_HAPPY) + " "
+                        + getEmojiByUnicode(UNI_SUN) + " ";
         }
+    }
+
+    public static String getEmojiByUnicode(int unicode){
+        return new String(Character.toChars(unicode));
     }
 }

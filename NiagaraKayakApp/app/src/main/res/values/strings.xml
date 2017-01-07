@@ -8,4 +8,6 @@
     <string name="OPEN_WEATHER_API_KEY">922ee36e789d1afa54220341a705f230</string>
     <string name="access_drawer_open">Open navigation drawer</string>
     <string name="accesss_drawer_close">Close navigation drawer</string>
+    <string name="contact_us"><u>Contact us</u></string>
+    <string name="nk_logo">NIAGARA <b>KAYAK</b></string>
 </resources>

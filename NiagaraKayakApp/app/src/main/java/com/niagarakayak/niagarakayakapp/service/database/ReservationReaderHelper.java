@@ -45,6 +45,11 @@ public class ReservationReaderHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public void reset(SQLiteDatabase db,  String TABLE_NAME) {
+        db.execSQL ("drop table "+TABLE_NAME);
+        onCreate(db);
+    }
+
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
