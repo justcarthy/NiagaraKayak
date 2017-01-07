@@ -16,13 +16,13 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class Step1Fragment extends Fragment implements View.OnClickListener {
 
     private TextInputEditText dateText;
     private TextInputEditText timeText;
     private AutoCompleteTextView hoursText;
-    private AutoCompleteTextView launchText;
     private Bundle mBundle;
 
     @Nullable
@@ -36,7 +36,6 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
         dateText = (TextInputEditText) root.findViewById(R.id.date_text);
         timeText = (TextInputEditText) root.findViewById(R.id.time_text);
         hoursText = (AutoCompleteTextView) root.findViewById(R.id.hours_text);
-        launchText = (AutoCompleteTextView) root.findViewById(R.id.launch_text);
         dateText.setOnClickListener(this);
         timeText.setOnClickListener(this);
         String[] hoursOptions = getResources().getStringArray(R.array.hour_options);
@@ -50,16 +49,6 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        String[] launchOptions = getResources().getStringArray(R.array.launch_points_array);
-        ArrayAdapter<String> launchOptionsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, launchOptions);
-        launchText.setAdapter(launchOptionsAdapter);
-        launchText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                ((AutoCompleteTextView) v).showDropDown();
-                return false;
-            }
-        });
         return root;
     }
 
@@ -70,7 +59,6 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
             dateText.setText(mBundle.getString("date"));
             timeText.setText(mBundle.getString("time"));
             hoursText.setText(mBundle.getString("hour"));
-            launchText.setText(mBundle.getString("launch"));
         }
     }
 
@@ -80,7 +68,6 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
         outState.putString("date", dateText.getText().toString());
         outState.putString("time", timeText.getText().toString());
         outState.putString("hour", hoursText.getText().toString());
-        outState.putString("launch", launchText.getText().toString());
     }
 
     public static Step1Fragment newInstance() {
@@ -99,18 +86,6 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
         timeText.setText(time);
     }
 
-    public String getDateText() {
-        return dateText.getText().toString();
-    }
-
-    public String getTimeText() {
-        return timeText.getText().toString();
-    }
-
-    public String getHourText() {
-        return hoursText.getText().toString();
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -119,10 +94,17 @@ public class Step1Fragment extends Fragment implements View.OnClickListener {
                 DatePickerDialog dpd = DatePickerDialog.newInstance(new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+                        String day = dayOfMonth < 10 ? "0"+dayOfMonth : ""+(dayOfMonth);
                         String month = monthOfYear < 10 ? "0"+(monthOfYear+1) : ""+(monthOfYear+1);
-                        setDateText(year + "-" + month + "-" + dayOfMonth);
+                        setDateText(year + "-" + month + "-" + day);
                     }
                 }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
+                dpd.setMinDate(now);
+                int noOfDays = 14; //i.e two weeks
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(new Date());
+                cal.add(Calendar.DAY_OF_YEAR, noOfDays);
+                dpd.setMaxDate(cal);
                 dpd.show(getFragmentManager(), "datePicker");
                 break;
             }

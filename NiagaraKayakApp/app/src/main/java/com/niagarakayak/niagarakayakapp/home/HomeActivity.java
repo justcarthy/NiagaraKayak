@@ -15,10 +15,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import com.niagarakayak.niagarakayakapp.R;
-import com.niagarakayak.niagarakayakapp.logo.LogoActivity;
+import com.niagarakayak.niagarakayakapp.contact.ContactActivity;
+import com.niagarakayak.niagarakayakapp.login_activity.LoginActivity;
 import com.niagarakayak.niagarakayakapp.model.Weather;
 import com.niagarakayak.niagarakayakapp.preferences.PreferencesActivity;
 import com.niagarakayak.niagarakayakapp.reservations.ReservationActivity;
+import com.niagarakayak.niagarakayakapp.service.database.ReservationReaderContract.ReservationEntry;
+import com.niagarakayak.niagarakayakapp.service.database.ReservationReaderHelper;
 import com.niagarakayak.niagarakayakapp.service.twitter.TwitterAPIService;
 import com.niagarakayak.niagarakayakapp.service.weather.OpenWeatherAPIService;
 import com.niagarakayak.niagarakayakapp.service.weather.WeatherService;
@@ -32,12 +35,12 @@ import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.SnackbarColor.
 import static com.niagarakayak.niagarakayakapp.util.SnackbarUtils.SnackbarColor.WEATHER_COLOR;
 
 public class HomeActivity extends AppCompatActivity {
-    private DrawerLayout mDrawer;
-    private Toolbar mToolbar;
-    private NavigationView mNavigationView;
-    private String[] mDrawerTitles;
+    private View headerLayout;
+    private DrawerLayout drawerLayout;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
 
-    private ActionBarDrawerToggle mDrawerToggle;
+    private ActionBarDrawerToggle drawerToggle;
 
     private HomeViewFragment homeViewFragment;
     private SharedPreferences prefs;
@@ -45,7 +48,8 @@ public class HomeActivity extends AppCompatActivity {
     private TwitterAPIService twitterAPIService;
     private OpenWeatherAPIService openWeatherAPIService;
 
-    private View headerLayout;
+    private ReservationReaderHelper dbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,20 +58,18 @@ public class HomeActivity extends AppCompatActivity {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         if (!checkSettings(prefs)) {
-            Intent i = new Intent(this, LogoActivity.class);
+            Intent i = new Intent(this, LoginActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }
 
         setContentView(R.layout.activity_home);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         setToolbarTitle("Home");
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header);
-        mDrawerTitles = getResources().getStringArray(R.array.menu_titles);
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         twitterAPIService = new TwitterAPIService(
                 getString(R.string.TWITTER_CONSUMER_KEY),
@@ -84,20 +86,19 @@ public class HomeActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             homeViewFragment = HomeViewFragment.newInstance();
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), homeViewFragment, R.id.contentView);
-            loadWeatherBar("St.Catharines");
+            if (isConnectedOrConnecting(this)) {
+                loadWeatherBar("St.Catharines");
+            }
         } else {
             homeViewFragment = (HomeViewFragment) getSupportFragmentManager().findFragmentById(R.id.contentView);
         }
 
         setNavHeaderText(prefs.getString("name", ""), prefs.getString("email", ""));
         new HomePresenter(twitterAPIService, homeViewFragment, isConnectedOrConnecting(this));
-        setupDrawer();
-    }
 
-    private void clearSharedPrefs(SharedPreferences prefs) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.clear();
-        editor.commit();
+        dbHelper = new ReservationReaderHelper(this);
+
+        setupDrawer();
     }
 
     private void setNavHeaderText(String username, String email) {
@@ -118,7 +119,9 @@ public class HomeActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(Weather weather) {
-                        ActivityUtils.showSnackbarWithMessage(homeViewFragment.getView(), WeatherUtils.getWeatherString(weather), LENGTH_LONGER, WEATHER_COLOR);
+                        if (homeViewFragment != null) {
+                            ActivityUtils.showSnackbarWithMessage(homeViewFragment.getView(), WeatherUtils.getWeatherString(weather), LENGTH_LONGER, WEATHER_COLOR);
+                        }
                     }
                 }));
     }
@@ -136,19 +139,19 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
+        drawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     private void setupDrawer() {
-        mDrawerToggle = setupDrawerToggle();
-        mDrawer.addDrawerListener(mDrawerToggle);
-        mNavigationView.setNavigationItemSelectedListener(
+        drawerToggle = setupDrawerToggle();
+        drawerLayout.addDrawerListener(drawerToggle);
+        navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem item) {
@@ -172,6 +175,7 @@ public class HomeActivity extends AppCompatActivity {
                 // Reservations
                 Intent i = new Intent(this, ReservationActivity.class);
                 itemClicked = 1;
+                navigationView.getMenu().getItem(itemClicked).setChecked(true);
                 i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(i);
                 break;
@@ -181,20 +185,39 @@ public class HomeActivity extends AppCompatActivity {
                 // Preferences
                 Intent i = new Intent(this, PreferencesActivity.class);
                 itemClicked = 2;
+                navigationView.getMenu().getItem(itemClicked).setChecked(true);
                 i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(i);
+                break;
+            }
+
+            case R.id.nav_contact: {
+                Intent i = new Intent(this, ContactActivity.class);
+                itemClicked = 3;
+                navigationView.getMenu().getItem(itemClicked).setChecked(true);
+                i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(i);
+                break;
+            }
+
+            case R.id.nav_sign_out: {
+                dbHelper.reset(dbHelper.getWritableDatabase(), ReservationEntry.RESERVATION_TABLE);
+                ActivityUtils.clearSharedPrefs(prefs);
+                Intent i = new Intent(this, LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
                 break;
             }
         }
 
-        mNavigationView.getMenu().getItem(itemClicked).setChecked(true);
-        mDrawer.closeDrawers();
+        navigationView.getMenu().getItem(itemClicked).setChecked(false);
+        drawerLayout.closeDrawers();
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
@@ -202,7 +225,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
-        return new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.access_drawer_open,  R.string.accesss_drawer_close);
+        return new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.access_drawer_open,  R.string.accesss_drawer_close);
     }
 
 

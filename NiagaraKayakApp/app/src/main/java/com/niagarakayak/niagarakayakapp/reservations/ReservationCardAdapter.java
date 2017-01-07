@@ -84,6 +84,7 @@ public class ReservationCardAdapter extends RecyclerView.Adapter<ReservationCard
                 confirmedIndicator.setColorFilter(CONFIRMED_COLOR);
                 confirmedText.setText("CONFIRMED");
                 confirmedText.setTextColor(CONFIRMED_COLOR);
+                itemView.setBackgroundColor(Color.argb(255, 255, 255, 255));
             } else {
                 // Red
                 int UNCONFIRMED_COLOR = Color.argb(255, 179, 62, 62);

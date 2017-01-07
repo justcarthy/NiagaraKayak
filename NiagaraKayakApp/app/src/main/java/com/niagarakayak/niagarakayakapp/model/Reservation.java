@@ -1,6 +1,7 @@
 package com.niagarakayak.niagarakayakapp.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * This class represents a reservation.
@@ -103,7 +104,7 @@ public class Reservation implements Serializable {
 
     public void setAdults(int adults){ this.adults = adults; }
 
-    public int getAdults(){ return adults; }
+    public int getAdults() { return adults; }
 
     public int getChildren() { return children; }
 
@@ -116,4 +117,14 @@ public class Reservation implements Serializable {
     public String getTime() { return time; }
 
     public void setTime(String time) { this.time = time; }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Reservation && ((Reservation) o).getReservationID().equals(getReservationID());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(reservationID);
+    }
 }

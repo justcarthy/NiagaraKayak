@@ -1,10 +1,13 @@
 package com.niagarakayak.niagarakayakapp.add_reservations;
 
 
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +20,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.badoualy.stepperindicator.StepperIndicator;
 import com.niagarakayak.niagarakayakapp.R;
+import com.niagarakayak.niagarakayakapp.add_reservations.steps.Step2Fragment;
 import com.niagarakayak.niagarakayakapp.add_reservations.steps.VerifyDialog;
 import com.niagarakayak.niagarakayakapp.model.Reservation;
 import com.niagarakayak.niagarakayakapp.reservations.ReservationActivity;
@@ -44,6 +50,17 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
     private ReservationAPIService reservationAPIService;
     private ReservationLocalDataService reservationLocalService;
 
+    private String dateText;
+    private String timeText;
+    private String hourText;
+
+    private String launchText;
+
+    private String adultText;
+    private String childText;
+    private String singleText;
+    private String tandemText;
+
     private String userEmail;
     private int currentStep;
 
@@ -65,7 +82,7 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
         stepPagerAdapter = new StepPagerAdapter(getFragmentManager());
         stepPager.setAdapter(stepPagerAdapter);
         indicator.setViewPager(stepPager, true);
-        indicator.setStepCount(2);
+        indicator.setStepCount(3);
         continueOrDoneButton.setOnClickListener(this);
         backButton.setOnClickListener(this);
         submitButton.setOnClickListener(this);
@@ -92,22 +109,43 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("currentStep", currentStep);
+        putTextInBundle(outState, "dateText", dateText);
+        putTextInBundle(outState, "hourText", hourText);
+        putTextInBundle(outState, "timeText", timeText);
+        putTextInBundle(outState, "launchText", launchText);
+        putTextInBundle(outState, "adultText", adultText);
+        putTextInBundle(outState, "childText", childText);
+        putTextInBundle(outState, "singleText", singleText);
+        putTextInBundle(outState, "tandemText", tandemText);
     }
+
+    private void putTextInBundle(Bundle bundle, String bundleText, String text) {
+        if (text != null) {
+            bundle.putString(text, bundleText);
+        }
+    }
+
+    private boolean getTextFromBundle(Bundle bundle, String bundleText) {
+        return bundle.getBundle(bundleText) != null;
+    }
+
 
     @Override
     protected void onResume() {
         super.onResume();
 
         if (mBundle != null) {
-            currentStep = mBundle.getInt("currentStep");
+            currentStep = mBundle.getInt("currentStep", 0);
+
             if (currentStep > 0) {
                 backButton.setVisibility(View.VISIBLE);
             }
 
-            if (currentStep == 1) {
+            if (currentStep == 2) {
                 continueOrDoneButton.setVisibility(View.INVISIBLE);
                 submitButton.setVisibility(View.VISIBLE);
             }
+
         }
     }
 
@@ -119,7 +157,11 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
                 if (isValid(currentStep)) {
                     showNextPage();
                 } else {
-                    showToastWithMessage("One or more fields are blank!");
+                    if (currentStep == 1) {
+                        showToastWithMessage("Please select a launch point!");
+                    } else {
+                        showToastWithMessage("One or more fields are blank!");
+                    }
                 }
                 break;
             }
@@ -144,46 +186,50 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
                 .title("Thank you!")
                 .customView(R.layout.dialog_verify, true)
                 .positiveText("Got it")
-                .dismissListener(new DialogInterface.OnDismissListener() {
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onDismiss(DialogInterface dialog) {
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         sendEmailForReservation(getReservationFromFields());
                     }
                 })
                 .show();
     }
 
-    private boolean isValid(int page) {
-        switch (page) {
+    private boolean isValid(int step) {
+        switch (step) {
             case StepPagerAdapter.STEP_ONE:
                 return !(getDateText().isEmpty() || getTimeText().isEmpty() || getHourText().isEmpty());
             case StepPagerAdapter.STEP_TWO:
-                return !(getAdultText().isEmpty() || getChildText().isEmpty() || getLaunchText().isEmpty());
+                return !getLaunchText().isEmpty();
+            case StepPagerAdapter.STEP_THREE: {
+                return !(getAdultText().isEmpty() || getChildText().isEmpty() || getSingleText().isEmpty() || getTandemText().isEmpty());
+            }
             default:
                 return false;
         }
     }
 
     private Reservation getReservationFromFields() {
-        return new Reservation(
-                userEmail+System.currentTimeMillis(),
-                userEmail,
-                getDateText(),
-                getTimeText(),
-                convertHourText(getHourText()),
-                Integer.parseInt(getSingleText()),
-                Integer.parseInt(getTandemText()),
-                getLaunchText(),
-                Integer.parseInt(getAdultText()),
-                Integer.parseInt(getChildText()),
-                false
-        );
+            return new Reservation(
+                    userEmail+System.currentTimeMillis(),
+                    userEmail,
+                    dateText,
+                    timeText,
+                    convertHourText(hourText),
+                    Integer.parseInt(singleText),
+                    Integer.parseInt(tandemText),
+                    launchText,
+                    Integer.parseInt(adultText),
+                    Integer.parseInt(childText),
+                    false
+            );
     }
 
     private void sendEmailForReservation(final Reservation reservation) {
         reservationAPIService.postReservation(new ReservationService.PostCallback() {
             @Override
             public void onFailure(Exception e) {
+                e.printStackTrace();
                 ActivityUtils.showSnackbarWithMessage(root, "Couldn't send reservation email.", LENGTH_LONGER, SnackbarColor.ERROR_COLOR);
             }
 
@@ -199,9 +245,7 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
     }
 
     private int convertHourText(String hourText) {
-        int toHours = 0;
         int unit = Integer.parseInt(hourText.split(" ")[0]);
-        // Convert days to hours
         return hourText.contains("day") ? unit * 24 : unit;
     }
 
@@ -214,44 +258,63 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
 
             @Override
             public void onSuccess() {
-                Log.d("ADD LOCAL", "onSuccess: Successfully wrote to database");
+                Log.d("ADD LOCAL", "nextPage: Successfully wrote to database");
             }
         }, reservation);
     }
 
     private String getDateText() {
-        return ((TextInputEditText) findViewById(R.id.date_text)).getText().toString();
+        dateText =  ((TextInputEditText) findViewById(R.id.date_text)).getText().toString();
+        return dateText;
     }
 
     private String getTimeText() {
-        String timeText = ((TextInputEditText) findViewById(R.id.time_text)).getText().toString();
-        String result = TimeUtils.get24HrTime(timeText.split(" ")) + ":00";
-        return result;
+        timeText = ((TextInputEditText) findViewById(R.id.time_text)).getText().toString();
+
+        if (!timeText.isEmpty()) {
+            timeText = TimeUtils.get24HrTime(timeText.split(" ")) + ":00";
+        }
+
+        return timeText;
     }
 
     private String getHourText() {
-        return ((AutoCompleteTextView) findViewById(R.id.hours_text)).getText().toString();
-    }
-
-
-    private String getAdultText() {
-        return ((TextInputEditText) findViewById(R.id.adult_text)).getText().toString();
-    }
-
-    private String getChildText() {
-        return ((TextInputEditText) findViewById(R.id.child_text)).getText().toString();
+        hourText = ((AutoCompleteTextView) findViewById(R.id.hours_text)).getText().toString();
+        return hourText;
     }
 
     private String getLaunchText() {
-        return ((AutoCompleteTextView) findViewById(R.id.launch_text)).getText().toString();
+        if (currentStep == 1) {
+            Fragment page = stepPagerAdapter.getCurrentFragment();
+
+            if (page != null) {
+                launchText = ((Step2Fragment) page).getLaunchPointText();
+            } else {
+                launchText = "";
+            }
+        }
+
+        return launchText;
+    }
+
+    private String getAdultText() {
+        adultText = ((TextInputEditText) findViewById(R.id.adult_text)).getText().toString();
+        return adultText;
+    }
+
+    private String getChildText() {
+        childText = ((TextInputEditText) findViewById(R.id.child_text)).getText().toString();
+        return childText;
     }
 
     private String getSingleText() {
-        return ((TextInputEditText) findViewById(R.id.single_text)).getText().toString();
+        singleText = ((TextInputEditText) findViewById(R.id.single_text)).getText().toString();
+        return singleText;
     }
 
     private String getTandemText() {
-        return ((TextInputEditText) findViewById(R.id.tandem_text)).getText().toString();
+        tandemText = ((TextInputEditText) findViewById(R.id.tandem_text)).getText().toString();
+        return tandemText;
     }
 
 
@@ -259,33 +322,43 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
         Toast.makeText(AddReservationsActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
-
     private void showNextPage() {
-        if (currentStep < 1) {
+        if (currentStep < 2) {
             currentStep++;
             // Fake a drag in the x direction by 1000 pixels to the right
-            fakeDrag(-1000);
+            fakeDrag(-2000);
         }
 
         if (currentStep > 0) {
             backButton.setVisibility(View.VISIBLE);
+            continueOrDoneButton.setVisibility(View.VISIBLE);
+            submitButton.setVisibility(View.INVISIBLE);
+        }
+
+        if (currentStep == 2) {
             continueOrDoneButton.setVisibility(View.INVISIBLE);
             submitButton.setVisibility(View.VISIBLE);
         }
+
     }
 
     private void showPrevPage() {
         if (currentStep > 0) {
             currentStep--;
             // Fake a drag in the x direction by 1000 pixels to the left
-            fakeDrag(1000);
+            fakeDrag(2000);
+        }
+
+        if (currentStep < 2) {
+            backButton.setVisibility(View.VISIBLE);
+            continueOrDoneButton.setVisibility(View.VISIBLE);
+            submitButton.setVisibility(View.INVISIBLE);
         }
 
         if (currentStep == 0) {
             backButton.setVisibility(View.INVISIBLE);
-            continueOrDoneButton.setVisibility(View.VISIBLE);
-            submitButton.setVisibility(View.INVISIBLE);
         }
+
     }
 
     private void fakeDrag(float amount) {
