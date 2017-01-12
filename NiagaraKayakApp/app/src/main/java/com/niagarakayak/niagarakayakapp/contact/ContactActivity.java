@@ -2,6 +2,7 @@ package com.niagarakayak.niagarakayakapp.contact;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.home.HomeActivity;
@@ -22,7 +24,7 @@ import com.niagarakayak.niagarakayakapp.service.database.ReservationReaderContra
 import com.niagarakayak.niagarakayakapp.service.database.ReservationReaderHelper;
 import com.niagarakayak.niagarakayakapp.util.ActivityUtils;
 
-public class ContactActivity extends AppCompatActivity {
+public class ContactActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
     private NavigationView navigationView;
@@ -31,12 +33,12 @@ public class ContactActivity extends AppCompatActivity {
     private ReservationReaderHelper dbHelper;
     private SharedPreferences prefs;
 
+    private RelativeLayout telephoneContainer, webContainer, emailContainer;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        // TODO: Launch phone, email and web browser based on container click
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
@@ -45,6 +47,10 @@ public class ContactActivity extends AppCompatActivity {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        telephoneContainer = (RelativeLayout) findViewById(R.id.telephone_container);
+        webContainer = (RelativeLayout) findViewById(R.id.web_container);
+        emailContainer = (RelativeLayout) findViewById(R.id.email_container);
 
         setSupportActionBar(toolbar);
         setToolbarTitle("Contact");
@@ -58,6 +64,9 @@ public class ContactActivity extends AppCompatActivity {
 
         setupDrawer();
 
+        telephoneContainer.setOnClickListener(this);
+        webContainer.setOnClickListener(this);
+        emailContainer.setOnClickListener(this);
 
     }
 
@@ -135,5 +144,24 @@ public class ContactActivity extends AppCompatActivity {
 
     private void setToolbarTitle(String title) {
         getSupportActionBar().setTitle(title);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.telephone_container:
+                Intent dialIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", "289-654-2562", null));
+                startActivity(dialIntent);
+                break;
+            case R.id.email_container:
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                emailIntent.setData(Uri.parse("mailto:support@niagarakayak.com"));
+                startActivity(emailIntent);
+                break;
+            case R.id.web_container:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.niagarakayak.com"));
+                startActivity(browserIntent);
+                break;
+        }
     }
 }
