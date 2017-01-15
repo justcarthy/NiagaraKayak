@@ -9,6 +9,7 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.android.gms.maps.*;
@@ -32,6 +33,7 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
     private SupportMapFragment mapFragment;
     private TextView mapsLabel;
     private Bundle mBundle;
+    private Button retryButton;
 
     @Nullable
     @Override
@@ -46,12 +48,21 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
         tweetDesc = (TextView) root.findViewById(R.id.tweet_desc);
         tweetHandle = (TextView) root.findViewById(R.id.tweet_handle);
         tweetDate = (TextView) root.findViewById(R.id.tweet_date);
+        retryButton = (Button) root.findViewById(R.id.btn_retry);
         tweetProfileImage = (ImageView) root.findViewById(R.id.tweet_pic);
         mapsCard = (CardView) root.findViewById(R.id.map_card);
         mapsLabel = (TextView) root.findViewById(R.id.map_card_label);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment);
         // Don't destroy the map fragment.
         mapFragment.setRetainInstance(true);
+
+        retryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.loadTweetCard();
+            }
+        });
+
         return root;
     }
 
@@ -123,6 +134,15 @@ public class HomeViewFragment extends Fragment implements HomeContract.View {
     public void showMapsLabel() {
         if (mapsLabel != null) {
             mapsLabel.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void showRetryButton(boolean show) {
+        if (show) {
+            retryButton.setVisibility(View.VISIBLE);
+        } else {
+            retryButton.setVisibility(View.INVISIBLE);
         }
     }
 

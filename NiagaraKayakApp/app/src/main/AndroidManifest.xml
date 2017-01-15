@@ -36,6 +36,9 @@
                 android:name=".reservations.ReservationActivity"
                 android:launchMode="singleTask"/>
         <activity
+                android:name=".reservation_detail.ReservationDetailActivity"
+                android:launchMode="singleTask"/>
+        <activity
                 android:name=".add_reservations.AddReservationsActivity"
                 android:screenOrientation="portrait"
                 android:configChanges="keyboardHidden|orientation|screenSize"/>

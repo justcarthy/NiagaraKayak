@@ -10,4 +10,6 @@
     <string name="accesss_drawer_close">Close navigation drawer</string>
     <string name="contact_us"><u>Contact us</u></string>
     <string name="nk_logo">NIAGARA <b>KAYAK</b></string>
+    <string name="status_text">Unconfirmed</string>
+    <string name="delete_reservation_dialog">We require 24 hours notice for any reservation cancellations. Please call us to cancel your reservation.</string>
 </resources>

@@ -115,5 +115,13 @@
                 android:layout_height="200dp"
                 map:liteMode="true"/>
     </android.support.v7.widget.CardView>
+    <Button
+            android:id="@+id/btn_retry"
+            android:text="Retry"
+            android:layout_alignParentBottom="true"
+            android:visibility="invisible"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 </RelativeLayout>
 </ScrollView>

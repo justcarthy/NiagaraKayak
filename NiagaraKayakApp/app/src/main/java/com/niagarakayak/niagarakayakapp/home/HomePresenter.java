@@ -43,8 +43,10 @@ public class HomePresenter implements HomeContract.Presenter {
         if (isConnected) {
             loadTweetCard();
         } else {
-            ActivityUtils.showSnackbarWithMessage(((Fragment) mHomeView).getView(), "No internet connection found!", LENGTH_LONG, ERROR_COLOR);
+            ActivityUtils.showSnackbarWithMessage(((Fragment) mHomeView).getView(),
+                    "No internet connection found!", LENGTH_LONG, ERROR_COLOR);
             loadErrorTweetCard();
+            mHomeView.showRetryButton(true);
         }
     }
 
@@ -53,7 +55,8 @@ public class HomePresenter implements HomeContract.Presenter {
         mTwitterAPI.loadLastTweet(new TwitterService.TwitterCallback() {
             @Override
             public void onFailure(Exception e) {
-                ActivityUtils.showSnackbarWithMessage((View) mHomeView, "Failed to fetch most recent tweet", LENGTH_SHORT, ERROR_COLOR);
+                ActivityUtils.showSnackbarWithMessage(((Fragment) mHomeView).getView(),
+                        "Failed to fetch most recent tweet", LENGTH_SHORT, ERROR_COLOR);
                 loadErrorTweetCard();
             }
 
@@ -88,6 +91,7 @@ public class HomePresenter implements HomeContract.Presenter {
         mHomeView.setMapsLabel(dayOfTweet == today ? "Here's where are for today" : "Here's where we were last");
         mHomeView.showMapsLabel();
         mHomeView.showMapsCardWithCoords(coords);
+        mHomeView.showRetryButton(false);
     }
 
     @Override

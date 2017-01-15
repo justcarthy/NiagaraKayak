@@ -1,6 +1,8 @@
 package com.niagarakayak.niagarakayakapp.reservations;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import com.niagarakayak.niagarakayakapp.R;
 import com.niagarakayak.niagarakayakapp.model.Reservation;
+import com.niagarakayak.niagarakayakapp.reservation_detail.ReservationDetailActivity;
+import com.niagarakayak.niagarakayakapp.util.MapUtils;
 import com.niagarakayak.niagarakayakapp.util.TimeUtils;
 
 import java.util.ArrayList;
@@ -46,17 +50,19 @@ public class ReservationCardAdapter extends RecyclerView.Adapter<ReservationCard
         return reservations.size();
     }
 
-    class ReservationViewHolder extends RecyclerView.ViewHolder {
+    class ReservationViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageButton confirmedIndicator;
         private TextView confirmedText;
         private TextView reservationDate;
         private TextView reservationNumberLocations;
         private TextView reservationGroupDetails;
         private View itemView;
+        private Bundle mBundle;
 
         public ReservationViewHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
+            this.itemView.setOnClickListener(this);
             confirmedIndicator = (ImageButton) itemView.findViewById(R.id.confirmed_indicator);
             confirmedText = (TextView) itemView.findViewById(R.id.confirmed_text);
             reservationDate = (TextView) itemView.findViewById(R.id.reservation_date);
@@ -96,8 +102,26 @@ public class ReservationCardAdapter extends RecyclerView.Adapter<ReservationCard
             }
 
             reservationGroupDetails.setText(reservationGroupMsg);
+            mBundle = new Bundle();
+            mBundle.putBoolean("confirmedStatus", reservation.isConfirmed());
+            mBundle.putInt("adults", reservation.getAdults());
+            mBundle.putInt("children", reservation.getChildren());
+            mBundle.putString("location", reservation.getLocation());
+            mBundle.putString("date", reservation.getDate());
+            mBundle.putString("time", twelveHrtime);
         }
 
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.card_view: {
+                    Intent i = new Intent(itemView.getContext(), ReservationDetailActivity.class);
+                    i.putExtra("reservation", mBundle);
+                    itemView.getContext().startActivity(i);
+                    break;
+                }
+            }
+        }
     }
 
 }
