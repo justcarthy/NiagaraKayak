@@ -19,6 +19,7 @@ public interface HomeContract {
         void setTweetDate(String stringDate);
         void showMapsCardWithCoords(final LatLng coords);
         void showMapsLabel();
+        void showRetryButton(boolean show);
         void setMapsLabel(String label);
     }
 

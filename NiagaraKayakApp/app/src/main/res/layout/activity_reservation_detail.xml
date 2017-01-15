@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+          android:orientation="vertical"
+          android:id="@+id/root"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:fitsSystemWindows="true">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:contentScrim="?attr/colorPrimary"
+                android:elevation="8dp"
+                app:expandedTitleMarginStart="48dp"
+                app:expandedTitleMarginEnd="64dp"
+                android:fitsSystemWindows="true">
+            <ImageView
+                    android:id="@+id/img_location"
+                    android:layout_width="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:layout_height="200dp"/>
+
+            <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                    app:layout_collapseMode="pin" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:padding="@dimen/activity_vertical_margin"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <RelativeLayout
+                    android:id="@+id/status_container"
+                    android:layout_width="match_parent"
+                    android:clickable="true"
+                    android:foreground="?android:selectableItemBackground"
+                    android:layout_height="match_parent">
+
+                <ImageView
+                        android:id="@+id/status_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tint="@color/verify_color"
+                        android:contentDescription="Status icon"
+                        android:src="@drawable/ic_info_outline_black_24dp"
+                        android:layout_margin="20dp"/>
+
+                <TextView
+                        android:id="@+id/status_text"
+                        android:textSize="20sp"
+                        android:text="Confirmed"
+                        android:layout_alignBottom="@id/status_icon"
+                        android:textColor="@color/verify_color"
+                        android:layout_toEndOf="@id/status_icon"
+                        android:layout_marginTop="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:id="@+id/status_label"
+                        android:textSize="12sp"
+                        android:text="Reservation Status"
+                        android:contentDescription="Reservation Status"
+                        android:layout_below="@id/status_text"
+                        android:textColor="@color/verify_color"
+                        android:layout_marginTop="5dp"
+                        android:layout_alignBaseline="@id/status_icon"
+                        android:layout_alignStart="@id/status_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            </RelativeLayout>
+            <RelativeLayout
+                    android:id="@+id/date_container"
+                    android:layout_width="match_parent"
+                    android:clickable="true"
+                    android:foreground="?android:selectableItemBackground"
+                    android:layout_height="match_parent">
+
+                <ImageView
+                        android:id="@+id/date_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tint="@color/colorAccent"
+                        android:contentDescription="Calendar icon"
+                        android:src="@drawable/ic_date_range_white_24dp"
+                        android:layout_margin="20dp"/>
+
+                <TextView
+                        android:id="@+id/date_text"
+                        android:textSize="20sp"
+                        android:layout_alignBottom="@id/date_icon"
+                        android:layout_toEndOf="@id/date_icon"
+                        android:layout_marginTop="20dp"
+                        android:contentDescription="Date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:id="@+id/date_label"
+                        android:text="Date (YYYY/MM/DD)"
+                        android:textSize="12sp"
+                        android:contentDescription="Date of reservation"
+                        android:layout_below="@id/date_text"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:layout_marginTop="5dp"
+                        android:layout_alignBaseline="@id/date_icon"
+                        android:layout_alignStart="@id/date_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            </RelativeLayout>
+            <RelativeLayout
+                    android:id="@+id/time_container"
+                    android:layout_width="match_parent"
+                    android:clickable="true"
+                    android:foreground="?android:selectableItemBackground"
+                    android:layout_height="match_parent">
+
+                <ImageView
+                        android:id="@+id/time_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tint="@color/colorAccent"
+                        android:contentDescription="Clock icon"
+                        android:src="@drawable/ic_alarm_white_24dp"
+                        android:layout_margin="20dp"/>
+
+                <TextView
+                        android:id="@+id/time_text"
+                        android:textSize="20sp"
+                        android:layout_alignBottom="@id/time_icon"
+                        android:layout_toEndOf="@id/time_icon"
+                        android:layout_marginTop="20dp"
+                        android:contentDescription="Time of reservation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:id="@+id/time_label"
+                        android:text="Time"
+                        android:textSize="12sp"
+                        android:layout_below="@id/time_text"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:contentDescription="Time of reservation"
+                        android:layout_marginTop="5dp"
+                        android:layout_alignBaseline="@id/time_icon"
+                        android:layout_alignStart="@id/time_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+            </RelativeLayout>
+            <RelativeLayout
+                    android:id="@+id/adult_container"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:clickable="true"
+                    android:foreground="?android:selectableItemBackground"
+                    android:layout_height="match_parent">
+
+                <ImageView
+                        android:id="@+id/adult_icon"
+                        android:layout_width="wrap_content"
+                        android:contentDescription="Adult icon"
+                        android:layout_height="wrap_content"
+                        android:tint="@color/colorAccent"
+                        android:src="@drawable/ic_person_white_24dp"
+                        android:layout_margin="20dp"/>
+
+                <TextView
+                        android:id="@+id/adult_text"
+                        android:textSize="20sp"
+                        android:layout_alignBottom="@id/adult_icon"
+                        android:layout_toEndOf="@id/adult_icon"
+                        android:contentDescription="Number of adults"
+                        android:layout_marginTop="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:id="@+id/adult_label"
+                        android:text="Number of adults"
+                        android:textSize="12sp"
+                        android:layout_below="@id/adult_text"
+                        android:contentDescription="Number of adults"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:layout_marginTop="5dp"
+                        android:layout_alignBaseline="@id/adult_icon"
+                        android:layout_alignStart="@id/adult_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+            </RelativeLayout>
+            <RelativeLayout
+                    android:id="@+id/child_container"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:clickable="true"
+                    android:foreground="?android:selectableItemBackground"
+                    android:layout_height="match_parent">
+                <ImageView
+                        android:id="@+id/child_icon"
+                        android:layout_width="wrap_content"
+                        android:contentDescription="Children icon"
+                        android:layout_height="wrap_content"
+                        android:tint="@color/colorAccent"
+                        android:src="@drawable/ic_child_care_white_24dp"
+                        android:layout_margin="20dp"/>
+
+                <TextView
+                        android:id="@+id/child_text"
+                        android:textSize="20sp"
+                        android:layout_alignBottom="@id/child_icon"
+                        android:layout_toEndOf="@id/child_icon"
+                        android:contentDescription="Number of children"
+                        android:layout_marginTop="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:id="@+id/child_label"
+                        android:text="Number of children"
+                        android:textSize="12sp"
+                        android:layout_below="@id/child_text"
+                        android:contentDescription="Number of children"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:layout_marginTop="5dp"
+                        android:layout_alignBaseline="@id/child_icon"
+                        android:layout_alignStart="@id/child_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            </RelativeLayout>
+            <Button
+                    android:id="@+id/btn_directions"
+                    android:layout_marginTop="20dp"
+                    android:text="Get directions"
+                    android:background="@null"
+                    android:textColor="@color/colorPrimary"
+                    android:textAlignment="textStart"
+                    android:foreground="?android:selectableItemBackground"
+                    android:clickable="true"
+                    android:drawableTint="@color/colorAccent"
+                    android:drawableLeft="@drawable/ic_location_on_black_24dp"
+                    android:layout_width="match_parent"
+                    android:padding="16dp"
+                    android:drawablePadding="20dp"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

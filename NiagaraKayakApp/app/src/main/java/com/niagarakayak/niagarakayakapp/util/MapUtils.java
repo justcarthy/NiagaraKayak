@@ -1,9 +1,11 @@
 package com.niagarakayak.niagarakayakapp.util;
 
+import android.graphics.drawable.Drawable;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.niagarakayak.niagarakayakapp.R;
 
 public class MapUtils {
     private static final String[] LOCATIONS = {
@@ -17,6 +19,12 @@ public class MapUtils {
             new LatLng(43.165492, -79.052310),
             // Niagara-on-the-lake
             new LatLng(43.255049, -79.062405)
+    };
+
+    private static final int[] LOCATION_IMGS = {
+            R.drawable.charles_daley_park,
+            R.drawable.queenston,
+            R.drawable.notl
     };
 
     public static LatLng getLocationFromTweet(String tweetString) {
@@ -44,5 +52,4 @@ public class MapUtils {
         markerToAdd.setSnippet(snippet);
         return markerToAdd;
     }
-
 }
