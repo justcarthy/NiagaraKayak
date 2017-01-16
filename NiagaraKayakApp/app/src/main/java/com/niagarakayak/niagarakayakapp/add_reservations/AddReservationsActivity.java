@@ -125,11 +125,6 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
         }
     }
 
-    private boolean getTextFromBundle(Bundle bundle, String bundleText) {
-        return bundle.getBundle(bundleText) != null;
-    }
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -156,12 +151,6 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
                 // Validate here
                 if (isValid(currentStep)) {
                     showNextPage();
-                } else {
-                    if (currentStep == 1) {
-                        showToastWithMessage("Please select a launch point!");
-                    } else {
-                        showToastWithMessage("One or more fields are blank!");
-                    }
                 }
                 break;
             }
@@ -174,8 +163,6 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
             case R.id.submit_btn: {
                 if (isValid(currentStep)) {
                     showVerifyDialog();
-                } else {
-                    showToastWithMessage("One or more fields are blank!");
                 }
             }
         }
@@ -198,14 +185,56 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
     private boolean isValid(int step) {
         switch (step) {
             case StepPagerAdapter.STEP_ONE:
-                return !(getDateText().isEmpty() || getTimeText().isEmpty() || getHourText().isEmpty());
+                return isStep1Valid();
             case StepPagerAdapter.STEP_TWO:
-                return !getLaunchText().isEmpty();
+                return isStep2Valid();
             case StepPagerAdapter.STEP_THREE: {
-                return !(getAdultText().isEmpty() || getChildText().isEmpty() || getSingleText().isEmpty() || getTandemText().isEmpty());
+                return isStep3Valid();
             }
             default:
                 return false;
+        }
+    }
+
+    private boolean isStep2Valid() {
+        if (!getLaunchText().isEmpty()) {
+            return true;
+        } else {
+            showToastWithMessage("Please select a launch point to continue!");
+            return false;
+        }
+    }
+
+    private boolean isStep1Valid() {
+        if (!(getDateText().isEmpty() || getTimeText().isEmpty() || getHourText().isEmpty())) {
+            return true;
+        } else {
+            showToastWithMessage("One or more fields are empty!");
+            return false;
+        }
+    }
+
+    private boolean isStep3Valid() {
+        if (!getAdultText().isEmpty() && !getChildText().isEmpty()
+                && !getSingleText().isEmpty() && !getTandemText().isEmpty()) {
+            int adults = Integer.parseInt(getAdultText());
+            int singles = Integer.parseInt(getSingleText());
+            int tandems = Integer.parseInt(getTandemText());
+
+            if (adults == 0) {
+                showToastWithMessage("We require at least 1 adult for a reservation.");
+                return false;
+            }
+
+            if (singles == 0 && tandems == 0) {
+                showToastWithMessage("You need to select at least 1 (single or tandem) kayak.");
+                return false;
+            }
+
+            return true;
+        } else {
+            showToastWithMessage("One or more fields are empty!");
+            return false;
         }
     }
 
@@ -230,7 +259,8 @@ public class AddReservationsActivity extends AppCompatActivity implements View.O
             @Override
             public void onFailure(Exception e) {
                 e.printStackTrace();
-                ActivityUtils.showSnackbarWithMessage(root, "Couldn't send reservation email.", LENGTH_LONGER, SnackbarColor.ERROR_COLOR);
+                ActivityUtils.showSnackbarWithMessage(root, "Couldn't send reservation email.",
+                        LENGTH_LONGER, SnackbarColor.ERROR_COLOR);
             }
 
             @Override
